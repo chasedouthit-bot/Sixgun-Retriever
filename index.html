@@ -335,7 +335,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 1.0.0</div>
+    <div class="landing-version">Version 1.1.0</div>
   </div>
 </div>
 
@@ -655,6 +655,17 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
+const RELEASE_VERSION="1.1.0";
+const CACHE_VERSION="sixgun-retriever-v1.1.0";
+// Clear Cache Storage entries left by older installed-PWA builds without
+// touching localStorage (where the user's load and target data lives).
+if("caches" in window){
+  const seen=localStorage.getItem("sr_cache_version");
+  if(seen!==CACHE_VERSION){
+    caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_VERSION).map(k=>caches.delete(k))))
+      .finally(()=>localStorage.setItem("sr_cache_version",CACHE_VERSION));
+  }
+}
 let DB = load();
 function load(){try{const s=localStorage.getItem(KEY);return s?JSON.parse(s):structuredClone(SEED);}catch(e){return structuredClone(SEED);}}
 function save(){localStorage.setItem(KEY,JSON.stringify(DB));}
@@ -1385,7 +1396,7 @@ function taApplyFlatten(){
   TA.imgData=fc.toDataURL("image/jpeg",0.85);
   const im=new Image();
   im.onload=()=>{
-    TA.img=im; TA.mode="scale";
+    TA.img=im; TA.mode="scale";TA.scaleBox=null;TA.holes=[];TA.sel=null;
     TA.zoom=1;TA.panx=0;TA.pany=0;TA.zoomMode=false;
     fitImage(); taSetStep(); taRenderControls(); taDraw();
   };
@@ -1407,7 +1418,9 @@ document.getElementById("taFile").onchange=function(e){
       TA.imgData=oc.toDataURL("image/jpeg",0.82);
       TA.origData=TA.imgData;
       const shown=new Image();
-      shown.onload=()=>{TA.img=shown;TA.origImg=shown;TA.mode="flatten";fitImage();document.getElementById("taEmpty").style.display="none";taSetStep();taRenderControls();taDraw();
+      // Most target photos are already square enough. Start at Scale and keep
+      // Flatten available as an optional correction instead of a mandatory step.
+      shown.onload=()=>{TA.img=shown;TA.origImg=shown;TA.mode="scale";fitImage();document.getElementById("taEmpty").style.display="none";taSetStep();taRenderControls();taDraw();
         requestAnimationFrame(()=>{sizeTaCanvas();fitImage();taDraw();});};
       shown.src=TA.imgData;
     };
@@ -1483,11 +1496,11 @@ function taDraw(){
       ctx.strokeStyle="#c79a4b";ctx.lineWidth=1.5;
       ctx.beginPath();ctx.moveTo(cc.x-8,cc.y);ctx.lineTo(cc.x+8,cc.y);ctx.moveTo(cc.x,cc.y-8);ctx.lineTo(cc.x,cc.y+8);ctx.stroke();
     }
-    // marker radius = real .451" bullet, derived from scale (px/in), in canvas px.
-    // clamp so it stays tappable zoomed out and not huge zoomed in.
+    // Exact physical marker radius: .451" diameter / 2, derived from the
+    // reference scale. Hit-testing is enlarged separately; drawing is never
+    // clamped to a fixed pixel size, so the marker remains proportional.
     const ppi=taPPI();
-    let rr=ppi?(ppi*0.2255)*vScale():7;   // 0.2255 = .451"/2
-    rr=Math.max(5,Math.min(22,rr));
+    const rr=ppi?(ppi*0.2255)*vScale():7; // 0.2255 = .451"/2
     const labelPx=Math.max(8,Math.min(13,rr*0.95));
     TA.holes.forEach((p,i)=>{
       const c=toCanvas(p);
@@ -1536,68 +1549,62 @@ function taGeometry(){
    scale mode: 1 finger drags the box, 2 fingers pinch to resize it
    holes mode: tap places a hole; 1 finger drags an existing hole
 */
+function taMarkerRadius(){const ppi=taPPI();return ppi?(ppi*0.2255)*vScale():7;}
 function taHit(cx,cy){
-  const R=18;
-  for(let i=0;i<TA.holes.length;i++){const c=toCanvas(TA.holes[i]);if(Math.hypot(c.x-cx,c.y-cy)<R)return{type:"hole",idx:i};}
+  const R=Math.max(22,taMarkerRadius()+10); // accessible touch target, independent of drawn size
+  for(let i=TA.holes.length-1;i>=0;i--){const c=toCanvas(TA.holes[i]);if(Math.hypot(c.x-cx,c.y-cy)<=R)return{type:"hole",idx:i};}
   return null;
 }
-function taTouchList(e){
+function taEventPoints(e,phase="active"){
   const r=TA.canvas.getBoundingClientRect();
-  // normalize client coords into the canvas's CSS pixel space, scaling by the
-  // ratio of our logical size (cssW/H) to the actual on-screen rect. This makes
-  // taps land exactly under the finger regardless of DPR, scroll, or CSS scaling.
+  // The one normalization path for every analyzer gesture. Drawing and hit
+  // testing use CSS pixels; the backing canvas DPR never enters pointer math.
   const sx=(TA.cssW||r.width)/r.width, sy=(TA.cssH||r.height)/r.height;
-  const src=(e.touches&&e.touches.length)?e.touches:(e.changedTouches||[]);
+  const src=phase==="end"?(e.changedTouches||[]):((e.touches&&e.touches.length)?e.touches:(e.changedTouches||[]));
   const out=[];
-  for(let i=0;i<src.length;i++)out.push({x:(src[i].clientX-r.left)*sx,y:(src[i].clientY-r.top)*sy});
-  if(!out.length&&e.clientX!=null)out.push({x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy});
+  for(let i=0;i<src.length;i++)out.push({id:src[i].identifier,x:(src[i].clientX-r.left)*sx,y:(src[i].clientY-r.top)*sy});
+  if(!out.length&&e.clientX!=null)out.push({id:"mouse",x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy});
   return out;
 }
-let taDownPos=null,taMoved=false,taBoxStart=null;
-const TA_DRAG_THRESH=8;
+let taDownPos=null,taMoved=false,taBoxStart=null,taGestureMulti=false,taLongPressed=false,taLastTouchAt=0;
+const TA_DRAG_THRESH=7; // CSS px on every device, after normalization
 
 function midpoint(pts){return{x:(pts[0].x+pts[1].x)/2,y:(pts[0].y+pts[1].y)/2};}
-function nearestHole(p){
-  let best=-1,bd=1e9;
-  for(let i=0;i<TA.holes.length;i++){const c=toCanvas(TA.holes[i]);const d=Math.hypot(c.x-p.x,c.y-p.y);if(d<bd){bd=d;best=i;}}
-  return best;
-}
 function taDown(e){
-  if(!TA.img)return; e.preventDefault();
-  const pts=taTouchList(e);
+  if(!TA.img)return;
+  if(e.type.startsWith("mouse")&&Date.now()-taLastTouchAt<700)return;
+  if(e.type.startsWith("touch"))taLastTouchAt=Date.now();
+  e.preventDefault();
+  const pts=taEventPoints(e); if(!pts.length)return;
   // ZOOM MODE: two fingers pan/zoom the photo itself
   if(TA.zoomMode && pts.length>=2){
-    e.preventDefault();
+    taGestureMulti=true;
+    const mid=midpoint(pts);
     TA.vpinch={
       d0:Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y),
-      mid0:midpoint(pts), zoom0:TA.zoom, panx0:TA.panx, pany0:TA.pany
+      zoom0:TA.zoom,anchor:toImage(mid.x,mid.y)
     };
     TA.pinch=null; TA.drag=null; taDownPos=null; return;
   }
   if(pts.length>=2){
+    taGestureMulti=true;
     if(TA.mode==="scale" && TA.scaleBox){
       // two fingers in scale mode → pinch-resize the box
       TA.pinch={d0:Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y),size0:TA.scaleBox.size};
       TA.drag=null; taDownPos=null; return;
     }
-    if(TA.mode==="holes" && TA.sel!=null && TA.holes[TA.sel]){
-      // two fingers in holes mode → move the SELECTED hole
-      const mid=midpoint(pts);
-      TA.drag={type:"hole",idx:TA.sel}; TA.twoFingerMid0=mid; TA.holeStart={...TA.holes[TA.sel]};
-      taDownPos=null; TA.pinch=null; return;
-    }
     return;
   }
-  const p=pts[0]; taDownPos=p; taMoved=false; TA.pinch=null;
+  const p=pts[0]; taDownPos=p; taMoved=false;taLongPressed=false;TA.pinch=null;
   if(TA.mode==="holes"){
-    TA.drag=null;
-    // begin a long-press timer on the SELECTED hole (delete)
-    taHoleLongCancel();
     const hit=taHit(p.x,p.y);
-    if(hit&&hit.idx===TA.sel){
-      taHoleLongTimer=setTimeout(()=>{taHoleLongTimer=null;taConfirmDeleteSelected();},550);
+    TA.drag=hit?{type:"hole",idx:hit.idx}:null;
+    if(hit){TA.sel=hit.idx;TA.holeStart={...TA.holes[hit.idx]};TA.holeDragStart=p;}
+    taHoleLongCancel();
+    if(hit){
+      taHoleLongTimer=setTimeout(()=>{taHoleLongTimer=null;taLongPressed=true;taConfirmDeleteSelected();},550);
     }
-  }else{
+  }else if(TA.mode==="scale"){
     TA.drag={type:"box"};
     TA.boxStart={x:TA.scaleBox.x,y:TA.scaleBox.y,px:p.x,py:p.y};
   }
@@ -1606,14 +1613,18 @@ let taHoleLongTimer=null;
 function taHoleLongCancel(){if(taHoleLongTimer){clearTimeout(taHoleLongTimer);taHoleLongTimer=null;}}
 function taConfirmDeleteSelected(){
   if(TA.sel==null||!TA.holes[TA.sel])return;
-  if(window.confirm(`Delete marker ${TA.sel+1}?`)){
-    TA.holes.splice(TA.sel,1); TA.sel=null;
+  const idx=TA.sel;
+  taConfirm(`Delete marker ${idx+1}?`,()=>{
+    if(!TA.holes[idx])return;
+    TA.holes.splice(idx,1); TA.sel=null;
     taDraw(); taUpdateReadout(); taRenderControls(); taSetStep();
-  }
+  });
 }
 function taMove(e){
   if(!TA.img)return;
-  const pts=taTouchList(e);
+  if(e.type.startsWith("mouse")&&Date.now()-taLastTouchAt<700)return;
+  if(e.type.startsWith("touch"))taLastTouchAt=Date.now();
+  const pts=taEventPoints(e); if(!pts.length)return;
   // ZOOM MODE pan/zoom the photo
   if(TA.vpinch && pts.length>=2){
     e.preventDefault();
@@ -1622,10 +1633,9 @@ function taMove(e){
     const mid=midpoint(pts);
     // zoom about the initial midpoint, then follow finger pan
     TA.zoom=Math.max(1,Math.min(8,TA.vpinch.zoom0*f));
-    const zr=TA.zoom/TA.vpinch.zoom0;
-    // keep the pinch midpoint anchored: new pan = mid - (mid - oldpan)*zr, plus finger drag
-    TA.panx=mid.x-(TA.vpinch.mid0.x-TA.vpinch.panx0)*zr - (TA.base.ox*(TA.zoom-TA.vpinch.zoom0));
-    TA.pany=mid.y-(TA.vpinch.mid0.y-TA.vpinch.pany0)*zr - (TA.base.oy*(TA.zoom-TA.vpinch.zoom0));
+    // Keep the same image-space point beneath the moving pinch midpoint.
+    TA.panx=mid.x-(TA.base.ox+TA.vpinch.anchor.x*TA.base.scale)*TA.zoom;
+    TA.pany=mid.y-(TA.base.oy+TA.vpinch.anchor.y*TA.base.scale)*TA.zoom;
     taClampPan();
     taDraw();
     return;
@@ -1635,17 +1645,10 @@ function taMove(e){
     e.preventDefault();
     const d=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
     const factor=d/(TA.pinch.d0||1);
-    TA.scaleBox.size=Math.max(6,(TA.pinch.size0)*factor);
-    taDraw(); taUpdateReadout();
-    return;
-  }
-  // two-finger hole move (holes mode)
-  if(TA.drag&&TA.drag.type==="hole"&&TA.twoFingerMid0&&pts.length>=2){
-    e.preventDefault();
-    taHoleLongCancel();
-    const mid=midpoint(pts);
-    const dx=(mid.x-TA.twoFingerMid0.x)/vScale(), dy=(mid.y-TA.twoFingerMid0.y)/vScale();
-    TA.holes[TA.drag.idx]={x:TA.holeStart.x+dx,y:TA.holeStart.y+dy};
+    TA.scaleBox.size=Math.max(6,Math.min(Math.min(TA.img.width,TA.img.height),TA.pinch.size0*factor));
+    const half=TA.scaleBox.size/2;
+    TA.scaleBox.x=Math.max(half,Math.min(TA.img.width-half,TA.scaleBox.x));
+    TA.scaleBox.y=Math.max(half,Math.min(TA.img.height-half,TA.scaleBox.y));
     taDraw(); taUpdateReadout();
     return;
   }
@@ -1653,11 +1656,21 @@ function taMove(e){
   const p=pts[0];
   if(!taMoved && Math.hypot(p.x-taDownPos.x,p.y-taDownPos.y)<TA_DRAG_THRESH)return;
   taMoved=true;
+  taHoleLongCancel();
   if(!TA.drag)return;
   e.preventDefault();
   if(TA.drag.type==="box"){
     const dx=(p.x-TA.boxStart.px)/vScale(), dy=(p.y-TA.boxStart.py)/vScale();
-    TA.scaleBox.x=TA.boxStart.x+dx; TA.scaleBox.y=TA.boxStart.y+dy;
+    const half=TA.scaleBox.size/2;
+    TA.scaleBox.x=Math.max(half,Math.min(TA.img.width-half,TA.boxStart.x+dx));
+    TA.scaleBox.y=Math.max(half,Math.min(TA.img.height-half,TA.boxStart.y+dy));
+    taDraw(); taUpdateReadout();
+  }else if(TA.drag.type==="hole"){
+    const dx=(p.x-TA.holeDragStart.x)/vScale(),dy=(p.y-TA.holeDragStart.y)/vScale();
+    TA.holes[TA.drag.idx]={
+      x:Math.max(0,Math.min(TA.img.width,TA.holeStart.x+dx)),
+      y:Math.max(0,Math.min(TA.img.height,TA.holeStart.y+dy))
+    };
     taDraw(); taUpdateReadout();
   }
 }
@@ -1674,21 +1687,22 @@ function taClampPan(){
 }
 function taUp(e){
   if(!TA.img)return;
+  if(e.type.startsWith("mouse")&&Date.now()-taLastTouchAt<700)return;
+  if(e.type.startsWith("touch"))taLastTouchAt=Date.now();
   taHoleLongCancel();
   const remaining=(e.touches&&e.touches.length)||0;
-  if(TA.vpinch){ if(remaining<2){TA.vpinch=null;} return; }
-  if(TA.pinch){ if(remaining<2)TA.pinch=null; taUpdateReadout(); return; }
-  if(TA.drag&&TA.drag.type==="hole"&&TA.twoFingerMid0){
-    if(remaining<2){TA.drag=null;TA.twoFingerMid0=null;TA.holeStart=null;}
-    taUpdateReadout(); return;
-  }
+  const endPts=taEventPoints(e,"end");
+  if(TA.vpinch){if(remaining<2)TA.vpinch=null;if(!remaining)taGestureMulti=false;return;}
+  if(TA.pinch){if(remaining<2)TA.pinch=null;if(!remaining)taGestureMulti=false;taUpdateReadout();return;}
   const wasDrag=taMoved;
-  const dp=taDownPos; TA.drag=null; taDownPos=null;
-  if(TA.mode==="holes" && !wasDrag && dp){
-    // tap SELECTS the marker under the finger, or deselects if tapping empty space
+  const dp=taDownPos,up=endPts[0]||dp;
+  TA.drag=null; taDownPos=null;TA.holeStart=null;TA.holeDragStart=null;
+  if(TA.mode==="holes"&&!wasDrag&&!taGestureMulti&&!taLongPressed&&dp&&up){
     const hit=taHit(dp.x,dp.y);
-    TA.sel=hit?hit.idx:null;
+    if(hit)TA.sel=hit.idx;
+    else taAddBullet(up);
   }
+  if(!remaining)taGestureMulti=false;
   taMoved=false;
   taDraw(); taUpdateReadout(); taRenderControls(); taSetStep();
 }
@@ -1699,13 +1713,13 @@ function taUp(e){
 /* ---- step hint ---- */
 function taSetStep(){
   const el=document.getElementById("taStep");
-  if(!TA.img){el.textContent="Step 1 · Import a target photo";return;}
+  if(!TA.img){el.textContent="Choose a target photo";return;}
   if(TA.mode==="flatten"){
-    el.textContent="Step 1 · Level & flatten with the sliders · then tap Next";
+    el.textContent="Optional · Correct a tilted photo, then apply";
   }else if(TA.mode==="scale"){
-    el.textContent="Step 2 · Drag the green box onto one 1\" square · pinch to resize · then tap Holes";
+    el.textContent="Scale · Match the green box to one 1\" square";
   }else{
-    el.textContent=TA.holes.length<1?"Step 3 · ＋ Add bullet, then two-finger drag it onto the hole":"Step 3 · Tap a marker to select · two fingers drag · hold to delete";
+    el.textContent=TA.holes.length<1?"Holes · Tap each bullet hole":"Holes · Tap to add · drag to adjust · hold to delete";
   }
 }
 
@@ -1734,19 +1748,20 @@ function taRenderControls(){
       <div class="ta-slider-row"><label>Horizontal</label><input type="range" min="-1" max="1" step="0.02" value="${TA.ph}" oninput="taFlat('ph',this.value)"></div>
     </div>`;
     h+=`<button class="ta-btn" onclick="taResetFlatten()">Reset</button>`;
-    h+=`<button class="ta-btn primary" onclick="taApplyFlatten()">Next · Scale ›</button>`;
+    h+=`<button class="ta-btn primary" onclick="taApplyFlatten()">Apply · Scale ›</button>`;
     el.innerHTML=h;
     requestAnimationFrame(taRelayout);
     return;
   }
-  h+=`<button class="ta-btn" onclick="taBackToFlatten()">‹ Flatten</button>`;
+  h+=`<button class="ta-btn" onclick="taBackToFlatten()">Adjust photo</button>`;
   h+=`<button class="ta-btn ${TA.mode==='scale'?'primary':''}" onclick="taMode('scale')">Scale</button>`;
   h+=`<button class="ta-btn ${TA.mode==='holes'?'primary':''}" onclick="taMode('holes')" ${taScaleReady()?'':'disabled'}>Holes</button>`;
   if(TA.mode==="scale"){
     h+=`<span style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:var(--ink-faint)">box =</span><input class="ta-input" style="width:60px" id="taRef" inputmode="decimal" value="${TA.refInches}" oninput="taSetRef(this.value)"><span style="font-size:11px;color:var(--ink-faint)">in</span></span>`;
+    h+=`<div class="ta-sliders"><div class="ta-slider-row"><label>Box size</label><input type="range" min="16" max="90" step="1" value="${taScalePercent()}" oninput="taSetScalePercent(this.value)"></div></div>`;
   }
   if(TA.mode==="holes"){
-    h+=`<button class="ta-btn primary" onclick="taAddBullet()">＋ Add bullet</button>`;
+    h+=`<button class="ta-btn primary" onclick="taAddBullet()">＋ Center marker</button>`;
     h+=`<button class="ta-btn" onclick="taAutoDetect()">✨ Suggest</button>`;
     h+=`<button class="ta-btn" onclick="taClear()">Clear all</button>`;
     h+=`<span style="display:flex;align-items:center;gap:6px"><input class="ta-input" id="taDist" inputmode="decimal" placeholder="yds" value="${TA.distanceYd||''}" oninput="taDist(this.value)"><span style="font-size:11px;color:var(--ink-faint)">yards</span></span>`;
@@ -1758,13 +1773,19 @@ function taRenderControls(){
   requestAnimationFrame(taRelayout);
 }
 function taFlat(k,v){TA[k]=parseFloat(v);taDraw();}
-function taAddBullet(){
+function taAddBullet(point){
   // drop a new marker at the centre of the current view, auto-selected
-  const centerImg=toImage(TA.cssW/2,TA.cssH/2);
+  const centerImg=point?toImage(point.x,point.y):toImage(TA.cssW/2,TA.cssH/2);
   TA.holes.push(centerImg);
   TA.sel=TA.holes.length-1;
   taDraw(); taUpdateReadout(); taRenderControls(); taSetStep();
-  toast("Marker added — two fingers to drag it");
+  toast("Marker added — drag to fine-tune");
+}
+function taScalePercent(){return TA.scaleBox&&TA.img?Math.round(TA.scaleBox.size/Math.min(TA.img.width,TA.img.height)*100):17;}
+function taSetScalePercent(v){
+  if(!TA.scaleBox||!TA.img)return;
+  TA.scaleBox.size=Math.max(6,Math.min(TA.img.width,TA.img.height)*(parseFloat(v)||17)/100);
+  taDraw();taUpdateReadout();
 }
 function taBackToFlatten(){
   // return to flatten with the original image; keep current slider values so
@@ -1906,11 +1927,15 @@ function taDeleteTargetBtn(loadId,tidx){
   const load=(C().loads||[]).find(l=>l.id===loadId); if(!load||!load.targets||!load.targets[tidx])return;
   const t=load.targets[tidx];
   const label=(t.date?t.date:"this target")+(t.groupIn!=null?` · ${t.groupIn.toFixed(2)}" group`:"");
-  taConfirm(`Delete ${label}?`,()=>{
-    // re-find at delete time in case the list changed
-    const ld=(C().loads||[]).find(l=>l.id===loadId);
-    if(ld&&ld.targets&&ld.targets[tidx]){ld.targets.splice(tidx,1);save();renderAll();toast("Target deleted");}
-  });
+  taConfirm(`Delete ${label}?`,()=>taRemoveSavedTarget(loadId,tidx));
+}
+function taRemoveSavedTarget(loadId,tidx){
+  // Re-find at confirmation time in case sorting or another render occurred.
+  const ld=(C().loads||[]).find(l=>l.id===loadId);
+  if(!ld||!ld.targets||!ld.targets[tidx])return false;
+  ld.targets.splice(tidx,1);
+  save();renderAll();toast("Target deleted");
+  return true;
 }
 /* in-app confirm modal (window.confirm is unreliable in standalone PWA on iOS) */
 function taConfirm(msg,onYes){
