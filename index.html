@@ -270,7 +270,7 @@ main{padding:0 16px 24px;background:var(--bg)}
 .powder-count{min-width:18px;height:18px;padding:0 5px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:var(--line);color:var(--ink-faint);font-size:10px;font-weight:700}
 .powder-picker-btn.has-stars{border-color:var(--brass-dim);color:var(--brass)}
 .powder-picker-btn.has-stars .powder-count{background:var(--brass);color:#241d0e}
-.powder-picker-scrim{position:fixed;inset:0;z-index:350;background:rgba(0,0,0,.66);display:flex;align-items:flex-end;justify-content:center;padding:18px 14px calc(18px + var(--safe-b))}
+.powder-picker-scrim{position:fixed;inset:0;z-index:350;background:rgba(0,0,0,.66);display:flex;align-items:center;justify-content:center;padding:calc(18px + var(--safe-t)) 14px calc(18px + var(--safe-b))}
 .powder-picker{width:min(460px,100%);max-height:min(72vh,620px);display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--brass-dim);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.55);overflow:hidden}
 .powder-picker-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
 .powder-picker-title{font-family:Bitter,serif;font-size:18px;font-weight:700;color:var(--ink)}
@@ -351,7 +351,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 1.2.0</div>
+    <div class="landing-version">Version 1.2.1</div>
   </div>
 </div>
 
@@ -671,8 +671,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="1.2.0";
-const CACHE_VERSION="sixgun-retriever-v1.2.0";
+const RELEASE_VERSION="1.2.1";
+const CACHE_VERSION="sixgun-retriever-v1.2.1";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching localStorage (where the user's load and target data lives).
 if("caches" in window){
