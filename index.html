@@ -266,6 +266,22 @@ main{padding:0 16px 24px;background:var(--bg)}
 .tbl-chip{padding:7px 13px;border:1px solid var(--line);border-radius:20px;background:var(--bg2);font-size:12.5px;font-weight:600;color:var(--ink-dim);cursor:pointer;transition:.15s}
 .tbl-chip.on{border-color:var(--brass);color:#241d0e;background:var(--brass)}
 .tbl-chip.group-label{border:none;background:none;color:var(--ink-faint);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:7px 4px 7px 8px;cursor:default;font-weight:700}
+.powder-picker-btn{display:flex;align-items:center;gap:7px}
+.powder-count{min-width:18px;height:18px;padding:0 5px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:var(--line);color:var(--ink-faint);font-size:10px;font-weight:700}
+.powder-picker-btn.has-stars{border-color:var(--brass-dim);color:var(--brass)}
+.powder-picker-btn.has-stars .powder-count{background:var(--brass);color:#241d0e}
+.powder-picker-scrim{position:fixed;inset:0;z-index:350;background:rgba(0,0,0,.66);display:flex;align-items:flex-end;justify-content:center;padding:18px 14px calc(18px + var(--safe-b))}
+.powder-picker{width:min(460px,100%);max-height:min(72vh,620px);display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--brass-dim);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.55);overflow:hidden}
+.powder-picker-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.powder-picker-title{font-family:Bitter,serif;font-size:18px;font-weight:700;color:var(--ink)}
+.powder-picker-sub{font-size:11px;color:var(--ink-faint);margin-top:3px}
+.powder-picker-close{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--bg3);color:var(--ink);font-size:18px;cursor:pointer}
+.powder-picker-list{overflow-y:auto;padding:8px}
+.powder-pick-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 13px;border:1px solid transparent;border-radius:11px;background:none;color:var(--ink-dim);font:600 13px Inter,sans-serif;text-align:left;cursor:pointer}
+.powder-pick-row+.powder-pick-row{border-top-color:var(--line)}
+.powder-pick-row.starred{background:var(--bg3);border-color:var(--brass-dim);color:var(--ink)}
+.powder-star{font-size:21px;line-height:1;color:var(--ink-faint)}
+.powder-pick-row.starred .powder-star{color:var(--brass)}
 .ltable{background:linear-gradient(158deg,var(--bg2),var(--bg3));border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:16px}
 .ltable-head{padding:15px 16px 14px;border-bottom:1px solid var(--line);background:var(--walnut)}
 .ltable-title{font-family:Bitter,serif;font-weight:700;font-size:18px;line-height:1.2;color:var(--ink)}
@@ -335,7 +351,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 1.1.0</div>
+    <div class="landing-version">Version 1.2.0</div>
   </div>
 </div>
 
@@ -655,8 +671,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="1.1.0";
-const CACHE_VERSION="sixgun-retriever-v1.1.0";
+const RELEASE_VERSION="1.2.0";
+const CACHE_VERSION="sixgun-retriever-v1.2.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching localStorage (where the user's load and target data lives).
 if("caches" in window){
@@ -1182,21 +1198,62 @@ function renderLibEntries(){
     </div>`).join("");
 }
 function libTablesScoped(){return libCart==="all"?LIB_TABLES:LIB_TABLES.filter(t=>t.cartridge===libCart);}
+function allTablePowders(){return [...new Set(LIB_TABLES.flatMap(t=>t.powders||[]))].sort();}
+function starredTablePowders(){
+  DB.preferences=DB.preferences||{};
+  if(!Array.isArray(DB.preferences.starredTablePowders))DB.preferences.starredTablePowders=[];
+  const valid=new Set(allTablePowders());
+  DB.preferences.starredTablePowders=DB.preferences.starredTablePowders.filter(p=>valid.has(p));
+  return DB.preferences.starredTablePowders;
+}
+function toggleTablePowderStar(powder){
+  const stars=starredTablePowders();
+  const i=stars.indexOf(powder);
+  if(i>=0)stars.splice(i,1);else stars.push(powder);
+  stars.sort();
+  if(tblPowder===powder&&i>=0)tblPowder="all";
+  save();renderTblFilters();renderLibTables();renderPowderPicker();
+}
+function openPowderPicker(){
+  let scrim=document.getElementById("powderPickerScrim");
+  if(!scrim){
+    scrim=document.createElement("div");scrim.id="powderPickerScrim";scrim.className="powder-picker-scrim";
+    scrim.innerHTML=`<div class="powder-picker" role="dialog" aria-modal="true" aria-labelledby="powderPickerTitle">
+      <div class="powder-picker-head"><div><div class="powder-picker-title" id="powderPickerTitle">Powders</div><div class="powder-picker-sub">Star powders to pin them in the filter row.</div></div><button type="button" class="powder-picker-close" aria-label="Close powder picker">✕</button></div>
+      <div class="powder-picker-list" id="powderPickerList"></div></div>`;
+    document.body.appendChild(scrim);
+    scrim.querySelector(".powder-picker-close").onclick=closePowderPicker;
+    scrim.onclick=e=>{if(e.target===scrim)closePowderPicker();};
+  }
+  scrim.style.display="flex";renderPowderPicker();
+}
+function closePowderPicker(){const s=document.getElementById("powderPickerScrim");if(s)s.style.display="none";}
+function renderPowderPicker(){
+  const list=document.getElementById("powderPickerList");if(!list)return;
+  const stars=new Set(starredTablePowders());
+  list.innerHTML=allTablePowders().map(p=>`<button type="button" class="powder-pick-row ${stars.has(p)?'starred':''}" data-powder="${p}"><span>${p}</span><span class="powder-star" aria-hidden="true">${stars.has(p)?'★':'☆'}</span></button>`).join("");
+  list.querySelectorAll(".powder-pick-row").forEach(b=>b.onclick=()=>toggleTablePowderStar(b.dataset.powder));
+}
 function renderTblFilters(){
   const el=document.getElementById("tblFilters");
   const scope=libTablesScoped();
   const powders=[...new Set(scope.flatMap(t=>t.powders||[]))].sort();
   const writers=[...new Set(scope.map(t=>t.writer))];
+  const allStars=starredTablePowders();
+  const visibleStars=allStars.filter(p=>powders.includes(p));
   if(tblPowder!=="all"&&!powders.includes(tblPowder))tblPowder="all";
   if(tblWriter!=="all"&&!writers.includes(tblWriter))tblWriter="all";
   function grp(label,items,active,attr){
     return `<span class="tbl-chip group-label">${label}</span>`+[["all","All"]].concat(items.map(i=>[i,i])).map(([k,l])=>
       `<div class="tbl-chip ${active===k?'on':''}" data-f="${attr}" data-v="${k}">${l}</div>`).join("");
   }
-  el.innerHTML=grp("Powder",powders,tblPowder,"powder")+grp("Writer",writers,tblWriter,"writer");
+  const powderButton=`<button type="button" class="tbl-chip powder-picker-btn ${allStars.length?'has-stars':''}" id="powderPickerButton">Powders <span class="powder-count">${allStars.length}</span></button>`;
+  const pinned=visibleStars.map(p=>`<div class="tbl-chip ${tblPowder===p?'on':''}" data-f="powder" data-v="${p}">${p}</div>`).join("");
+  el.innerHTML=powderButton+pinned+grp("Writer",writers,tblWriter,"writer");
+  document.getElementById("powderPickerButton").onclick=openPowderPicker;
   el.querySelectorAll(".tbl-chip[data-f]").forEach(c=>c.onclick=()=>{
     const f=c.dataset.f,v=c.dataset.v;
-    if(f==="powder")tblPowder=v; if(f==="writer")tblWriter=v;
+    if(f==="powder")tblPowder=tblPowder===v?"all":v; if(f==="writer")tblWriter=v;
     renderTblFilters();renderLibTables();
   });
 }
