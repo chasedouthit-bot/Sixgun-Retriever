@@ -15,9 +15,10 @@ assert(html.includes("assets/photographic-record-masthead.webp"), "photographic 
 assert(html.includes("aspect-ratio:3/2;height:auto!important"), "photographic masthead must preserve the engraving ratio responsively");
 assert(html.includes("applyPhotoCoverMasthead(book,g)"), "PDF export must apply the photographic masthead to its cover");
 assert(html.includes("scroll-snap-type:x mandatory"), "photographic Moments must use deliberate snap pagination");
-assert(html.includes("class=\"pr-postcard\""), "photographs must render as archival postcard cards");
+assert(html.includes("<figure class=\"pr-postcard"), "photographs must render as archival postcard cards");
 assert(html.includes("function wireAlbumNavigation"), "album pages must expose arrow and page-indicator navigation");
 assert(html.includes("pdf-postcard-grid"), "PDF photo pages must preserve the postcard album treatment");
+assert(html.includes('family=Caveat'), "postcard captions must load the pencil-handwriting face");
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map(match => match[1])
   .filter(script => script.includes("const SEED"));
@@ -79,7 +80,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -200,7 +201,11 @@ assert(albumMarkup.includes('data-album-page="2"'), "five mobile postcards shoul
 assert(albumMarkup.includes("Page 1 of 3"), "album markup should expose a ledger-style page count");
 const recordAlbumMarkup = api.renderRecordAlbum(api.gunMoments(gun));
 assert(recordAlbumMarkup.includes('class="pr-postcard-moment"'), "record-wide postcards must identify their Moment");
-assert(recordAlbumMarkup.includes("Page 1 of 3"), "record-wide mobile album must group postcards two per page");
+assert(recordAlbumMarkup.includes("Page 1 of 1"), "five postcards that fit together should share one album page");
+const wideEntries = Array.from({ length: 10 }, (_, i) => ({ p: { pixel_width: 1600, pixel_height: 900 }, m: { title: `Wide ${i}` } }));
+assert.deepEqual(Array.from(api.albumPageGroups(wideEntries), page => page.length), [5, 5], "landscape-heavy album pages should hold five postcards");
+const portraitEntries = Array.from({ length: 8 }, (_, i) => ({ p: { pixel_width: 900, pixel_height: 1600 }, m: { title: `Portrait ${i}` } }));
+assert.deepEqual(Array.from(api.albumPageGroups(portraitEntries), page => page.length), [4, 4], "portrait-heavy album pages should hold four postcards");
 const pdfMarkup = api.pdfMomentPages(catalog.photo_moments.at(-1), api.momentPhotos("photo-moment::smoke"), 3);
 assert.equal((pdfMarkup.match(/pdf-album-sheet/g) || []).length, 2, "five postcards should span two PDF album sheets");
 const recordPdfMarkup = api.pdfRecordAlbumPages(api.gunMoments(gun), api.momentPhotos("photo-moment::smoke")[0], 3);
