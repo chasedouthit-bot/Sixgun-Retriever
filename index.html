@@ -1034,7 +1034,7 @@ function letterPrompts(g,data){
   return[{id:"origin",prompt:"Why did you get this gun, and what drew you to it?"},{id:"moments",prompt:moments},{id:"legacy",prompt:"What do you want the next person to know about you—and about caring for this gun?"},{id:"additional",prompt:"Is there one more story, lesson, or piece of advice that belongs with it?"}];
 }
 function letterOpening(g,rec){return rec.opening||`If you're reading this, this ${gunDisplay(g)} has come to you, and with it a piece of my story.`;}
-function letterOrnament(){return`<img class="letter-ornament" src="assets/archive-letter-masthead.webp" alt="Engraved western landscape with Henry the retriever and a historic sixgun">`;}
+function letterOrnament(){return`<img class="letter-ornament" src="assets/archive-letter-masthead.webp" alt="Engraved western landscape with Henry the retriever and a historic sixgun" decoding="async">`;}
 function fitLetterPreview(){
   const stage=document.getElementById("letterStage"),page=document.getElementById("archiveLetter"),viewport=document.getElementById("letterPreview");if(!stage||!page||!viewport)return;
   page.style.transform="none";const pageHeight=Math.max(1056,page.scrollHeight),scale=Math.min(1,viewport.clientWidth/816);page.style.transform=`scale(${scale})`;stage.style.width=`${816*scale}px`;stage.style.height=`${pageHeight*scale}px`;
