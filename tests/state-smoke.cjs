@@ -4,9 +4,12 @@ const assert = require("assert");
 const { webcrypto } = require("crypto");
 
 const html = fs.readFileSync("index.html", "utf8");
+const serviceMigration = fs.readFileSync("supabase/migrations/20260826_parts_maintenance.sql", "utf8");
 const landingVersion = html.match(/<div class="landing-version">Version ([^<]+)<\/div>/)?.[1];
 const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)"/)?.[1];
+const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
+assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
 assert(html.includes("body>header{"), "top-bar styles must be scoped away from page-level header elements");
 assert(!html.includes("\nheader{\n"), "page-level headers must not inherit the sticky top-bar layout");
 assert(html.includes(".field{display:flex;min-width:0"), "editor fields must be allowed to shrink within their grid column");
@@ -19,6 +22,13 @@ assert(html.includes("<figure class=\"pr-postcard"), "photographs must render as
 assert(html.includes("function wireAlbumNavigation"), "album pages must expose arrow and page-indicator navigation");
 assert(html.includes("pdf-postcard-grid"), "PDF photo pages must preserve the postcard album treatment");
 assert(html.includes('family=Caveat'), "postcard captions must load the pencil-handwriting face");
+assert(html.includes('id="s-parts-maintenance"'), "binder must expose a Parts & Maintenance screen");
+assert(html.includes("Selected service records for this sixgun"), "service page must use the archival subtitle convention");
+assert(html.includes('name="include_maintenance"'), "PDF export must expose the Parts & Maintenance toggle");
+assert(html.includes("function pdfPartsMaintenancePages"), "PDF export must render parts and maintenance pages");
+assert(serviceMigration.includes("create table if not exists public.parts_modifications"), "parts migration must create the parts table");
+assert(serviceMigration.includes("create table if not exists public.maintenance_entries"), "parts migration must create the maintenance table");
+assert.equal((serviceMigration.match(/enable row level security/g) || []).length, 2, "both service tables must enable RLS");
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map(match => match[1])
   .filter(script => script.includes("const SEED"));
@@ -80,7 +90,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -168,6 +178,18 @@ assert.equal(letterData.sessions, 1, "letter should count linked sessions live")
 const letter = api.gunLetter(gun);
 letter.prompt_answers.origin = "A test provenance paragraph.";
 assert.equal(api.letterPrompts(gun, letterData).length, 4, "letter editor should expose guided prompts");
+
+catalog.parts_modifications.push({_syncKey:"parts-modification::smoke",gun_key:gun._legacyKey,title:"Sight swap",description:"Installed a taller front sight.",date:"2026-08-20",vendor:"Test Smith",cost:75});
+catalog.maintenance_entries.push({_syncKey:"maintenance-entry::old",gun_key:gun._legacyKey,date:"2026-08-21",category:"Cleaning",notes:"Cleaned and lubricated.",round_count:150});
+catalog.maintenance_entries.push({_syncKey:"maintenance-entry::new",gun_key:gun._legacyKey,date:"2026-08-26",category:"Function Check",notes:"Passed.",round_count:null});
+assert.equal(api.gunParts(gun).length, 1, "parts records should belong to the firearm");
+assert.equal(api.gunMaintenance(gun)[0]._syncKey, "maintenance-entry::new", "maintenance ledger should be reverse chronological");
+assert.deepEqual(JSON.parse(JSON.stringify(api.maintenanceSummary(gun))), {count:2,last:"2026-08-26"}, "maintenance summary should expose last service and count");
+assert.equal(api.letterData(gun).maintenance.length, 2, "letter data should pull live maintenance records");
+const servicePdf = api.pdfPartsMaintenancePages(gun, 2);
+assert(servicePdf.includes("Parts &amp; Modifications") && servicePdf.includes("Maintenance Log"), "PDF should preserve both service subsections");
+const maintenanceSafe = api.cloudSafeState(db).catalog.maintenance_entries.at(-1);
+assert.equal(maintenanceSafe.round_count, null, "maintenance records should persist through app_state snapshots");
 
 const record = api.photoRecord(gun);
 assert.equal(record.title, "Photographic Record");

@@ -9,6 +9,7 @@ key cannot create tables or users, so complete these one-time owner steps:
    - `supabase/migrations/20260825_gun_biography.sql`
    - `supabase/migrations/20260826_gun_biography_letter.sql`
    - `supabase/migrations/20260826_photographic_record.sql`
+   - `supabase/migrations/20260826_parts_maintenance.sql`
 3. Go to **Authentication > Users > Add user** and create your one owner user.
 4. Go to **Authentication > Sign In / Providers > Email** and disable new-user
    signup after that owner exists. Leave email/password and/or magic links on.
@@ -21,6 +22,10 @@ key cannot create tables or users, so complete these one-time owner steps:
 All application tables use Row Level Security keyed to `auth.uid()`. The photo
 bucket is private and restricts every object to the signed-in user's own folder.
 The app provides sign-in only; it does not expose account creation.
+
+The Parts & Maintenance migration adds owner-only parts/modification history and
+maintenance ledger tables. Run it before using the new binder section so those
+entries can sync across devices.
 
 Photographic Record uploads create a display rendition (maximum 1800 px) and a
 higher-quality PDF rendition (maximum 3200 px) in separate private folders in
