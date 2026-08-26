@@ -6,6 +6,9 @@ const { webcrypto } = require("crypto");
 const html = fs.readFileSync("index.html", "utf8");
 assert(html.includes(".field{display:flex;min-width:0"), "editor fields must be allowed to shrink within their grid column");
 assert(html.includes(".editor-card .form-grid{grid-template-columns:minmax(0,1fr)}"), "editor forms must stack on narrow mobile screens");
+assert(html.includes("assets/photographic-record-masthead.webp"), "photographic record must use the archival engraving masthead");
+assert(html.includes("aspect-ratio:3/2;height:auto!important"), "photographic masthead must preserve the engraving ratio responsively");
+assert(html.includes("applyPhotoCoverMasthead(book,g)"), "PDF export must apply the photographic masthead to its cover");
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map(match => match[1])
   .filter(script => script.includes("const SEED"));
