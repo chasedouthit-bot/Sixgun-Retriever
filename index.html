@@ -321,6 +321,7 @@ main{padding:0 16px 24px;background:var(--bg)}
 .j-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.j-pill{font-size:10px;color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;padding:4px 8px}.j-photos{display:flex;gap:7px;overflow-x:auto;margin-top:10px}.j-photos img{width:82px;height:82px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
 .screen-actions{display:flex;justify-content:flex-end;gap:8px;margin:4px 0 12px}.action-btn{border:1px solid var(--brass-dim);background:var(--bg2);color:var(--ink);border-radius:10px;padding:9px 13px;font-weight:700;font-size:12px;cursor:pointer}.action-btn.primary{background:var(--brass);border-color:var(--brass);color:#241d0e}
 .catalog-grid{display:grid;grid-template-columns:1fr;gap:14px}.catalog-section{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);padding:14px}.catalog-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.catalog-head h2{font-family:Bitter,serif;font-size:19px}.catalog-row{padding:11px 0;border-top:1px solid var(--line)}.catalog-row:first-child{border-top:none}.catalog-name{font-family:Bitter,serif;font-size:15px;font-weight:700}.catalog-meta{font-size:11.5px;color:var(--ink-faint);line-height:1.45;margin-top:3px}.catalog-notes{font-size:12px;color:var(--ink-dim);line-height:1.45;margin-top:5px}
+.catalog-row-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.catalog-delete{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid rgba(193,91,74,.45);background:rgba(193,91,74,.08);color:var(--red);font-size:14px;cursor:pointer}
 .editor-scrim{position:fixed;inset:0;z-index:350;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.72)}.editor-card{width:min(520px,100%);max-height:calc(100dvh - 36px);overflow-y:auto;background:var(--bg2);border:1px solid var(--brass-dim);border-radius:17px;padding:18px;box-shadow:0 20px 70px rgba(0,0,0,.6)}.editor-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.editor-title{font-family:Bitter,serif;font-size:21px;font-weight:700}.editor-close{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--bg3);color:var(--ink);font-size:17px;cursor:pointer}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}.field label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:11px;font:inherit;font-size:14px}.field textarea{min-height:88px;resize:vertical}.entity-hint{display:none;margin-top:5px;padding:8px 10px;border:1px solid var(--brass-dim);border-radius:8px;background:rgba(199,154,75,.08);color:var(--ink-dim);font-size:12px}.entity-hint button{border:none;background:none;color:var(--brass);font-weight:700;cursor:pointer;padding:0}.editor-actions{display:flex;gap:9px;margin-top:16px}.editor-actions button{flex:1;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg3);color:var(--ink);font-weight:700;cursor:pointer}.editor-actions .primary{background:var(--brass);border-color:var(--brass);color:#241d0e}.photo-preview{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.photo-preview img{width:68px;height:68px;object-fit:cover;border-radius:7px;border:1px solid var(--line)}
 @media(min-width:760px){.catalog-grid{grid-template-columns:1fr 1fr}}
 
@@ -363,7 +364,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.1.0</div>
+    <div class="landing-version">Version 2.1.1</div>
   </div>
 </div>
 
@@ -711,8 +712,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.1.0";
-const CACHE_VERSION="sixgun-retriever-v2.1.0";
+const RELEASE_VERSION="2.1.1";
+const CACHE_VERSION="sixgun-retriever-v2.1.1";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -740,7 +741,6 @@ function ensureCatalog(state=DB){
     }
     (c.journal||[]).forEach((j,i)=>{j._syncKey=j._syncKey||`${cart}::journal::${j.date||"undated"}::${i}`;if(j.gun&&!j.gunCatalogKey)j.gunCatalogKey=(c.guns||[]).find(g=>norm(g.name)===norm(j.gun))?._legacyKey||`${cart}::${j.gun}`;if(j.powder&&!j.powderCatalogKey)j.powderCatalogKey=norm(j.powder);});
   }
-  if(typeof LIB_TABLES!=="undefined")for(const table of LIB_TABLES)for(const name of table.powders||[]){const key=norm(name);if(!powderKeys.has(key)){state.catalog.powders.push({_legacyKey:key,name,notes:"Library powder"});powderKeys.add(key);}}
   state.catalog.guns.sort((a,b)=>gunDisplay(a).localeCompare(gunDisplay(b)));state.catalog.powders.sort((a,b)=>a.name.localeCompare(b.name));return state.catalog;
 }
 function exactGun(name,cart=null){ensureCatalog();return DB.catalog.guns.find(g=>norm(gunDisplay(g))===norm(name)&&(!cart||!g.caliber||norm(g.caliber)===norm(cart)))||null;}
@@ -993,7 +993,28 @@ function openJournalForm(){
     const v=Object.fromEntries(fd),gun=v.gun?exactGun(v.gun,DB.activeCartridge):null,powder=v.powder?exactPowder(v.powder):null;if(v.gun&&!gun)throw new Error("Choose a Catalog gun or add it first");if(v.powder&&!powder)throw new Error("Choose a Catalog powder or add it first");if(gun)attachGunToCartridge(gun,DB.activeCartridge);const files=[...form.querySelector("#journalPhoto").files],photos=[];for(const file of files)photos.push(await fileDataUrl(file));C().journal.push({_syncKey:`journal::${crypto.randomUUID()}`,date:v.date,type:v.type,did:v.note.trim(),note:v.note.trim(),gun:gun?gunDisplay(gun):null,gunCatalogKey:gun?gun._legacyKey:null,powder:powder?powder.name:null,powderCatalogKey:powder?powder._legacyKey:null,photos,photoPaths:[],next:""});await save();editorClose();renderAll();toast("Journal entry added");
   });wireEntityInput("journalGun","gun",DB.activeCartridge);wireEntityInput("journalPowder","powder");document.getElementById("journalPhoto").onchange=async e=>{const box=document.getElementById("journalPhotoPreview"),urls=[];for(const f of e.target.files)urls.push(await fileDataUrl(f));box.innerHTML=urls.map(u=>`<img src="${u}" alt="Selected photo">`).join("");};
 }
-function renderCatalog(){ensureCatalog();const guns=document.getElementById("catalogGuns"),powders=document.getElementById("catalogPowders");if(!guns||!powders)return;guns.innerHTML=DB.catalog.guns.length?DB.catalog.guns.map(g=>`<div class="catalog-row"><div class="catalog-name">${esc(gunDisplay(g))}</div><div class="catalog-meta">${[g.caliber,g.serial&&`S/N ${g.serial}`,g.rotation_status].filter(Boolean).map(esc).join(" · ")||"No profile details"}</div><div class="catalog-notes">${[g.purchase_date&&`Purchased ${g.purchase_date}`,g.source,g.price!=null&&`$${Number(g.price).toFixed(2)}`].filter(Boolean).map(esc).join(" · ")}</div></div>`).join(""):`<div class="empty">No guns yet.</div>`;powders.innerHTML=DB.catalog.powders.length?DB.catalog.powders.map(p=>`<div class="catalog-row"><div class="catalog-name">${esc(p.name)}</div>${p.notes?`<div class="catalog-notes">${esc(p.notes)}</div>`:""}</div>`).join(""):`<div class="empty">No powders yet.</div>`;}
+function catalogUsage(kind,key){
+  ensureCatalog();const item=(kind==="gun"?DB.catalog.guns:DB.catalog.powders).find(x=>x._legacyKey===key),name=kind==="gun"?gunDisplay(item||{}):(item?.name||"");let loads=0,sessions=0,journal=0;
+  for(const [cart,c] of Object.entries(DB.cartridges||{})){
+    for(const l of c.loads||[]){const match=kind==="gun"?(l.gunCatalogKey===key||(!l.gunCatalogKey&&norm(l.gun)===norm(name)&&(!item?.caliber||norm(item.caliber)===norm(cart)))):(l.powderCatalogKey===key||(!l.powderCatalogKey&&norm(l.powder)===norm(name)));if(match){loads++;sessions+=(l.sessions||[]).length;}}
+    for(const j of c.journal||[]){const match=kind==="gun"?(j.gunCatalogKey===key||(!j.gunCatalogKey&&norm(j.gun)===norm(name)&&(!item?.caliber||norm(item.caliber)===norm(cart)))):(j.powderCatalogKey===key||(!j.powderCatalogKey&&norm(j.powder)===norm(name)));if(match)journal++;}
+  }return{loads,sessions,journal};
+}
+function removeCatalogEntry(kind,key){
+  ensureCatalog();if(kind==="gun"){const item=DB.catalog.guns.find(g=>g._legacyKey===key);DB.catalog.guns=DB.catalog.guns.filter(g=>g._legacyKey!==key);for(const c of Object.values(DB.cartridges||{})){c.guns=(c.guns||[]).filter(g=>g._legacyKey!==key);if(item&&c.defaultGun===gunDisplay(item)&&!(c.guns||[]).some(g=>g.name===c.defaultGun))c.defaultGun=(c.guns[0]||{}).name||null;}}
+  else DB.catalog.powders=DB.catalog.powders.filter(p=>p._legacyKey!==key);
+}
+function appAlert(msg){let m=document.getElementById("appAlertModal");if(!m){m=document.createElement("div");m.id="appAlertModal";m.style.cssText="position:fixed;inset:0;z-index:410;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.65)";m.innerHTML=`<div style="background:var(--bg2);border:1px solid var(--brass-dim);border-radius:14px;padding:20px;max-width:330px;width:84%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.5)"><div id="appAlertMsg" style="color:var(--ink);font-size:14px;line-height:1.5;margin-bottom:17px"></div><button id="appAlertOk" class="action-btn primary" style="width:100%">Got it</button></div>`;document.body.appendChild(m);}document.getElementById("appAlertMsg").textContent=msg;m.style.display="flex";const close=()=>m.style.display="none";document.getElementById("appAlertOk").onclick=close;m.onclick=e=>{if(e.target===m)close();};}
+function requestCatalogDelete(kind,key){
+  ensureCatalog();const item=(kind==="gun"?DB.catalog.guns:DB.catalog.powders).find(x=>x._legacyKey===key);if(!item)return;const name=kind==="gun"?gunDisplay(item):item.name,used=catalogUsage(kind,key);if(used.loads||used.journal){const bits=[];if(used.loads)bits.push(`${used.loads} load${used.loads===1?"":"s"}`);if(used.sessions)bits.push(`${used.sessions} session${used.sessions===1?"":"s"}`);if(used.journal)bits.push(`${used.journal} journal entr${used.journal===1?"y":"ies"}`);appAlert(`${name} is still used in ${bits.join(" and ")}. Remove or update those records first.`);return;}
+  taConfirm(`Delete ${name} from the Catalog? Library reference tables will not be affected.`,async()=>{removeCatalogEntry(kind,key);await save();renderAll();toast(`${name} deleted`);});
+}
+function renderCatalog(){
+  ensureCatalog();const guns=document.getElementById("catalogGuns"),powders=document.getElementById("catalogPowders");if(!guns||!powders)return;
+  guns.innerHTML=DB.catalog.guns.length?DB.catalog.guns.map(g=>`<div class="catalog-row"><div class="catalog-row-top"><div class="catalog-name">${esc(gunDisplay(g))}</div><button class="catalog-delete" data-kind="gun" data-key="${esc(g._legacyKey)}" aria-label="Delete ${esc(gunDisplay(g))}">✕</button></div><div class="catalog-meta">${[g.caliber,g.serial&&`S/N ${g.serial}`,g.rotation_status].filter(Boolean).map(esc).join(" · ")||"No profile details"}</div><div class="catalog-notes">${[g.purchase_date&&`Purchased ${g.purchase_date}`,g.source,g.price!=null&&`$${Number(g.price).toFixed(2)}`].filter(Boolean).map(esc).join(" · ")}</div></div>`).join(""):`<div class="empty">No guns yet.</div>`;
+  powders.innerHTML=DB.catalog.powders.length?DB.catalog.powders.map(p=>`<div class="catalog-row"><div class="catalog-row-top"><div class="catalog-name">${esc(p.name)}</div><button class="catalog-delete" data-kind="powder" data-key="${esc(p._legacyKey)}" aria-label="Delete ${esc(p.name)}">✕</button></div>${p.notes?`<div class="catalog-notes">${esc(p.notes)}</div>`:""}</div>`).join(""):`<div class="empty">No powders yet.</div>`;
+  document.querySelectorAll(".catalog-delete").forEach(b=>b.onclick=()=>requestCatalogDelete(b.dataset.kind,b.dataset.key));
+}
 document.getElementById("addGunBtn").onclick=openGunForm;document.getElementById("addPowderBtn").onclick=openPowderForm;document.getElementById("newLoadBtn").onclick=()=>openLoadForm();document.getElementById("newJournalBtn").onclick=openJournalForm;
 
 /* ---------- nav ---------- */
@@ -2198,6 +2219,10 @@ async function syncNormalized(state){
   if(journalRows.length)supaError(await sb.from("journal_entries").upsert(journalRows,{onConflict:"user_id,legacy_key"}));
   if(targetRows.length)supaError(await sb.from("target_analyses").upsert(targetRows,{onConflict:"user_id,legacy_key"}));
   const existingTargets=supaError(await sb.from("target_analyses").select("id,legacy_key,photo_path"));const wanted=new Set(targetRows.map(r=>r.legacy_key)),removed=existingTargets.filter(r=>!wanted.has(r.legacy_key));if(removed.length){const paths=removed.map(r=>r.photo_path).filter(Boolean);if(paths.length)supaError(await sb.storage.from("sixgun-photos").remove(paths));supaError(await sb.from("target_analyses").delete().in("id",removed.map(r=>r.id)));}
+  // Reconcile Catalog removals only against guns/powders. Library tables are
+  // independent JSON/text reference material and are deliberately untouched.
+  const [existingGuns,existingPowders]=await Promise.all([sb.from("guns").select("id,legacy_key"),sb.from("powders").select("id,legacy_key")]);supaError(existingGuns);supaError(existingPowders);
+  const wantedGuns=new Set(gunRows.map(r=>r.legacy_key)),wantedPowders=new Set(powderRows.map(r=>r.legacy_key));const removedGuns=(existingGuns.data||[]).filter(r=>!wantedGuns.has(r.legacy_key)),removedPowders=(existingPowders.data||[]).filter(r=>!wantedPowders.has(r.legacy_key));if(removedGuns.length)supaError(await sb.from("guns").delete().in("id",removedGuns.map(r=>r.id)));if(removedPowders.length)supaError(await sb.from("powders").delete().in("id",removedPowders.map(r=>r.id)));
   const libEntries=LIB_ENTRIES.map((data,i)=>({user_id:uid,legacy_key:`note-${i}`,cartridge:data.cartridge||null,writer:data.who||null,data,updated_at:now}));if(libEntries.length)supaError(await sb.from("library_entries").upsert(libEntries,{onConflict:"user_id,legacy_key"}));
   const libTables=LIB_TABLES.map((data,i)=>({user_id:uid,legacy_key:`table-${i}`,cartridge:data.cartridge||null,writer:data.writer||data.who||null,powders:data.powders||[],data,updated_at:now}));if(libTables.length)supaError(await sb.from("library_tables").upsert(libTables,{onConflict:"user_id,legacy_key"}));
   supaError(await sb.from("app_state").upsert({user_id:uid,state:cloudSafeState(state),schema_version:CLOUD_SCHEMA_VERSION,updated_at:now},{onConflict:"user_id"}));
