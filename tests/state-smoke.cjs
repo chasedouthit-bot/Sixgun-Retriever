@@ -56,7 +56,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,cloudSafeState,getDB:()=>DB};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -80,6 +80,15 @@ assert.equal(catalog.guns.length, gunCount + 1);
 assert.equal(catalog.powders.length, powderCount + 1);
 assert(gun._legacyKey.startsWith("catalog::"));
 assert(powder._legacyKey.startsWith("catalog::"));
+const usedPowder = catalog.powders.find(p =>
+  Object.values(db.cartridges).some(c => c.loads.some(l => l.powderCatalogKey === p._legacyKey))
+);
+assert(usedPowder, "expected a powder referenced by an existing load");
+assert(api.catalogUsage("powder", usedPowder._legacyKey).loads > 0, "referenced powder should report load usage");
+const libraryBefore = JSON.stringify(api.getLibTables());
+api.removeCatalogEntry("powder", powder._legacyKey);
+assert.equal(catalog.powders.some(p => p._legacyKey === powder._legacyKey), false, "unreferenced powder should be removable");
+assert.equal(JSON.stringify(api.getLibTables()), libraryBefore, "Catalog removal must not modify Library tables");
 
 db.cartridges[db.activeCartridge].journal.push({
   _syncKey: "journal::smoke",
