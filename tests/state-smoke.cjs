@@ -5,6 +5,7 @@ const { webcrypto } = require("crypto");
 
 const html = fs.readFileSync("index.html", "utf8");
 const serviceMigration = fs.readFileSync("supabase/migrations/20260826_parts_maintenance.sql", "utf8");
+const garminMigration = fs.readFileSync("supabase/migrations/20260827_garmin_chronograph_import.sql", "utf8");
 const landingVersion = html.match(/<div class="landing-version">Version ([^<]+)<\/div>/)?.[1];
 const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)"/)?.[1];
 const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
@@ -30,6 +31,9 @@ assert(html.includes("function pdfPartsMaintenancePages"), "PDF export must rend
 assert(serviceMigration.includes("create table if not exists public.parts_modifications"), "parts migration must create the parts table");
 assert(serviceMigration.includes("create table if not exists public.maintenance_entries"), "parts migration must create the maintenance table");
 assert.equal((serviceMigration.match(/enable row level security/g) || []).length, 2, "both service tables must enable RLS");
+assert(garminMigration.includes("create table if not exists public.chronograph_shots"), "Garmin migration must create per-shot storage");
+assert(garminMigration.includes("session_datetime timestamptz"), "Garmin migration must preserve session date and time");
+assert(garminMigration.includes("firearm_id bigint references public.guns"), "imported sessions must store the assigned firearm ID");
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map(match => match[1])
   .filter(script => script.includes("const SEED"));
@@ -91,14 +95,33 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
 const api = context.__test;
 const db = api.getDB();
 const catalog = api.ensureCatalog();
+const garminCsv = `"Pistol session started at 10:52"
+#,SPEED (FPS),Δ AVG (FPS),KE (FT-LB),POWER FACTOR (KGR⋅FT/S),TIME,CLEAN BORE,COLD BORE,SHOT NOTES
+1, 980.0, 0.0, , , 10:53:11 AM, yes, yes, First shot
+2, 1000.0, 20.0, , , 10:54:11 AM, , ,
+3, 1020.0, 40.0, , , 10:55:11 AM, , ,
+-,,,,,,,,
+AVERAGE SPEED,1000.0,,,,,,,
+STD DEV,20.0,,,,,,,
+SPREAD,40.0,,,,,,,
+SESSION NOTE,"Test string",,,,,,,
+-,,,,,,,,
+DATE, "May 21, 2026 at 10:52 AM",,,,,,,`;
+const garmin = api.parseShotViewCSV(garminCsv, "three-shot.csv");
+assert.deepEqual(JSON.parse(JSON.stringify(garmin.computed)), { n: 3, avg: 1000, sd: 20, es: 40, populationSd: 16.3 });
+assert.equal(garmin.shots[0].time, "10:53:11 AM");
+assert.equal(garmin.shots[0].clean_bore, true);
+assert.equal(garmin.sessionNote, "Test string");
+assert(garmin.sessionDatetime, "Garmin DATE line should parse");
 assert.equal(typeof elements.get("doorBench").onclick, "function", "Reloading Bench must be interactive before cloud hydration");
+assert.equal(typeof elements.get("doorImport").onclick, "function", "Import Session must be interactive before cloud hydration");
 context.window.SixgunCloud = null;
 elements.get("doorBench").onclick();
 assert(elements.get("landing").classList.contains("hidden"), "Reloading Bench should dismiss the landing page");

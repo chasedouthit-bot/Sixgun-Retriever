@@ -343,6 +343,10 @@ main{padding:0 16px 24px;background:var(--bg)}
 .empty{text-align:center;padding:40px 20px;color:var(--ink-faint)}
 .empty .big{font-size:15px;color:var(--ink-dim);margin-bottom:6px;font-family:Bitter}
 
+/* ---------- Garmin ShotView import ---------- */
+#s-import{max-width:880px}.import-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}.import-head h1{font:700 28px/1.1 Bitter,serif}.import-head p{max-width:560px;margin-top:6px;color:var(--ink-faint);font-size:13px;line-height:1.5}.import-drop{border:1px dashed var(--brass-dim);border-radius:15px;padding:25px;text-align:center;background:linear-gradient(145deg,var(--bg2),var(--bg3));transition:.18s}.import-drop.dragging{border-color:var(--brass);background:rgba(199,154,75,.09)}.import-drop-title{font:600 17px Bitter,serif}.import-drop-copy{margin:5px 0 14px;color:var(--ink-faint);font-size:12px}.import-file-btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 15px;border:1px solid var(--brass);border-radius:10px;background:var(--brass);color:#241d0e;font-size:13px;font-weight:700;cursor:pointer}.import-file-btn input{display:none}.import-errors{margin:12px 0;color:var(--red);font-size:12px;line-height:1.5}.import-list{display:flex;flex-direction:column;gap:13px;margin-top:16px}.import-row{border:1px solid var(--line);border-radius:15px;padding:16px;background:var(--bg2)}.import-row.saved{border-color:rgba(91,161,104,.65);background:linear-gradient(145deg,var(--bg2),rgba(91,161,104,.08))}.import-row.error{border-color:rgba(190,77,67,.7)}.import-row-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.import-file-name{font:600 15px Bitter,serif;overflow-wrap:anywhere}.import-date{margin-top:4px;color:var(--ink-faint);font-size:11px}.import-state{flex:none;border-radius:99px;padding:5px 9px;background:var(--bg3);color:var(--ink-faint);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}.import-row.saved .import-state{color:var(--green)}.import-row.error .import-state{color:var(--red)}.import-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:13px 0}.import-stat{padding:9px 6px;border:1px solid var(--line);border-radius:9px;text-align:center;background:var(--bg)}.import-stat strong{display:block;font:600 16px 'JetBrains Mono',monospace}.import-stat span{display:block;margin-top:3px;color:var(--ink-faint);font-size:9px;text-transform:uppercase;letter-spacing:.07em}.import-check{margin:-3px 0 12px;color:var(--ink-faint);font-size:10px}.import-check.warn{color:var(--amber)}.import-assign{display:grid;grid-template-columns:1fr 1fr;gap:10px}.import-inline{grid-column:1/-1;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}.import-inline-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.import-inline-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}.import-inline button,.import-save{border:1px solid var(--brass-dim);border-radius:9px;padding:9px 12px;background:var(--bg3);color:var(--ink);font-weight:700;cursor:pointer}.import-inline button.primary,.import-save{border-color:var(--brass);background:var(--brass);color:#241d0e}.import-notes{grid-column:1/-1}.import-save-line{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}.import-error-copy{color:var(--red);font-size:11px}.import-save:disabled{opacity:.45;cursor:default}.import-row.saved .import-assign,.import-row.saved .import-save{display:none}
+@media(max-width:650px){.import-head{display:block}.import-head .bio-back{margin-bottom:12px}.import-drop{padding:18px 13px}.import-drop-copy{display:none}.import-assign{grid-template-columns:1fr}.import-inline,.import-notes{grid-column:1}.import-inline-grid{grid-template-columns:1fr}.import-stats{gap:5px}.import-stat strong{font-size:14px}}
+
 /* ---------- bottom nav ---------- */
 nav{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:rgba(26,22,19,.92);backdrop-filter:blur(16px);border-top:1px solid var(--line);padding-bottom:var(--safe-b)}
 nav button{flex:1;background:none;border:none;padding:9px 0 8px;color:var(--ink-faint);font-size:10.5px;font-weight:600;letter-spacing:.03em;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.15s}
@@ -385,10 +389,18 @@ nav button.on{color:var(--brass)}
         </div>
         <svg class="door-arrow" viewBox="0 0 24 24" width="22" height="22"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
+      <button class="door" id="doorImport">
+        <div class="door-label">
+          <div class="door-kicker">Garmin ShotView</div>
+          <div class="door-name">Import Session</div>
+          <div class="door-sub">Bring chronograph strings into the loading book</div>
+        </div>
+        <svg class="door-arrow" viewBox="0 0 24 24" width="22" height="22"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.6.3</div>
+    <div class="landing-version">Version 2.7.0</div>
   </div>
 </div>
 
@@ -413,11 +425,23 @@ nav button.on{color:var(--brass)}
 <main>
   <!-- ============ LOADS ============ -->
   <section class="screen active" id="s-loads">
-    <div class="screen-actions"><button class="action-btn primary" id="newLoadBtn">＋ New Load</button></div>
+    <div class="screen-actions"><button class="action-btn" id="importLoadBtn">Import Session</button><button class="action-btn primary" id="newLoadBtn">＋ New Load</button></div>
     <div class="chips" id="gunChips"></div>
     <div class="chips" id="tierChips"></div>
     <div class="chips" id="powderChips"></div>
     <div id="loadList"></div>
+  </section>
+
+  <!-- ============ GARMIN IMPORT ============ -->
+  <section class="screen" id="s-import">
+    <div class="import-head"><div><h1>Import Session</h1><p>Select one or several Garmin ShotView CSV exports. Assign and save each string independently, so completed rows are already secure if the range day gets interrupted.</p></div><button class="bio-back" id="importBackBtn">‹ Back</button></div>
+    <div class="import-drop" id="importDropZone">
+      <div class="import-drop-title">Garmin ShotView CSV</div>
+      <div class="import-drop-copy">Drop several files here, or use the file picker</div>
+      <label class="import-file-btn">Select Files<input id="importFileInput" type="file" multiple accept=".csv,text/csv"></label>
+    </div>
+    <div class="import-errors" id="importErrors"></div>
+    <div class="import-list" id="importList"></div>
   </section>
 
   <!-- ============ BENCH ============ -->
@@ -748,8 +772,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.6.3";
-const CACHE_VERSION="sixgun-retriever-v2.6.3";
+const RELEASE_VERSION="2.7.0";
+const CACHE_VERSION="sixgun-retriever-v2.7.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -805,6 +829,99 @@ function stats(vels){
   if(n>1){const varr=v.reduce((a,b)=>a+(b-avg)**2,0)/(n-1);sd=Math.sqrt(varr);}
   return {n,avg:+avg.toFixed(1),sd:+sd.toFixed(1),es:+es.toFixed(1)};
 }
+
+/* ---------- Garmin ShotView CSV import ---------- */
+let importRows=[],importReturnScreen="loads";
+function csvRows(text){
+  const rows=[];let row=[],field="",quoted=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(quoted){if(ch==='"'&&text[i+1]==='"'){field+='"';i++;}else if(ch==='"')quoted=false;else field+=ch;continue;}
+    if(ch==='"'){quoted=true;continue;}if(ch===","){row.push(field);field="";continue;}
+    if(ch==="\n"){row.push(field.replace(/\r$/,"").trim());rows.push(row);row=[];field="";continue;}field+=ch;
+  }
+  if(field.length||row.length){row.push(field.replace(/\r$/,"").trim());rows.push(row);}return rows;
+}
+function shotViewDate(value){
+  const raw=String(value||"").trim();if(!raw)return null;
+  const match=raw.match(/^([A-Za-z]+)\s+(\d{1,2}),\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if(match){const months=["january","february","march","april","may","june","july","august","september","october","november","december"],month=months.indexOf(match[1].toLowerCase());let hour=Number(match[4])%12;if(match[6].toUpperCase()==="PM")hour+=12;const parsed=new Date(Number(match[3]),month,Number(match[2]),hour,Number(match[5]));if(month>=0&&!isNaN(parsed))return parsed.toISOString();}
+  const parsed=new Date(raw.replace(/\s+at\s+/i," "));return isNaN(parsed)?null:parsed.toISOString();
+}
+function flagValue(value){const v=norm(value);return v==="yes"||v==="true"||v==="1"?true:v==="no"||v==="false"||v==="0"?false:null;}
+function parseShotViewCSV(text,filename="ShotView.csv"){
+  const rows=csvRows(String(text||"").replace(/^\uFEFF/,""));
+  const headerIndex=rows.findIndex(r=>norm(r[0])==="#"&&norm(r[1]).startsWith("speed (fps)"));
+  if(headerIndex<0)throw new Error("ShotView header (#, SPEED (FPS)) was not found");
+  const header=rows[headerIndex].map(x=>norm(x)),at=name=>header.findIndex(x=>x===norm(name));
+  const speedAt=at("speed (fps)"),timeAt=at("time"),cleanAt=at("clean bore"),coldAt=at("cold bore"),notesAt=at("shot notes"),shots=[];
+  for(let i=headerIndex+1;i<rows.length;i++){
+    const r=rows[i],first=String(r[0]||"").trim();if(first==="-")break;
+    const shotNumber=Number(first),speed=Number(String(r[speedAt]||"").trim());
+    if(Number.isFinite(shotNumber)&&Number.isFinite(speed)&&speed>0)shots.push({shot_number:shotNumber,speed:+speed.toFixed(1),time:String(r[timeAt]||"").trim()||null,clean_bore:flagValue(r[cleanAt]),cold_bore:flagValue(r[coldAt]),notes:String(r[notesAt]||"").trim()||null});
+  }
+  if(!shots.length)throw new Error("No valid shot rows were found");
+  const reported={avg:null,sd:null,es:null};let sessionNote="",sessionDatetime=null;
+  for(const r of rows.slice(headerIndex+1)){
+    const label=norm(r[0]),value=String(r[1]??"").trim();
+    if(label==="average speed")reported.avg=num(value);else if(label==="std dev")reported.sd=num(value);else if(label==="spread")reported.es=num(value);else if(label==="session note")sessionNote=value;else if(label==="date")sessionDatetime=shotViewDate(value);
+  }
+  const velocities=shots.map(s=>s.speed),computed=stats(velocities),mean=velocities.reduce((a,b)=>a+b,0)/velocities.length,populationSd=Math.sqrt(shots.reduce((sum,s)=>sum+(s.speed-mean)**2,0)/shots.length);
+  const delta={avg:reported.avg==null?null:+Math.abs(computed.avg-reported.avg).toFixed(1),sd:reported.sd==null?null:+Math.abs(computed.sd-reported.sd).toFixed(1),es:reported.es==null?null:+Math.abs(computed.es-reported.es).toFixed(1)};
+  return{filename,shots,computed:{...computed,populationSd:+populationSd.toFixed(1)},reported,delta,sessionNote,sessionDatetime};
+}
+function importGunOptions(selected=""){ensureCatalog();return `<option value="">Choose firearm…</option>${DB.catalog.guns.map(g=>`<option value="${esc(g._legacyKey)}" ${g._legacyKey===selected?"selected":""}>${esc(gunDisplay(g))}${g.caliber?` · ${esc(g.caliber)}`:""}</option>`).join("")}<option value="__new__">＋ New Firearm</option>`;}
+function importLoadsForGun(gunKey){
+  const out=[];for(const [cart,c] of Object.entries(DB.cartridges||{}))for(const l of c.loads||[])if(l.gunCatalogKey===gunKey)out.push({cart,load:l});return out;
+}
+function importLoadLabel(cart,l){const tier=DB.cartridges[cart]?.groupNoun||"Tier";return `${cart} · ${tier} ${l.tier??"—"} · ${l.charge!=null?Number(l.charge).toFixed(1)+"gr ":""}${l.powder||""} · ${l.bullet||""}`;}
+function importLoadOptions(row){const loads=importLoadsForGun(row.gunKey);return `<option value="">Choose load…</option>${loads.map(({cart,load})=>{const key=`${cart}::${load.id}`;return `<option value="${esc(key)}" ${row.loadKey===key?"selected":""}>${esc(importLoadLabel(cart,load))}</option>`;}).join("")}<option value="__new__">＋ New Load</option>`;}
+function importDateLabel(iso){if(!iso)return "Date not found in export";const d=new Date(iso);return isNaN(d)?"Date not found in export":d.toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});}
+function importInlineGun(row){return `<div class="import-inline"><div class="import-inline-grid"><div class="field"><label>Make</label><input data-new-gun="make"></div><div class="field"><label>Model *</label><input data-new-gun="model"></div><div class="field"><label>Caliber *</label><input data-new-gun="caliber" value="${esc(DB.activeCartridge)}" list="importCalibers"></div></div><datalist id="importCalibers">${Object.keys(DB.cartridges).map(c=>`<option value="${esc(c)}">`).join("")}</datalist><div class="import-inline-actions"><button data-cancel-new-gun="1">Cancel</button><button class="primary" data-create-gun="1">Create Firearm</button></div></div>`;}
+function importInlineLoad(row){
+  const gun=DB.catalog.guns.find(g=>g._legacyKey===row.gunKey),cart=(gun?.caliber&&DB.cartridges[gun.caliber])?gun.caliber:DB.activeCartridge,c=DB.cartridges[cart];
+  const tierOpts=Object.entries(c?.tiers||{}).map(([k,t])=>`<option value="${esc(k)}">${esc((c.groupNoun||"Tier")+" "+k+" · "+t.name)}</option>`).join("");
+  return `<div class="import-inline"><div class="import-inline-grid"><div class="field"><label>Powder *</label><select data-new-load="powder"><option value="">Choose…</option>${DB.catalog.powders.map(p=>`<option value="${esc(p._legacyKey)}">${esc(p.name)}</option>`).join("")}</select></div><div class="field"><label>Charge (gr) *</label><input type="number" min="0" step="0.1" data-new-load="charge"></div><div class="field"><label>Bullet *</label><input data-new-load="bullet"></div><div class="field"><label>${esc(c?.groupNoun||"Tier")}</label><select data-new-load="tier">${tierOpts}</select></div></div><div class="import-inline-actions"><button data-cancel-new-load="1">Cancel</button><button class="primary" data-create-load="1">Create Load</button></div></div>`;
+}
+function renderImport(){
+  const list=document.getElementById("importList");if(!list)return;
+  list.innerHTML=importRows.map(row=>{const p=row.parsed,c=p.computed,discrepancy=Object.values(p.delta).some(v=>v!=null&&v>.2),state=row.status==="saved"?"Saved":row.status==="saving"?"Saving…":row.status==="error"?"Retry":"Unsaved";return `<article class="import-row ${row.status}" data-import-id="${esc(row.id)}"><div class="import-row-top"><div><div class="import-file-name">${esc(importDateLabel(p.sessionDatetime))}</div><div class="import-date">Source file · ${esc(p.filename)}</div></div><div class="import-state">${state}</div></div><div class="import-stats"><div class="import-stat"><strong>${c.avg}</strong><span>Avg fps</span></div><div class="import-stat"><strong>${c.sd}</strong><span>SD (sample)</span></div><div class="import-stat"><strong>${c.es}</strong><span>ES</span></div><div class="import-stat"><strong>${c.n}</strong><span>Shots</span></div></div><div class="import-check ${discrepancy?"warn":""}">${discrepancy?`Garmin reported ${p.reported.avg??"—"} avg / ${p.reported.sd??"—"} SD / ${p.reported.es??"—"} ES · recomputed values will be saved.`:"Raw shots cross-check against Garmin’s summary."}</div>${row.status==="saved"?`<div class="import-date">Assigned to ${esc(row.savedGun)} · ${esc(row.savedLoad)}</div>`:`<div class="import-assign"><div class="field"><label>Firearm *</label><select data-import-gun>${importGunOptions(row.gunKey)}</select></div><div class="field"><label>Load *</label><select data-import-load ${row.gunKey?"":"disabled"}>${importLoadOptions(row)}</select></div>${row.newGun?importInlineGun(row):""}${row.newLoad?importInlineLoad(row):""}<div class="field import-notes"><label>Session notes</label><textarea data-import-notes>${esc(row.notes)}</textarea></div></div><div class="import-save-line"><div class="import-error-copy">${esc(row.error||"")}</div><button class="import-save" data-save-import ${row.gunKey&&row.loadKey&&row.status!=="saving"?"":"disabled"}>${row.status==="error"?"Retry Save":"Save Session"}</button></div>`}</article>`;}).join("");
+  wireImportRows();
+}
+function importRowFrom(el){return importRows.find(r=>r.id===el.closest("[data-import-id]")?.dataset.importId);}
+function wireImportRows(){
+  document.querySelectorAll("[data-import-gun]").forEach(el=>el.onchange=()=>{const row=importRowFrom(el);if(el.value==="__new__"){row.newGun=true;row.gunKey="";}else{row.gunKey=el.value;row.newGun=false;}row.loadKey="";row.newLoad=false;renderImport();});
+  document.querySelectorAll("[data-import-load]").forEach(el=>el.onchange=()=>{const row=importRowFrom(el);if(el.value==="__new__"){row.newLoad=true;row.loadKey="";}else{row.loadKey=el.value;row.newLoad=false;}renderImport();});
+  document.querySelectorAll("[data-import-notes]").forEach(el=>el.oninput=()=>{importRowFrom(el).notes=el.value;});
+  document.querySelectorAll("[data-cancel-new-gun]").forEach(el=>el.onclick=()=>{const row=importRowFrom(el);row.newGun=false;renderImport();});
+  document.querySelectorAll("[data-cancel-new-load]").forEach(el=>el.onclick=()=>{const row=importRowFrom(el);row.newLoad=false;renderImport();});
+  document.querySelectorAll("[data-create-gun]").forEach(el=>el.onclick=()=>{const root=el.closest("[data-import-id]"),row=importRowFrom(el),values={};root.querySelectorAll("[data-new-gun]").forEach(x=>values[x.dataset.newGun]=x.value);try{const gun=addGunRecord(values);row.gunKey=gun._legacyKey;row.newGun=false;renderImport();}catch(e){row.error=e.message;renderImport();}});
+  document.querySelectorAll("[data-create-load]").forEach(el=>el.onclick=()=>{const root=el.closest("[data-import-id]"),row=importRowFrom(el),values={};root.querySelectorAll("[data-new-load]").forEach(x=>values[x.dataset.newLoad]=x.value);try{const gun=DB.catalog.guns.find(g=>g._legacyKey===row.gunKey),powder=DB.catalog.powders.find(p=>p._legacyKey===values.powder),cart=(gun?.caliber&&DB.cartridges[gun.caliber])?gun.caliber:DB.activeCartridge;if(!gun||!powder||!values.bullet.trim()||values.charge==="")throw new Error("Complete powder, charge, and bullet");attachGunToCartridge(gun,cart);const load={id:`load-${crypto.randomUUID()}`,gun:gunDisplay(gun),gunCatalogKey:gun._legacyKey,powder:powder.name,powderCatalogKey:powder._legacyKey,bullet:values.bullet.trim(),charge:Number(values.charge),tier:Number(values.tier||1),keep:"pending",avg:null,sd:null,es:null,moa:null,sessions:[],targets:[]};DB.cartridges[cart].loads.push(load);row.loadKey=`${cart}::${load.id}`;row.newLoad=false;renderImport();}catch(e){row.error=e.message;renderImport();}});
+  document.querySelectorAll("[data-save-import]").forEach(el=>el.onclick=()=>saveImportRow(importRowFrom(el)));
+}
+function findImportLoad(key){for(const [cart,c] of Object.entries(DB.cartridges||{}))for(const load of c.loads||[])if(`${cart}::${load.id}`===key)return{cart,load};return null;}
+function localSessionDate(iso){if(!iso)return null;const d=new Date(iso);if(isNaN(d))return null;const pad=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
+async function saveImportRow(row){
+  const gun=DB.catalog.guns.find(g=>g._legacyKey===row.gunKey),found=findImportLoad(row.loadKey);if(!gun||!found){row.error="Choose a firearm and load";renderImport();return;}
+  row.status="saving";row.error="";renderImport();
+  try{
+    const p=row.parsed,c=p.computed;
+    if(!row.session){row.session={_syncKey:`garmin-session::${crypto.randomUUID()}`,date:localSessionDate(p.sessionDatetime),session_datetime:p.sessionDatetime,shots:c.n,avg:c.avg,sd:c.sd,es:c.es,notes:row.notes||null,source:"garmin_shotview",source_filename:p.filename,garmin_avg:p.reported.avg,garmin_sd:p.reported.sd,garmin_es:p.reported.es,sd_population:c.populationSd,sd_method:"sample",raw_shots:p.shots};found.load.sessions=found.load.sessions||[];found.load.sessions.push(row.session);}else row.session.notes=row.notes||null;
+    found.load.avg=c.avg;found.load.sd=c.sd;found.load.es=c.es;
+    if(!window.SixgunCloud?.saveNow)throw new Error("Cloud sync is not ready. Sign in and try again.");await window.SixgunCloud.saveNow();
+    row.status="saved";row.savedGun=gunDisplay(gun);row.savedLoad=importLoadLabel(found.cart,found.load);row.error="";renderAll();renderImport();toast("Garmin session saved");
+  }catch(e){row.status="error";row.error=e.message||"Could not save this session";renderImport();}
+}
+async function handleImportFiles(files){
+  const errors=[];for(const file of files){try{const parsed=parseShotViewCSV(await file.text(),file.name);importRows.push({id:crypto.randomUUID(),parsed,gunKey:"",loadKey:"",notes:parsed.sessionNote||"",newGun:false,newLoad:false,status:"unsaved",error:"",session:null});}catch(e){errors.push(`${file.name}: ${e.message}`);}}
+  document.getElementById("importErrors").innerHTML=errors.map(esc).join("<br>");renderImport();
+}
+function openImport(from="loads"){importReturnScreen=from;document.getElementById("landing").classList.add("hidden");goto("import");renderImport();}
+const importInput=document.getElementById("importFileInput"),importDrop=document.getElementById("importDropZone");
+importInput.onchange=()=>{handleImportFiles([...importInput.files]);importInput.value="";};
+for(const event of ["dragenter","dragover"]){importDrop.addEventListener(event,e=>{e.preventDefault();importDrop.classList.add("dragging");});}
+for(const event of ["dragleave","drop"]){importDrop.addEventListener(event,e=>{e.preventDefault();importDrop.classList.remove("dragging");});}
+importDrop.addEventListener("drop",e=>handleImportFiles([...e.dataTransfer.files].filter(f=>f.name.toLowerCase().endsWith(".csv"))));
 
 /* ---------- render: LOADS ---------- */
 let tierFilter="all";
@@ -1232,7 +1349,7 @@ function renderCatalog(){
   powders.innerHTML=DB.catalog.powders.length?DB.catalog.powders.map(p=>`<div class="catalog-row"><div class="catalog-row-top"><div class="catalog-name">${esc(p.name)}</div><button class="catalog-delete" data-kind="powder" data-key="${esc(p._legacyKey)}" aria-label="Delete ${esc(p.name)}">✕</button></div>${p.notes?`<div class="catalog-notes">${esc(p.notes)}</div>`:""}</div>`).join(""):`<div class="empty">No powders yet.</div>`;
   document.querySelectorAll(".catalog-open").forEach(b=>b.onclick=()=>openBiography(b.dataset.openGun));document.querySelectorAll(".catalog-edit").forEach(b=>b.onclick=()=>openGunEdit(b.dataset.editGun));document.querySelectorAll(".catalog-delete").forEach(b=>b.onclick=()=>requestCatalogDelete(b.dataset.kind,b.dataset.key));
 }
-document.getElementById("addGunBtn").onclick=openGunForm;document.getElementById("addPowderBtn").onclick=openPowderForm;document.getElementById("newLoadBtn").onclick=()=>openLoadForm();document.getElementById("newJournalBtn").onclick=openJournalForm;
+document.getElementById("addGunBtn").onclick=openGunForm;document.getElementById("addPowderBtn").onclick=openPowderForm;document.getElementById("newLoadBtn").onclick=()=>openLoadForm();document.getElementById("newJournalBtn").onclick=openJournalForm;document.getElementById("importLoadBtn").onclick=()=>openImport("loads");document.getElementById("importBackBtn").onclick=()=>{if(importReturnScreen==="landing")showLanding();else goto(importReturnScreen);};
 
 /* ---------- nav ---------- */
 function goto(s){
@@ -1240,7 +1357,7 @@ function goto(s){
   document.getElementById("s-"+s).classList.add("active");
   document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
   // caliber switcher is meaningless in app-wide Library/Catalog; keep home reachable
-  document.getElementById("cartSwitch").style.visibility=(s==="lib"||s==="catalog"||s==="biography"||s==="letter"||s==="photo-record"||s==="parts-maintenance")?"hidden":"visible";
+  document.getElementById("cartSwitch").style.visibility=(s==="lib"||s==="catalog"||s==="biography"||s==="letter"||s==="photo-record"||s==="parts-maintenance"||s==="import")?"hidden":"visible";
   if(s==="lib")renderLibrary();
   if(s==="catalog")renderCatalog();
   window.scrollTo(0,0);
@@ -1271,6 +1388,7 @@ function renderLanding(){
     document.getElementById("landing").classList.add("hidden");
     goto("lib");
   };
+  document.getElementById("doorImport").onclick=()=>openImport("landing");
 }
 function enterCartridge(name){
   const names=Object.keys(DB.cartridges||{});if(!names.length){toast("No cartridge records are available");return;}
@@ -1290,7 +1408,7 @@ function showLanding(){
 }
 document.getElementById("homeBtn").onclick=showLanding;
 // The landing page is visible before IndexedDB/auth hydration completes. Wire
-// both doors synchronously so a quick tap on launch can never be discarded.
+// all landing doors synchronously so a quick tap on launch can never be discarded.
 renderLanding();
 
 /* ---------- cartridge switcher ---------- */
@@ -2368,7 +2486,7 @@ document.addEventListener("click",function(e){
    ============================================================ */
 const SUPABASE_URL="https://risuqltejfwjokdsrkmj.supabase.co";
 const SUPABASE_KEY="sb_publishable_xGQGXi9U4GxEE7GisKQVuw_k0HvBWPx";
-const CLOUD_SCHEMA_VERSION=3;
+const CLOUD_SCHEMA_VERSION=4;
 const IDB_NAME="sixgun_retriever_cloud_v1";
 let sb=null,cloudUser=null,cloudFlushing=false,cloudSaveTimer=null;
 
@@ -2384,7 +2502,7 @@ async function idbDelete(store,id){const d=await idbOpen();return new Promise((r
 function clone(v){return JSON.parse(JSON.stringify(v));}
 function targetKey(cart,load,index,target){return target._syncKey||`${cart}::${load.id}::target::${index}`;}
 function prepareState(state){
-  ensureCatalog(state);Object.entries(state.cartridges||{}).forEach(([cart,c])=>{(c.loads||[]).forEach(load=>(load.targets||[]).forEach((target,i)=>{target._syncKey=targetKey(cart,load,i,target);}));(c.journal||[]).forEach((j,i)=>{j._syncKey=j._syncKey||`${cart}::journal::${j.date||"undated"}::${i}`;});});return state;
+  ensureCatalog(state);Object.entries(state.cartridges||{}).forEach(([cart,c])=>{(c.loads||[]).forEach(load=>{(load.targets||[]).forEach((target,i)=>{target._syncKey=targetKey(cart,load,i,target);});(load.sessions||[]).forEach((session,i)=>{session._syncKey=session._syncKey||`${cart}::${load.id}::session::${i}`;});});(c.journal||[]).forEach((j,i)=>{j._syncKey=j._syncKey||`${cart}::journal::${j.date||"undated"}::${i}`;});});return state;
 }
 function cloudSafeState(state){const out=clone(prepareState(state));(out.catalog?.gun_entries||[]).forEach(e=>{delete e.photo;delete e.photo_url;});(out.catalog?.moment_photos||[]).forEach(p=>{delete p.display_data;delete p.print_data;delete p.display_url;delete p.print_url;});Object.values(out.cartridges||{}).forEach(c=>{(c.loads||[]).forEach(l=>(l.targets||[]).forEach(t=>{delete t.photo;}));(c.journal||[]).forEach(j=>{delete j.photo;delete j.photos;j.photoPaths=(j.photoPaths||j.photo_urls||[]).filter(p=>typeof p==="string"&&!p.startsWith("data:"));delete j.photo_urls;});});return out;}
 async function saveCloudState(){
@@ -2394,7 +2512,13 @@ async function saveCloudState(){
   cloudStatus(navigator.onLine?"Saving…":"Offline · changes queued","warn");
   clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(()=>flushCloudQueue(),250);
 }
-window.SixgunCloud={saveState:saveCloudState,uploadPhoto:async(blob,folder="journal")=>{
+async function saveCloudStateNow(){
+  prepareState(DB);await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});await idbPut("queue",{id:"snapshot",state:cloudSafeState(DB),updatedAt:Date.now()});
+  if(!cloudUser)throw new Error("Sign in before saving an imported session");if(!navigator.onLine)throw new Error("You are offline. Reconnect, then retry this row.");
+  while(cloudFlushing)await new Promise(resolve=>setTimeout(resolve,50));cloudFlushing=true;cloudStatus("Saving session…","warn");
+  try{await syncNormalized(cloudSafeState(DB));await idbDelete("queue","snapshot");localStorage.removeItem(KEY);cloudStatus("Synced","ok");}catch(e){cloudStatus(/relation|schema cache/i.test(e.message||"")?"Setup needed · run Garmin SQL":"Session save failed","error");throw e;}finally{cloudFlushing=false;}
+}
+window.SixgunCloud={saveState:saveCloudState,saveNow:saveCloudStateNow,uploadPhoto:async(blob,folder="journal")=>{
   if(!cloudUser)throw new Error("Sign in before uploading photos");
   const ext=(blob.type||"").includes("png")?"png":(blob.type||"").includes("webp")?"webp":"jpg";
   const path=`${cloudUser.id}/${folder}/${crypto.randomUUID()}.${ext}`;
@@ -2444,10 +2568,12 @@ async function syncNormalized(state){
   const loads=loadRows.length?supaError(await sb.from("loads").upsert(loadRows,{onConflict:"user_id,legacy_key"}).select("id,legacy_key")):[];const loadMap=new Map(loads.map(x=>[x.legacy_key,x.id]));
   const sessionRows=[],journalRows=[],targetRows=[];
   for(const [cart,c] of Object.entries(state.cartridges||{})){
-    for(const l of c.loads||[]){const lk=`${cart}::${l.id}`,loadId=loadMap.get(lk);(l.sessions||[]).forEach((s,i)=>sessionRows.push({user_id:uid,legacy_key:`${lk}::session::${i}`,load_id:loadId,date:s.date||null,avg_velocity:num(s.avg),sd:num(s.sd),es:num(s.es),moa:num(s.moa),notes:s.notes||null,metadata:s,updated_at:now}));(l.targets||[]).forEach((t,i)=>targetRows.push({user_id:uid,legacy_key:targetKey(cart,l,i,t),load_id:loadId,date:t.date||null,photo_path:t.photoPath||null,scale_box:t.scaleBox||null,ref_inches:num(t.refInches),holes:t.holes||[],distance_yards:num(t.distanceYd),group_inches:num(t.groupIn),moa:num(t.moa),mean_radius_inches:num(t.meanRadiusIn),shots:num(t.shots),updated_at:now}));}
+    for(const l of c.loads||[]){const lk=`${cart}::${l.id}`,loadId=loadMap.get(lk),firearmId=gunMap.get(l.gunCatalogKey||`${cart}::${l.gun}`)||null;(l.sessions||[]).forEach((s,i)=>sessionRows.push({user_id:uid,legacy_key:s._syncKey||`${lk}::session::${i}`,load_id:loadId,firearm_id:firearmId,date:s.date||null,session_datetime:s.session_datetime||null,shot_count:num(s.shots),avg_velocity:num(s.avg),sd:num(s.sd),es:num(s.es),moa:num(s.moa),source:s.source||null,source_filename:s.source_filename||null,garmin_avg_velocity:num(s.garmin_avg),garmin_sd:num(s.garmin_sd),garmin_es:num(s.garmin_es),notes:s.notes||null,metadata:s,updated_at:now}));(l.targets||[]).forEach((t,i)=>targetRows.push({user_id:uid,legacy_key:targetKey(cart,l,i,t),load_id:loadId,date:t.date||null,photo_path:t.photoPath||null,scale_box:t.scaleBox||null,ref_inches:num(t.refInches),holes:t.holes||[],distance_yards:num(t.distanceYd),group_inches:num(t.groupIn),moa:num(t.moa),mean_radius_inches:num(t.meanRadiusIn),shots:num(t.shots),updated_at:now}));}
     (c.journal||[]).forEach((j,i)=>journalRows.push({user_id:uid,legacy_key:j._syncKey||`${cart}::journal::${j.date||"undated"}::${i}`,date:j.date||null,tag:String(j.type||"").toUpperCase()==="RANGE"?"RANGE":"BENCH",gun_id:j.gun?gunMap.get(j.gunCatalogKey||`${cart}::${j.gun}`)||null:null,powder_id:j.powder?powderMap.get(j.powderCatalogKey||norm(j.powder))||null:null,note:j.did||j.note||"",photo_urls:(j.photoPaths||j.photo_urls||[]),cartridge:cart,metadata:j,updated_at:now}));
   }
-  if(sessionRows.length)supaError(await sb.from("sessions").upsert(sessionRows,{onConflict:"user_id,legacy_key"}));
+  const savedSessions=sessionRows.length?supaError(await sb.from("sessions").upsert(sessionRows,{onConflict:"user_id,legacy_key"}).select("id,legacy_key")):[],sessionMap=new Map(savedSessions.map(s=>[s.legacy_key,s.id])),shotRows=[];
+  for(const [cart,c] of Object.entries(state.cartridges||{}))for(const l of c.loads||[])(l.sessions||[]).forEach((s,i)=>{const legacy=s._syncKey||`${cart}::${l.id}::session::${i}`,sessionId=sessionMap.get(legacy);if(!sessionId)return;(s.raw_shots||[]).forEach(shot=>shotRows.push({user_id:uid,session_id:sessionId,shot_number:num(shot.shot_number),speed:num(shot.speed),shot_time:shot.time||null,clean_bore:shot.clean_bore,cold_bore:shot.cold_bore,shot_notes:shot.notes||null,metadata:shot,updated_at:now}));});
+  if(shotRows.length)supaError(await sb.from("chronograph_shots").upsert(shotRows,{onConflict:"user_id,session_id,shot_number"}));
   if(journalRows.length)supaError(await sb.from("journal_entries").upsert(journalRows,{onConflict:"user_id,legacy_key"}));
   if(targetRows.length)supaError(await sb.from("target_analyses").upsert(targetRows,{onConflict:"user_id,legacy_key"}));
   const existingTargets=supaError(await sb.from("target_analyses").select("id,legacy_key,photo_path"));const wanted=new Set(targetRows.map(r=>r.legacy_key)),removed=existingTargets.filter(r=>!wanted.has(r.legacy_key));if(removed.length){const paths=removed.map(r=>r.photo_path).filter(Boolean);if(paths.length)supaError(await sb.storage.from("sixgun-photos").remove(paths));supaError(await sb.from("target_analyses").delete().in("id",removed.map(r=>r.id)));}
