@@ -77,6 +77,13 @@ html,body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans
 body{min-height:100%}
 body::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--bg)}
 body{padding-bottom:calc(72px + var(--safe-b));min-height:100vh}
+.cloud-auth{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(20,16,14,.96)}
+.cloud-auth.hidden{display:none}.cloud-auth-card{width:min(390px,100%);padding:24px;background:var(--bg2);border:1px solid var(--brass-dim);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.55)}
+.cloud-auth-title{font-family:Bitter,serif;font-size:24px;font-weight:700}.cloud-auth-copy{margin:7px 0 18px;color:var(--ink-faint);font-size:13px;line-height:1.45}
+.cloud-auth input{width:100%;margin:0 0 10px;padding:12px 13px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.cloud-auth-actions{display:flex;gap:9px}.cloud-auth button{flex:1;padding:12px 10px;border-radius:10px;border:1px solid var(--brass-dim);background:var(--bg3);color:var(--ink);font-weight:700;cursor:pointer}.cloud-auth button.primary{background:var(--brass);border-color:var(--brass);color:#1a1613}
+.cloud-auth-status{min-height:18px;margin-top:12px;color:var(--ink-faint);font-size:12px;line-height:1.4}.cloud-auth-status.error{color:var(--red)}
+.cloud-sync{position:fixed;right:10px;bottom:calc(70px + var(--safe-b));z-index:70;padding:6px 9px;border:1px solid var(--line);border-radius:999px;background:rgba(35,30,25,.92);color:var(--ink-faint);font-size:10px;letter-spacing:.04em;opacity:.92}.cloud-sync.ok{color:var(--green)}.cloud-sync.warn{color:var(--amber)}.cloud-sync.error{color:var(--red)}
 .mono{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
 .serif{font-family:Bitter,serif}
 
@@ -351,7 +358,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 1.3.0</div>
+    <div class="landing-version">Version 2.0.0</div>
   </div>
 </div>
 
@@ -448,13 +455,28 @@ nav button.on{color:var(--brass)}
   <div class="ta-controls" id="taControls"></div>
 </div>
 
+<div id="cloudAuth" class="cloud-auth hidden" role="dialog" aria-modal="true" aria-labelledby="cloudAuthTitle">
+  <div class="cloud-auth-card">
+    <div class="cloud-auth-title" id="cloudAuthTitle">Private sync</div>
+    <div class="cloud-auth-copy">Sign in to sync your Sixgun Retriever data. This app has no public account creation.</div>
+    <input id="cloudEmail" type="email" autocomplete="username" placeholder="Email">
+    <input id="cloudPassword" type="password" autocomplete="current-password" placeholder="Password (optional for magic link)">
+    <div class="cloud-auth-actions"><button id="cloudMagic">Email magic link</button><button id="cloudSignIn" class="primary">Sign in</button></div>
+    <div id="cloudAuthStatus" class="cloud-auth-status"></div>
+  </div>
+</div>
+<div id="cloudSync" class="cloud-sync warn">Local · sign in to sync</div>
+
 <script>/* placeholder split so analyzer script mounts after DATA */</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
 
 <script>
 /* ============================================================
    DATA MODEL  — per-cartridge. Each cartridge owns its own
    tiers, loads, guns, inventory, bench note, and journal.
-   Seeded from Chase's real sheets. Persists to localStorage.
+   Seeded from Chase's real sheets. Supabase is canonical; IndexedDB
+   provides the offline working copy and write queue.
    ============================================================ */
 const SEED = {
   activeCartridge:".45 Colt",
@@ -671,20 +693,16 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="1.3.0";
-const CACHE_VERSION="sixgun-retriever-v1.3.0";
+const RELEASE_VERSION="2.0.0";
+const CACHE_VERSION="sixgun-retriever-v2.0.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
-// touching localStorage (where the user's load and target data lives).
+// touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
-  const seen=localStorage.getItem("sr_cache_version");
-  if(seen!==CACHE_VERSION){
-    caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_VERSION).map(k=>caches.delete(k))))
-      .finally(()=>localStorage.setItem("sr_cache_version",CACHE_VERSION));
-  }
+  caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE_VERSION).map(k=>caches.delete(k))));
 }
 let DB = load();
-function load(){try{const s=localStorage.getItem(KEY);return s?JSON.parse(s):structuredClone(SEED);}catch(e){return structuredClone(SEED);}}
-function save(){localStorage.setItem(KEY,JSON.stringify(DB));}
+function load(){return structuredClone(SEED);}
+function save(){return window.SixgunCloud?.saveState()||Promise.resolve();}
 /* active-cartridge accessor — every render reads through this */
 function C(){return DB.cartridges[DB.activeCartridge];}
 
@@ -991,7 +1009,7 @@ function renderAll(){
 
 /* ================= LIBRARY ================= */
 const LIB_SHAPES={number:"Number",rule:"Rule",opinion:"Opinion",technique:"Technique",story:"Context"};
-const LIB_ENTRIES=[
+let LIB_ENTRIES=[
   {shape:"rule",verify:false,cartridge:".45 Colt",
    body:"2400 in the .45 Colt case is <b>position-sensitive at low charge weights</b>. When the charge sits low in the large case, ignition and burn go inconsistent — erratic velocity, wide ES, sometimes squib-low readings. Keep case fill high or switch to a bulkier powder that fills the case better.",
    who:"Bench observation",source:"Consistent with your own Tier 3 chrono results",tags:["2400","powder position","ES/SD","case fill"]},
@@ -1060,7 +1078,7 @@ const LIB_ENTRIES=[
    body:"<b>The Titegroup that bulged a New Frontier.</b> A reader loaded 262gr cast over a Titegroup charge from a source that called it 'suitable for the Colt SAA,' fired it in a 3rd-gen Colt New Frontier, and stuck/scratched cases and bulged a bolt notch. Pearce's diagnosis: that load tests <b>over 30,000 psi</b> — fine for a Blackhawk, catastrophic-adjacent in a Colt. His numbers: SAA daily driver <b>14,000 psi (SAAMI)</b>; smokeless-era Colt absolute max <b>~21,000 psi</b> and even then guns loosen prematurely. His fix for that reader's Titegroup: drop to <b>6.0–6.2gr</b> for ~840–870 fps with 250-260gr. Third-gen SAAs also have oversized chambers that leave thin steel over the bolt notch, and Colt's burnishing can pre-stress it. Lesson: 'SAA-safe' from an unvetted source is not safe — verify the pressure.",
    who:"Brian Pearce",source:"Handloader No. 337 · Bullets & Brass (verbatim from owned copy)",link:"https://www.handloadermagazine.com/45-colt-p-medium-frame-sixguns-pet-loads",tags:["Titegroup","SAA","overpressure","14000 psi","21000 psi","safety","New Frontier"]}
 ];
-const LIB_TABLES=[
+let LIB_TABLES=[
   {verify:false,title:"Skeeter's Heavy .38 Special (357-FRAME ONLY)",who:"Skeeter Skelton",source:"Skeeter's Handloading Philosophy · American Handgunner",link:"https://americanhandgunner.com/our-experts/skeeter-skelton-handloading-philosophy/",
    cartridge:".38 Spl",powders:["2400"],writer:"Skelton",
    conditions:[["Case",".38 Special"],["Gun",".357 Mag or .45-frame .38 ONLY"],["WARNING","NOT for standard .38 Special revolvers"]],
@@ -1292,7 +1310,7 @@ document.querySelectorAll(".lib-nav-btn").forEach(b=>b.onclick=()=>{
    TARGET ANALYZER — Phase 1 (manual measurement)
    Raw taps + scale + distance are stored; group/MOA are always
    recomputed from raw. No CV. Entirely client-side. Photo is
-   downscaled before base64 storage to respect localStorage.
+   downscaled before it enters the offline photo queue and private Storage.
    ============================================================ */
 const TA={
   loadId:null, img:null, imgData:null, origImg:null, origData:null,
@@ -2025,9 +2043,121 @@ document.addEventListener("click",function(e){
   if(loadId!=null&&!isNaN(tidx))taDeleteTargetBtn(loadId,tidx);
 },true);
 
+/* ============================================================
+   SUPABASE + OFFLINE DATA LAYER
+   Supabase is canonical. IndexedDB stores the offline working copy and one
+   coalesced pending snapshot; localStorage is read once only for migration.
+   ============================================================ */
+const SUPABASE_URL="https://risuqltejfwjokdsrkmj.supabase.co";
+const SUPABASE_KEY="sb_publishable_xGQGXi9U4GxEE7GisKQVuw_k0HvBWPx";
+const CLOUD_SCHEMA_VERSION=1;
+const IDB_NAME="sixgun_retriever_cloud_v1";
+let sb=null,cloudUser=null,cloudFlushing=false,cloudSaveTimer=null;
+
+function cloudStatus(text,kind="warn"){
+  const el=document.getElementById("cloudSync");if(!el)return;
+  el.textContent=text;el.className=`cloud-sync ${kind}`;
+}
+function authStatus(text,isError=false){const el=document.getElementById("cloudAuthStatus");el.textContent=text||"";el.className=`cloud-auth-status${isError?' error':''}`;}
+function idbOpen(){return new Promise((resolve,reject)=>{const r=indexedDB.open(IDB_NAME,1);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains("state"))d.createObjectStore("state",{keyPath:"id"});if(!d.objectStoreNames.contains("queue"))d.createObjectStore("queue",{keyPath:"id"});};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});}
+async function idbGet(store,id){const d=await idbOpen();return new Promise((resolve,reject)=>{const r=d.transaction(store,"readonly").objectStore(store).get(id);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});}
+async function idbPut(store,value){const d=await idbOpen();return new Promise((resolve,reject)=>{const t=d.transaction(store,"readwrite");t.objectStore(store).put(value);t.oncomplete=()=>resolve();t.onerror=()=>reject(t.error);});}
+async function idbDelete(store,id){const d=await idbOpen();return new Promise((resolve,reject)=>{const t=d.transaction(store,"readwrite");t.objectStore(store).delete(id);t.oncomplete=()=>resolve();t.onerror=()=>reject(t.error);});}
+function clone(v){return JSON.parse(JSON.stringify(v));}
+function targetKey(cart,load,index,target){return target._syncKey||`${cart}::${load.id}::target::${index}`;}
+function prepareState(state){
+  Object.entries(state.cartridges||{}).forEach(([cart,c])=>(c.loads||[]).forEach(load=>(load.targets||[]).forEach((target,i)=>{target._syncKey=targetKey(cart,load,i,target);})));return state;
+}
+function cloudSafeState(state){const out=clone(prepareState(state));Object.values(out.cartridges||{}).forEach(c=>{(c.loads||[]).forEach(l=>(l.targets||[]).forEach(t=>{delete t.photo;}));(c.journal||[]).forEach(j=>{delete j.photo;j.photoPaths=(j.photoPaths||j.photo_urls||[]).filter(p=>typeof p==="string"&&!p.startsWith("data:"));delete j.photo_urls;});});return out;}
+async function saveCloudState(){
+  prepareState(DB);
+  await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});
+  await idbPut("queue",{id:"snapshot",state:cloudSafeState(DB),updatedAt:Date.now()});
+  cloudStatus(navigator.onLine?"Saving…":"Offline · changes queued","warn");
+  clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(()=>flushCloudQueue(),250);
+}
+window.SixgunCloud={saveState:saveCloudState,uploadPhoto:async(blob,folder="journal")=>{
+  if(!cloudUser)throw new Error("Sign in before uploading photos");
+  const ext=(blob.type||"").includes("png")?"png":(blob.type||"").includes("webp")?"webp":"jpg";
+  const path=`${cloudUser.id}/${folder}/${crypto.randomUUID()}.${ext}`;
+  const {error}=await sb.storage.from("sixgun-photos").upload(path,blob,{contentType:blob.type||"image/jpeg",upsert:false});if(error)throw error;return path;
+}};
+
+function supaError(result){if(result.error)throw result.error;return result.data||[];}
+function num(v){return v==null||v===""||isNaN(Number(v))?null:Number(v);}
+function dataUrlBlob(url){const [head,data]=url.split(",");const mime=(head.match(/data:([^;]+)/)||[])[1]||"image/jpeg";const bin=atob(data),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new Blob([bytes],{type:mime});}
+async function uploadPendingTargets(state){
+  const local=(await idbGet("state","current"))?.value||DB;
+  const localTargets=new Map();Object.entries(local.cartridges||{}).forEach(([cart,c])=>(c.loads||[]).forEach(load=>(load.targets||[]).forEach((t,i)=>localTargets.set(targetKey(cart,load,i,t),t))));
+  for(const [cart,c] of Object.entries(state.cartridges||{}))for(const load of c.loads||[])for(let i=0;i<(load.targets||[]).length;i++){
+    const t=load.targets[i];t._syncKey=targetKey(cart,load,i,t);if(t.photoPath)continue;
+    const source=localTargets.get(t._syncKey);if(!source?.photo?.startsWith("data:"))continue;
+    const blob=dataUrlBlob(source.photo),ext=blob.type.includes("png")?"png":blob.type.includes("webp")?"webp":"jpg";
+    const path=`${cloudUser.id}/targets/${crypto.randomUUID()}.${ext}`;
+    const {error}=await sb.storage.from("sixgun-photos").upload(path,blob,{contentType:blob.type,upsert:false});if(error)throw error;
+    t.photoPath=path;source.photoPath=path;
+  }
+  for(const [cart,c] of Object.entries(state.cartridges||{}))for(let i=0;i<(c.journal||[]).length;i++){
+    const j=c.journal[i],source=local.cartridges?.[cart]?.journal?.[i]||j;
+    const originals=source.photoPaths||source.photo_urls||source.photos||[],paths=(j.photoPaths||[]).filter(p=>typeof p==="string"&&!p.startsWith("data:"));
+    for(const item of originals){if(typeof item!=="string"||!item.startsWith("data:"))continue;const blob=dataUrlBlob(item),ext=blob.type.includes("png")?"png":blob.type.includes("webp")?"webp":"jpg",path=`${cloudUser.id}/journal/${crypto.randomUUID()}.${ext}`;const {error}=await sb.storage.from("sixgun-photos").upload(path,blob,{contentType:blob.type,upsert:false});if(error)throw error;paths.push(path);}
+    j.photoPaths=[...new Set(paths)];source.photoPaths=j.photoPaths;delete source.photo_urls;delete source.photos;
+  }
+  await idbPut("state",{id:"current",value:local,updatedAt:Date.now()});
+}
+async function syncNormalized(state){
+  state=prepareState(clone(state));await uploadPendingTargets(state);
+  const uid=cloudUser.id,now=new Date().toISOString();
+  const gunRows=[];
+  for(const [cart,c] of Object.entries(state.cartridges||{}))for(const g of c.guns||[])gunRows.push({user_id:uid,legacy_key:`${cart}::${g.name}`,make:g.make||null,model:g.model||g.name,caliber:cart,serial:g.serial||null,purchase_date:g.purchase_date||null,source:g.source||null,price:num(g.price),rotation_status:g.rotation_status||null,metadata:g,updated_at:now});
+  const guns=gunRows.length?supaError(await sb.from("guns").upsert(gunRows,{onConflict:"user_id,legacy_key"}).select("id,legacy_key")):[];const gunMap=new Map(guns.map(x=>[x.legacy_key,x.id]));
+  const powderNames=new Set();for(const c of Object.values(state.cartridges||{}))for(const l of c.loads||[])if(l.powder)powderNames.add(l.powder);for(const t of LIB_TABLES)for(const p of t.powders||[])powderNames.add(p);
+  const powderRows=[...powderNames].map(name=>({user_id:uid,legacy_key:name.toLowerCase(),name,updated_at:now}));
+  const powders=powderRows.length?supaError(await sb.from("powders").upsert(powderRows,{onConflict:"user_id,legacy_key"}).select("id,legacy_key,name")):[];const powderMap=new Map(powders.flatMap(x=>[[x.name,x.id],[x.legacy_key,x.id]]));
+  const loadRows=[];for(const [cart,c] of Object.entries(state.cartridges||{}))for(const l of c.loads||[]){const meta=clone(l);delete meta.sessions;delete meta.targets;loadRows.push({user_id:uid,legacy_key:`${cart}::${l.id}`,gun_id:gunMap.get(`${cart}::${l.gun}`)||null,powder_id:powderMap.get(l.powder)||null,charge:num(l.charge),bullet:l.bullet||null,primer:l.primer||null,oal:num(l.oal),tier:num(l.tier),cartridge:cart,metadata:meta,updated_at:now});}
+  const loads=loadRows.length?supaError(await sb.from("loads").upsert(loadRows,{onConflict:"user_id,legacy_key"}).select("id,legacy_key")):[];const loadMap=new Map(loads.map(x=>[x.legacy_key,x.id]));
+  const sessionRows=[],journalRows=[],targetRows=[];
+  for(const [cart,c] of Object.entries(state.cartridges||{})){
+    for(const l of c.loads||[]){const lk=`${cart}::${l.id}`,loadId=loadMap.get(lk);(l.sessions||[]).forEach((s,i)=>sessionRows.push({user_id:uid,legacy_key:`${lk}::session::${i}`,load_id:loadId,date:s.date||null,avg_velocity:num(s.avg),sd:num(s.sd),es:num(s.es),moa:num(s.moa),notes:s.notes||null,metadata:s,updated_at:now}));(l.targets||[]).forEach((t,i)=>targetRows.push({user_id:uid,legacy_key:targetKey(cart,l,i,t),load_id:loadId,date:t.date||null,photo_path:t.photoPath||null,scale_box:t.scaleBox||null,ref_inches:num(t.refInches),holes:t.holes||[],distance_yards:num(t.distanceYd),group_inches:num(t.groupIn),moa:num(t.moa),mean_radius_inches:num(t.meanRadiusIn),shots:num(t.shots),updated_at:now}));}
+    (c.journal||[]).forEach((j,i)=>journalRows.push({user_id:uid,legacy_key:`${cart}::journal::${j.date||"undated"}::${i}`,date:j.date||null,tag:String(j.type||"").toUpperCase()==="RANGE"?"RANGE":"BENCH",gun_id:j.gun?gunMap.get(`${cart}::${j.gun}`)||null:null,powder_id:j.powder?powderMap.get(j.powder)||null:null,note:j.did||j.note||"",photo_urls:(j.photoPaths||j.photo_urls||[]),cartridge:cart,metadata:j,updated_at:now}));
+  }
+  if(sessionRows.length)supaError(await sb.from("sessions").upsert(sessionRows,{onConflict:"user_id,legacy_key"}));
+  if(journalRows.length)supaError(await sb.from("journal_entries").upsert(journalRows,{onConflict:"user_id,legacy_key"}));
+  if(targetRows.length)supaError(await sb.from("target_analyses").upsert(targetRows,{onConflict:"user_id,legacy_key"}));
+  const existingTargets=supaError(await sb.from("target_analyses").select("id,legacy_key,photo_path"));const wanted=new Set(targetRows.map(r=>r.legacy_key)),removed=existingTargets.filter(r=>!wanted.has(r.legacy_key));if(removed.length){const paths=removed.map(r=>r.photo_path).filter(Boolean);if(paths.length)supaError(await sb.storage.from("sixgun-photos").remove(paths));supaError(await sb.from("target_analyses").delete().in("id",removed.map(r=>r.id)));}
+  const libEntries=LIB_ENTRIES.map((data,i)=>({user_id:uid,legacy_key:`note-${i}`,cartridge:data.cartridge||null,writer:data.who||null,data,updated_at:now}));if(libEntries.length)supaError(await sb.from("library_entries").upsert(libEntries,{onConflict:"user_id,legacy_key"}));
+  const libTables=LIB_TABLES.map((data,i)=>({user_id:uid,legacy_key:`table-${i}`,cartridge:data.cartridge||null,writer:data.writer||data.who||null,powders:data.powders||[],data,updated_at:now}));if(libTables.length)supaError(await sb.from("library_tables").upsert(libTables,{onConflict:"user_id,legacy_key"}));
+  supaError(await sb.from("app_state").upsert({user_id:uid,state:cloudSafeState(state),schema_version:CLOUD_SCHEMA_VERSION,updated_at:now},{onConflict:"user_id"}));
+  return state;
+}
+async function flushCloudQueue(){
+  if(cloudFlushing||!cloudUser||!navigator.onLine)return;const job=await idbGet("queue","snapshot");if(!job){cloudStatus("Synced","ok");return;}
+  cloudFlushing=true;cloudStatus("Syncing…","warn");try{const synced=await syncNormalized(job.state);await idbDelete("queue","snapshot");localStorage.removeItem(KEY);cloudStatus("Synced","ok");const local=(await idbGet("state","current"))?.value;if(local){DB=local;renderAll();}}catch(e){console.error("Sixgun sync",e);cloudStatus(/relation|schema cache|bucket/i.test(e.message||"")?"Setup needed · see SUPABASE_SETUP.md":"Sync paused · will retry","error");}finally{cloudFlushing=false;}
+}
+async function signTargetPhotos(){
+  const paths=[];Object.values(DB.cartridges||{}).forEach(c=>{(c.loads||[]).forEach(l=>(l.targets||[]).forEach(t=>{if(t.photoPath)paths.push(t.photoPath);}));(c.journal||[]).forEach(j=>(j.photoPaths||[]).forEach(p=>paths.push(p)));});if(!paths.length)return;
+  const {data,error}=await sb.storage.from("sixgun-photos").createSignedUrls([...new Set(paths)],3600);if(error)return;const urls=new Map((data||[]).map(x=>[x.path,x.signedUrl]));Object.values(DB.cartridges||{}).forEach(c=>{(c.loads||[]).forEach(l=>(l.targets||[]).forEach(t=>{if(urls.has(t.photoPath))t.photo=urls.get(t.photoPath);}));(c.journal||[]).forEach(j=>{j.photo_urls=(j.photoPaths||[]).map(p=>urls.get(p)).filter(Boolean);});});}
+async function hydrateCloud(){
+  const pending=await idbGet("queue","snapshot");if(pending){const local=await idbGet("state","current");if(local?.value)DB=local.value;renderAll();await flushCloudQueue();return;}
+  const stateResult=await sb.from("app_state").select("state").maybeSingle();if(stateResult.error)throw stateResult.error;
+  if(stateResult.data?.state)DB=stateResult.data.state;else await saveCloudState();
+  const [notes,tables]=await Promise.all([sb.from("library_entries").select("data").order("id"),sb.from("library_tables").select("data").order("id")]);if(!notes.error&&notes.data?.length)LIB_ENTRIES=notes.data.map(x=>x.data);if(!tables.error&&tables.data?.length)LIB_TABLES=tables.data.map(x=>x.data);
+  await signTargetPhotos();await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});renderAll();cloudStatus("Synced","ok");
+}
+async function onSignedIn(session){cloudUser=session.user;document.getElementById("cloudAuth").classList.add("hidden");cloudStatus("Connecting…","warn");try{await hydrateCloud();}catch(e){console.error(e);cloudStatus("Setup needed · run Supabase SQL","error");toast("Supabase setup is not finished yet");}}
+async function cloudBoot(){
+  try{const local=await idbGet("state","current");if(local?.value)DB=local.value;else{try{const legacy=localStorage.getItem(KEY);if(legacy)DB=JSON.parse(legacy);}catch(e){}await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});}renderAll();showLanding();
+    if(!window.supabase){cloudStatus("Cloud SDK unavailable · offline","error");return;}sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+    const {data:{session}}=await sb.auth.getSession();if(session)await onSignedIn(session);else document.getElementById("cloudAuth").classList.remove("hidden");
+    sb.auth.onAuthStateChange((event,next)=>{if(next&&next.user&&next.user.id!==cloudUser?.id)setTimeout(()=>onSignedIn(next),0);if(event==="SIGNED_OUT"){cloudUser=null;document.getElementById("cloudAuth").classList.remove("hidden");cloudStatus("Local · sign in to sync","warn");}});
+  }catch(e){console.error(e);cloudStatus("Local mode · cloud unavailable","error");renderAll();showLanding();}
+}
+document.getElementById("cloudSignIn").onclick=async()=>{const email=document.getElementById("cloudEmail").value.trim(),password=document.getElementById("cloudPassword").value;if(!email||!password){authStatus("Enter the owner email and password.",true);return;}authStatus("Signing in…");const {error}=await sb.auth.signInWithPassword({email,password});authStatus(error?error.message:"",!!error);};
+document.getElementById("cloudMagic").onclick=async()=>{const email=document.getElementById("cloudEmail").value.trim();if(!email){authStatus("Enter the owner email first.",true);return;}authStatus("Sending a private sign-in link…");const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo:location.origin}});authStatus(error?error.message:"Check your email for the sign-in link.",!!error);};
+window.addEventListener("online",()=>flushCloudQueue());window.addEventListener("offline",()=>cloudStatus("Offline · changes queued","warn"));
+
 /* ---------- init ---------- */
-renderAll();
-showLanding();
+cloudBoot();
 </script>
 </body>
 </html>
