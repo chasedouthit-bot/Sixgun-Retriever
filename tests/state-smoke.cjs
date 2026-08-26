@@ -7,6 +7,8 @@ const html = fs.readFileSync("index.html", "utf8");
 const landingVersion = html.match(/<div class="landing-version">Version ([^<]+)<\/div>/)?.[1];
 const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
+assert(html.includes("body>header{"), "top-bar styles must be scoped away from page-level header elements");
+assert(!html.includes("\nheader{\n"), "page-level headers must not inherit the sticky top-bar layout");
 assert(html.includes(".field{display:flex;min-width:0"), "editor fields must be allowed to shrink within their grid column");
 assert(html.includes(".editor-card .form-grid{grid-template-columns:minmax(0,1fr)}"), "editor forms must stack on narrow mobile screens");
 assert(html.includes("assets/photographic-record-masthead.webp"), "photographic record must use the archival engraving masthead");
