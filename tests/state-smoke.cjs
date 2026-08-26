@@ -56,7 +56,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -101,6 +101,20 @@ db.cartridges[db.activeCartridge].journal.push({
 const safe = api.cloudSafeState(db);
 const journal = safe.cartridges[db.activeCartridge].journal.at(-1);
 assert(!("photos" in journal), "base64 journal photos must not enter app_state");
+
+catalog.gun_entries.push({
+  _syncKey: "gun-entry::smoke",
+  gun_key: gun._legacyKey,
+  date: "2026-08-25",
+  text: "First cylinder",
+  photo: "data:image/jpeg;base64,AA==",
+  photo_path: null,
+});
+const bioSafe = api.cloudSafeState(db).catalog.gun_entries.at(-1);
+assert(!("photo" in bioSafe), "base64 biography photos must not enter app_state");
+assert.equal(gun.rotation_status, "in rotation", "new guns should default to in rotation");
+const bioStats = api.biographyStats(gun);
+assert.equal(bioStats.first, null, "new gun should not have a first shot yet");
 
 console.log(JSON.stringify({ guns: gunCount, powders: powderCount, loads: Object.values(db.cartridges).reduce((n, c) => n + c.loads.length, 0), result: "ok" }));
 
