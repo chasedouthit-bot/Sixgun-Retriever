@@ -4,6 +4,8 @@ const assert = require("assert");
 const { webcrypto } = require("crypto");
 
 const html = fs.readFileSync("index.html", "utf8");
+assert(html.includes(".field{display:flex;min-width:0"), "editor fields must be allowed to shrink within their grid column");
+assert(html.includes(".editor-card .form-grid{grid-template-columns:minmax(0,1fr)}"), "editor forms must stack on narrow mobile screens");
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map(match => match[1])
   .filter(script => script.includes("const SEED"));
