@@ -23,6 +23,7 @@ assert(html.includes("function wireAlbumNavigation"), "album pages must expose a
 assert(html.includes("pdf-postcard-grid"), "PDF photo pages must preserve the postcard album treatment");
 assert(html.includes('family=Caveat'), "postcard captions must load the pencil-handwriting face");
 assert(html.includes('id="s-parts-maintenance"'), "binder must expose a Parts & Maintenance screen");
+assert(html.includes("assets/parts-maintenance-masthead.webp"), "service page and PDF must use the cabin workbench masthead");
 assert(html.includes("Selected service records for this sixgun"), "service page must use the archival subtitle convention");
 assert(html.includes('name="include_maintenance"'), "PDF export must expose the Parts & Maintenance toggle");
 assert(html.includes("function pdfPartsMaintenancePages"), "PDF export must render parts and maintenance pages");
