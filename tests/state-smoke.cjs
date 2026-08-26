@@ -56,7 +56,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -115,6 +115,31 @@ assert(!("photo" in bioSafe), "base64 biography photos must not enter app_state"
 assert.equal(gun.rotation_status, "in rotation", "new guns should default to in rotation");
 const bioStats = api.biographyStats(gun);
 assert.equal(bioStats.first, null, "new gun should not have a first shot yet");
+
+const settings = api.ensureLetterSettings();
+assert.equal(settings.letterhead_name, "The Sixgun Retriever", "letterhead should have the archive default");
+db.cartridges[db.activeCartridge].loads.push({
+  id: "letter-smoke",
+  gun: gun.name,
+  gunCatalogKey: gun._legacyKey,
+  bullet: "255gr Keith",
+  powder: "Unique",
+  charge: 8.5,
+  signature_load: true,
+  moa: 2.25,
+  sd: 11,
+  es: 32,
+  sessions: [{ date: "2026-08-26", moa: 2.25, sd: 11, es: 32 }],
+  targets: [],
+});
+const performance = api.loadPerformanceScore(db.cartridges[db.activeCartridge].loads.at(-1));
+assert(performance && performance.score > 0, "blended performance score should compute from MOA, ES, and SD");
+const letterData = api.letterData(gun);
+assert.equal(letterData.signature.id, "letter-smoke", "flagged signature load should surface in the letter");
+assert.equal(letterData.sessions, 1, "letter should count linked sessions live");
+const letter = api.gunLetter(gun);
+letter.prompt_answers.origin = "A test provenance paragraph.";
+assert.equal(api.letterPrompts(gun, letterData).length, 4, "letter editor should expose guided prompts");
 
 console.log(JSON.stringify({ guns: gunCount, powders: powderCount, loads: Object.values(db.cartridges).reduce((n, c) => n + c.loads.length, 0), result: "ok" }));
 
