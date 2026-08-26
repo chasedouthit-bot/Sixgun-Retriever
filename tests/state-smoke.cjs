@@ -10,9 +10,15 @@ const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
 assert.equal(scripts.length, 1, "expected the main inline application script");
 
 function elementStub() {
+  const classes = new Set();
   return {
     style: {},
-    classList: { add() {}, remove() {}, toggle() {}, contains() { return false; } },
+    classList: {
+      add(...names) { names.forEach(name => classes.add(name)); },
+      remove(...names) { names.forEach(name => classes.delete(name)); },
+      toggle(name, force) { if (force === undefined ? !classes.has(name) : force) classes.add(name); else classes.delete(name); },
+      contains(name) { return classes.has(name); },
+    },
     addEventListener() {},
     appendChild() {},
     querySelectorAll() { return []; },
@@ -26,9 +32,10 @@ function elementStub() {
   };
 }
 
+const elements = new Map();
 const document = {
   body: elementStub(),
-  getElementById() { return elementStub(); },
+  getElementById(id) { if (!elements.has(id)) elements.set(id, elementStub()); return elements.get(id); },
   querySelectorAll() { return []; },
   createElement() { return elementStub(); },
   addEventListener() {},
@@ -56,13 +63,17 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
 const api = context.__test;
 const db = api.getDB();
 const catalog = api.ensureCatalog();
+assert.equal(typeof elements.get("doorBench").onclick, "function", "Reloading Bench must be interactive before cloud hydration");
+context.window.SixgunCloud = null;
+elements.get("doorBench").onclick();
+assert(elements.get("landing").classList.contains("hidden"), "Reloading Bench should dismiss the landing page");
 assert(catalog.guns.length > 0, "seed guns should migrate into Catalog");
 assert(catalog.powders.length > 0, "seed/load powders should migrate into Catalog");
 for (const cartridge of Object.values(db.cartridges)) {
@@ -140,6 +151,28 @@ assert.equal(letterData.sessions, 1, "letter should count linked sessions live")
 const letter = api.gunLetter(gun);
 letter.prompt_answers.origin = "A test provenance paragraph.";
 assert.equal(api.letterPrompts(gun, letterData).length, 4, "letter editor should expose guided prompts");
+
+const record = api.photoRecord(gun);
+assert.equal(record.title, "Photographic Record");
+catalog.photo_moments.push({
+  _syncKey: "photo-moment::smoke",
+  gun_key: gun._legacyKey,
+  title: "Acquired",
+  sort_position: 0,
+});
+catalog.moment_photos.push({
+  _syncKey: "moment-photo::smoke",
+  moment_key: "photo-moment::smoke",
+  display_data: "data:image/jpeg;base64,AA==",
+  print_data: "data:image/jpeg;base64,AA==",
+  sort_position: 0,
+  is_featured: true,
+});
+assert.equal(api.gunMoments(gun).length, 1, "photo Moments should belong to the firearm");
+assert.equal(api.momentPhotos("photo-moment::smoke").length, 1, "photos should belong to a Moment");
+const photoSafe = api.cloudSafeState(db).catalog.moment_photos.at(-1);
+assert(!("display_data" in photoSafe), "display image data must not enter app_state");
+assert(!("print_data" in photoSafe), "print image data must not enter app_state");
 
 console.log(JSON.stringify({ guns: gunCount, powders: powderCount, loads: Object.values(db.cartridges).reduce((n, c) => n + c.loads.length, 0), result: "ok" }));
 
