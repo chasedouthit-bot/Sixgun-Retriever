@@ -79,7 +79,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,renderPhotoMoment,pdfMomentPages,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -198,8 +198,13 @@ assert.equal(api.albumPageSize(), 2, "mobile portrait should group two postcards
 const albumMarkup = api.renderPhotoMoment(catalog.photo_moments.at(-1), 0, 1);
 assert(albumMarkup.includes('data-album-page="2"'), "five mobile postcards should span three album pages");
 assert(albumMarkup.includes("Page 1 of 3"), "album markup should expose a ledger-style page count");
+const recordAlbumMarkup = api.renderRecordAlbum(api.gunMoments(gun));
+assert(recordAlbumMarkup.includes('class="pr-postcard-moment"'), "record-wide postcards must identify their Moment");
+assert(recordAlbumMarkup.includes("Page 1 of 3"), "record-wide mobile album must group postcards two per page");
 const pdfMarkup = api.pdfMomentPages(catalog.photo_moments.at(-1), api.momentPhotos("photo-moment::smoke"), 3);
 assert.equal((pdfMarkup.match(/pdf-album-sheet/g) || []).length, 2, "five postcards should span two PDF album sheets");
+const recordPdfMarkup = api.pdfRecordAlbumPages(api.gunMoments(gun), api.momentPhotos("photo-moment::smoke")[0], 3);
+assert.equal((recordPdfMarkup.match(/pdf-album-sheet/g) || []).length, 1, "four non-cover postcards should share one PDF album sheet");
 const photoSafe = api.cloudSafeState(db).catalog.moment_photos.at(-1);
 assert(!("display_data" in photoSafe), "display image data must not enter app_state");
 assert(!("print_data" in photoSafe), "print image data must not enter app_state");
