@@ -95,7 +95,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -127,10 +127,12 @@ elements.get("doorBench").onclick();
 assert(elements.get("landing").classList.contains("hidden"), "Reloading Bench should dismiss the landing page");
 assert(catalog.guns.length > 0, "seed guns should migrate into Catalog");
 assert(catalog.powders.length > 0, "seed/load powders should migrate into Catalog");
+assert(catalog.bullets.length > 0, "load bullets should migrate into Catalog");
 for (const cartridge of Object.values(db.cartridges)) {
   for (const load of cartridge.loads) {
     assert(load.gunCatalogKey, `load ${load.id} is missing gunCatalogKey`);
     assert(load.powderCatalogKey, `load ${load.id} is missing powderCatalogKey`);
+    assert(load.bulletCatalogKey, `load ${load.id} is missing bulletCatalogKey`);
   }
 }
 
@@ -138,6 +140,10 @@ const gunCount = catalog.guns.length;
 const powderCount = catalog.powders.length;
 const gun = api.addGunRecord({ make: "Test", model: "Smoke", caliber: db.activeCartridge });
 const powder = api.addPowderRecord({ name: "Smoke Powder", notes: "test only" });
+const bullet = api.addBulletRecord({ manufacturer: "Test", product: "200 Grain Semi-Wadcutter", weight_gr: 200, diameter: ".452" });
+assert(bullet._legacyKey.startsWith("bullet::"));
+assert.equal(api.bulletNorm("200 Grain Semi-Wadcutter (Powder Coated)"), api.bulletNorm("200gr SWC PC"));
+assert.equal(api.exactBullet(bullet._legacyKey)._legacyKey, bullet._legacyKey);
 assert.equal(catalog.guns.length, gunCount + 1);
 assert.equal(catalog.powders.length, powderCount + 1);
 assert(gun._legacyKey.startsWith("catalog::"));
@@ -151,6 +157,14 @@ const libraryBefore = JSON.stringify(api.getLibTables());
 api.removeCatalogEntry("powder", powder._legacyKey);
 assert.equal(catalog.powders.some(p => p._legacyKey === powder._legacyKey), false, "unreferenced powder should be removable");
 assert.equal(JSON.stringify(api.getLibTables()), libraryBefore, "Catalog removal must not modify Library tables");
+
+const duplicate = api.addBulletRecord({ product: "Merge target 201gr WFN" });
+const activeLoad = db.cartridges[db.activeCartridge].loads[0];
+activeLoad.bulletCatalogKey = duplicate._legacyKey;
+activeLoad.bullet = "Merge target 201gr WFN";
+api.mergeBullets(bullet._legacyKey, duplicate._legacyKey);
+assert.equal(activeLoad.bulletCatalogKey, bullet._legacyKey, "merge should reassign load references");
+assert(api.catalogUsage("bullet", bullet._legacyKey).loads > 0, "bullet usage should include reassigned loads");
 
 db.cartridges[db.activeCartridge].journal.push({
   _syncKey: "journal::smoke",

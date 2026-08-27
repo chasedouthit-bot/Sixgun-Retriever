@@ -11,6 +11,7 @@ key cannot create tables or users, so complete these one-time owner steps:
    - `supabase/migrations/20260826_photographic_record.sql`
    - `supabase/migrations/20260826_parts_maintenance.sql`
    - `supabase/migrations/20260827_garmin_chronograph_import.sql`
+   - `supabase/migrations/20260827_bullet_catalog.sql`
 3. Go to **Authentication > Users > Add user** and create your one owner user.
 4. Go to **Authentication > Sign In / Providers > Email** and disable new-user
    signup after that owner exists. Leave email/password and/or magic links on.
