@@ -802,6 +802,18 @@ function gunDisplay(g){return g.name||[g.make,g.model].filter(Boolean).join(" ")
 function bulletDisplay(b){return b.display||[b.manufacturer,b.product,b.weight_gr!=null?`${Number(b.weight_gr)}gr`:"",b.style].filter(Boolean).join(" ").trim()||"Unnamed bullet";}
 function bulletNorm(v){return String(v||"").toLowerCase().replace(/[’']/g,"").replace(/\b(grains?|grs?|gns?)\b/g,"gr").replace(/\bsemi[\s-]*wad[\s-]*cutter\b/g,"swc").replace(/\bround[\s-]*nose[\s-]*flat[\s-]*point\b/g,"rnfp").replace(/\bwide[\s-]*flat[\s-]*nose\b/g,"wfn").replace(/\bpowder[\s-]*coat(?:ed)?\b/g,"pc").replace(/(\d)\s*gr\b/g,"$1gr").replace(/[^a-z0-9.]+/g," ").trim().replace(/\s+/g," ");}
 function bulletFields(text,load={}){const raw=String(text||"").trim(),wm=raw.match(/\b(\d+(?:\.\d+)?)\s*(?:grains?|grs?|gns?)\b/i),dm=String(load.dia||"").match(/\.?\d+(?:\.\d+)?/);return{manufacturer:String(load.brand||"").trim(),product:raw,weight_gr:wm?Number(wm[1]):null,diameter:dm?dm[0]:"",caliber:"",style:"",notes:"",display:raw};}
+let pendingLoadMerges=0;
+function loadRecipeKey(l){return[l.gunCatalogKey||norm(l.gun),l.powderCatalogKey||norm(l.powder),l.bulletCatalogKey||bulletNorm(l.bullet),Number(l.charge),String(l.tier??"")].join("|");}
+function compatibleLoadValue(a,b,tolerance=0){if(a==null||a===""||b==null||b==="")return true;return tolerance?Math.abs(Number(a)-Number(b))<=tolerance:norm(a)===norm(b);}
+function mergeUniqueRecords(a=[],b=[],keyFn){const seen=new Set(),out=[];for(const item of [...a,...b]){const key=keyFn(item);if(seen.has(key))continue;seen.add(key);out.push(item);}return out;}
+function reconcileDuplicateLoads(c){
+  const groups=new Map();for(const l of c.loads||[]){const key=loadRecipeKey(l);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(l);}let merged=0;
+  for(const group of groups.values())while(group.length>1){const keep=group.shift(),index=group.findIndex(drop=>compatibleLoadValue(keep.primer,drop.primer)&&compatibleLoadValue(keep.oal,drop.oal,.0005));if(index<0)break;const drop=group.splice(index,1)[0];
+    for(const field of ["primer","oal","brand","bhn","dia","sized","avg","sd","es","moa"])if((keep[field]==null||keep[field]==="")&&drop[field]!=null&&drop[field]!=="")keep[field]=drop[field];
+    keep.sessions=mergeUniqueRecords(keep.sessions,drop.sessions,s=>s._syncKey||[s.date,s.session_datetime,s.avg,s.sd,s.es,s.source_filename].join("|"));keep.targets=mergeUniqueRecords(keep.targets,drop.targets,t=>t._syncKey||[t.date,t.photoPath,t.groupIn,t.moa].join("|"));
+    const notes=[keep.note,drop.note].filter(Boolean);keep.note=[...new Set(notes)].join("\n\n");if((keep.keep||"pending")==="pending"&&(drop.keep||"pending")!=="pending")keep.keep=drop.keep;keep.signature_load=!!(keep.signature_load||drop.signature_load);c.loads=c.loads.filter(l=>l!==drop);merged++;
+  }return merged;
+}
 function ensureCatalog(state=DB){
   state.catalog=state.catalog||{};for(const k of ["guns","powders","bullets","gun_entries","gun_letters","photo_records","photo_moments","moment_photos","parts_modifications","maintenance_entries"])state.catalog[k]=state.catalog[k]||[];state.settings=state.settings||{letterhead_name:"The Sixgun Retriever",signature_name:""};
   const gunKeys=new Set(state.catalog.guns.map(g=>g._legacyKey)),powderKeys=new Set(state.catalog.powders.map(p=>p._legacyKey)),bulletByNorm=new Map(state.catalog.bullets.map(b=>[bulletNorm(bulletDisplay(b)),b]));
@@ -812,6 +824,7 @@ function ensureCatalog(state=DB){
       if(l.powder){const key=l.powderCatalogKey||norm(l.powder);l.powderCatalogKey=key;if(!powderKeys.has(key)){state.catalog.powders.push({_legacyKey:key,name:l.powder,notes:""});powderKeys.add(key);}}
       if(l.bullet){let b=l.bulletCatalogKey&&state.catalog.bullets.find(x=>x._legacyKey===l.bulletCatalogKey);if(!b)b=bulletByNorm.get(bulletNorm(l.bullet));if(!b){b={_legacyKey:`bullet::${crypto.randomUUID()}`,...bulletFields(l.bullet,l)};state.catalog.bullets.push(b);bulletByNorm.set(bulletNorm(l.bullet),b);}l.bulletCatalogKey=b._legacyKey;l.bullet=bulletDisplay(b);}
     }
+    const merged=reconcileDuplicateLoads(c);if(state===DB)pendingLoadMerges+=merged;
     (c.journal||[]).forEach((j,i)=>{j._syncKey=j._syncKey||`${cart}::journal::${j.date||"undated"}::${i}`;if(j.gun&&!j.gunCatalogKey)j.gunCatalogKey=(c.guns||[]).find(g=>norm(g.name)===norm(j.gun))?._legacyKey||`${cart}::${j.gun}`;if(j.powder&&!j.powderCatalogKey)j.powderCatalogKey=norm(j.powder);});
   }
   state.catalog.guns.sort((a,b)=>gunDisplay(a).localeCompare(gunDisplay(b)));state.catalog.powders.sort((a,b)=>a.name.localeCompare(b.name));state.catalog.bullets.sort((a,b)=>bulletDisplay(a).localeCompare(bulletDisplay(b)));return state.catalog;
@@ -2641,7 +2654,7 @@ async function hydrateCloud(){
   if(!momentPhotosRows.error)DB.catalog.moment_photos=(momentPhotosRows.data||[]).map(p=>({_syncKey:p.legacy_key,moment_key:p.gun_photo_moments.legacy_key,display_path:p.display_path,print_path:p.print_path,original_filename:p.original_filename,mime_type:p.mime_type,pixel_width:p.pixel_width,pixel_height:p.pixel_height,sort_position:p.sort_position,is_featured:p.is_featured}));
   if(!partRows.error)DB.catalog.parts_modifications=(partRows.data||[]).map(p=>({_syncKey:p.legacy_key,gun_key:p.guns.legacy_key,title:p.title,description:p.description||"",date:p.date,cost:p.cost,vendor:p.vendor||""}));
   if(!maintenanceRows.error)DB.catalog.maintenance_entries=(maintenanceRows.data||[]).map(m=>({_syncKey:m.legacy_key,gun_key:m.guns.legacy_key,date:m.date,category:m.category,notes:m.notes||"",round_count:m.round_count}));
-  await signTargetPhotos();await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});renderAll();cloudStatus("Synced","ok");
+  await signTargetPhotos();await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});renderAll();cloudStatus("Synced","ok");if(pendingLoadMerges){pendingLoadMerges=0;await saveCloudState();}
 }
 async function onSignedIn(session){cloudUser=session.user;document.getElementById("cloudAuth").classList.add("hidden");cloudStatus("Connecting…","warn");try{await hydrateCloud();}catch(e){console.error(e);cloudStatus("Setup needed · run Supabase SQL","error");toast("Supabase setup is not finished yet");}}
 async function cloudBoot(){

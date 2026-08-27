@@ -95,7 +95,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -165,6 +165,17 @@ activeLoad.bullet = "Merge target 201gr WFN";
 api.mergeBullets(bullet._legacyKey, duplicate._legacyKey);
 assert.equal(activeLoad.bulletCatalogKey, bullet._legacyKey, "merge should reassign load references");
 assert(api.catalogUsage("bullet", bullet._legacyKey).loads > 0, "bullet usage should include reassigned loads");
+
+const duplicateLoads = { loads: [
+  { id: "planned", gunCatalogKey: gun._legacyKey, powderCatalogKey: powder._legacyKey, bulletCatalogKey: bullet._legacyKey, gun: gun.name, powder: powder.name, bullet: bullet.product, charge: 8, tier: 3, oal: 1.594, note: "Planned", sessions: [], targets: [] },
+  { id: "imported", gunCatalogKey: gun._legacyKey, powderCatalogKey: powder._legacyKey, bulletCatalogKey: bullet._legacyKey, gun: gun.name, powder: powder.name, bullet: bullet.product, charge: 8, tier: 3, avg: 896.7, sd: 18.6, es: 56.9, sessions: [{ _syncKey: "session::duplicate", avg: 896.7 }], targets: [] },
+] };
+assert.equal(api.reconcileDuplicateLoads(duplicateLoads), 1, "compatible planned/imported loads should merge");
+assert.equal(duplicateLoads.loads.length, 1);
+assert.equal(duplicateLoads.loads[0].oal, 1.594, "planned metadata should survive load merge");
+assert.equal(duplicateLoads.loads[0].sessions.length, 1, "imported session should survive load merge");
+const conflictingLoads = { loads: duplicateLoads.loads.concat({ ...duplicateLoads.loads[0], id: "different-oal", oal: 1.58 }) };
+assert.equal(api.reconcileDuplicateLoads(conflictingLoads), 0, "conflicting OAL values must remain separate");
 
 db.cartridges[db.activeCartridge].journal.push({
   _syncKey: "journal::smoke",
@@ -275,4 +286,3 @@ assert(!("display_data" in photoSafe), "display image data must not enter app_st
 assert(!("print_data" in photoSafe), "print image data must not enter app_state");
 
 console.log(JSON.stringify({ guns: gunCount, powders: powderCount, loads: Object.values(db.cartridges).reduce((n, c) => n + c.loads.length, 0), result: "ok" }));
-
