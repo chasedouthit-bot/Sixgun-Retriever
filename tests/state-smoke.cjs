@@ -24,6 +24,9 @@ assert(html.includes("function wireAlbumNavigation"), "album pages must expose a
 assert(html.includes("pdf-postcard-grid"), "PDF photo pages must preserve the postcard album treatment");
 assert(html.includes('family=Caveat'), "postcard captions must load the pencil-handwriting face");
 assert(html.includes('id="s-parts-maintenance"'), "binder must expose a Parts & Maintenance screen");
+assert(html.includes('value="__new__">＋ New Powder'), "import must allow creating a Catalog powder");
+assert(html.includes('value="__new__">＋ New Bullet'), "import must allow creating a Catalog bullet");
+assert(html.includes('＋ New Firearm'), "import must allow creating a Catalog firearm");
 assert(html.includes("assets/parts-maintenance-masthead-v2.jpg"), "service page and PDF must use the cabin workbench masthead");
 assert(html.includes("Selected service records for this sixgun"), "service page must use the archival subtitle convention");
 assert(html.includes('name="include_maintenance"'), "PDF export must expose the Parts & Maintenance toggle");
