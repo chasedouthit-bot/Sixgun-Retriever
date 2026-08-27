@@ -409,7 +409,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.7.0</div>
+    <div class="landing-version">Version 2.7.1</div>
   </div>
 </div>
 
@@ -477,7 +477,7 @@ nav button.on{color:var(--brass)}
 
   <!-- ============ GUN BIOGRAPHY ============ -->
   <section class="screen" id="s-biography"><div class="bio-top"><button class="bio-back" id="bioBackBtn">‹ Catalog</button><button class="action-btn" id="bioEditBtn">Edit profile</button></div><div id="bioContent"></div></section>
-  <section class="screen" id="s-letter"><div class="letter-toolbar"><button class="bio-back" id="letterBackBtn">‹ Biography</button><div class="letter-toolbar-group"><button class="action-btn" id="letterSettingsBtn">Letterhead</button><button class="action-btn" id="letterEditBtn">Your words</button><button class="action-btn primary" id="letterExportBtn">Export PDF</button></div></div><div id="letterPreview"></div></section>
+  <section class="screen" id="s-letter"><div class="letter-toolbar"><button class="bio-back" id="letterBackBtn">‹ Biography</button><div class="letter-toolbar-group"><button class="action-btn" id="letterSettingsBtn">Letterhead</button><button class="action-btn" id="letterEditBtn">Your words</button><button class="action-btn primary" id="letterExportBtn">Export PDF</button></div></div><div class="letter-preview-viewport" id="letterPreview"></div></section>
   <section class="screen" id="s-photo-record"><div class="pr-toolbar"><button class="bio-back" id="photoRecordBackBtn">‹ Biography</button><div class="pr-tools"><button class="action-btn" id="photoRecordEditBtn">Edit Record</button><button class="action-btn primary" id="photoRecordAddBtn">＋ Add Photos</button></div></div><div id="photoRecordContent"></div></section>
   <section class="screen" id="s-parts-maintenance"><div class="pr-toolbar"><button class="bio-back" id="partsMaintenanceBackBtn">‹ Biography</button><div class="pr-tools"><button class="action-btn" id="addPartBtn">＋ Add Part</button><button class="action-btn primary" id="addMaintenanceBtn">＋ Log Maintenance</button></div></div><div id="partsMaintenanceContent"></div></section>
 
@@ -782,8 +782,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.7.0";
-const CACHE_VERSION="sixgun-retriever-v2.7.0";
+const RELEASE_VERSION="2.7.1";
+const CACHE_VERSION="sixgun-retriever-v2.7.1";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -1226,7 +1226,10 @@ function renderLetter(){
   const g=biographyGun(),el=document.getElementById("letterPreview");if(!g||!el){goto("catalog");return;}const rec=gunLetter(g),data=letterData(g),settings=ensureLetterSettings(),answers=letterPrompts(g,data).map(p=>rec.prompt_answers[p.id]).filter(x=>String(x||"").trim()),signature=settings.signature_name||defaultSigner(),prov=[["Serial Number",g.serial],["Caliber",g.caliber],["Barrel Length",g.barrel_length||g.barrel],["Finish",g.finish],["Acquired From",g.source],["Date Acquired",g.purchase_date?fmtDate(g.purchase_date):null]].filter(x=>x[1]),chron=[];if(data.signature)chron.push(["Signature Load",loadLabel(data.signature)]);if(data.sessions)chron.push(["Sessions Logged",String(data.sessions)]);if(data.best){const m=data.best.metrics,bits=[m.moa!=null?`${m.moa.toFixed(2)} MOA`:null,m.es!=null?`ES ${m.es.toFixed(1)}`:null,m.sd!=null?`SD ${m.sd.toFixed(1)}`:null].filter(Boolean).join(" · ");chron.push(["Best-Performing Load",`${loadLabel(data.best.load)}${bits?` — ${bits}`:""}`]);}if(data.maintenance.length)chron.push(["Last Serviced",`${fmtDate(data.maintenance[0].date)} · ${data.maintenance.length} entr${data.maintenance.length===1?"y":"ies"} logged`]);
   const paragraphs=[letterOpening(g,rec),...answers],date=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
   el.innerHTML=`<div class="letter-stage" id="letterStage"><article class="archive-letter" id="archiveLetter"><div class="letter-mast">${letterOrnament()}<div class="letter-mast-copy"><div class="letterhead-name">${esc(settings.letterhead_name)}</div><div class="letter-kicker">Private Collection Record</div></div></div><div class="letter-correspondence"><div class="letter-date">${date}</div><p class="letter-salutation">Dear Future Keeper:</p><p class="letter-intro">This letter records the known provenance and continuing history of the firearm described below, as preserved in this private collection.</p><div class="letter-record-title">Collection Archive Record</div><section class="letter-provenance"><div class="letter-gun-name">${esc(gunDisplay(g))}</div>${prov.map(([k,v])=>`<div class="letter-row"><div class="letter-label">${esc(k)}:</div><div>${esc(v)}</div></div>`).join("")||`<div class="letter-empty">Complete the gun profile to establish its provenance.</div>`}</section>${chron.length?`<section class="letter-chronicle"><div class="letter-chronicle-title">Recorded History</div>${chron.map(([k,v])=>`<div class="letter-row"><div class="letter-label">${esc(k)}:</div><div>${esc(v)}</div></div>`).join("")}</section>`:""}<section class="letter-body"><div class="letter-body-title">A Personal Letter</div>${paragraphs.filter(Boolean).map(p=>`<p>${esc(p)}</p>`).join("")||`<div class="letter-empty">This letter is waiting for your words.</div>`}<div class="letter-closing">With care,</div><div class="letter-signature">${esc(signature)}</div><div class="letter-seal">SR</div><div class="letter-signature-role">Keeper of the Record</div></section><footer class="letter-footer">Prepared ${date} · ${esc(settings.letterhead_name)} · Private Collection Archive</footer></div></article></div>`;
-  requestAnimationFrame(fitLetterPreview);
+  const masthead=el.querySelector(".letter-ornament");
+  if(masthead&&!masthead.complete)masthead.addEventListener("load",fitLetterPreview,{once:true});
+  document.fonts?.ready.then(fitLetterPreview);
+  requestAnimationFrame(()=>requestAnimationFrame(fitLetterPreview));
 }
 function openLetterEditor(){
   const g=biographyGun();if(!g)return;const rec=gunLetter(g),data=letterData(g),prompts=letterPrompts(g,data);
