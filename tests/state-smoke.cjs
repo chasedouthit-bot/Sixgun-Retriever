@@ -4,6 +4,8 @@ const assert = require("assert");
 const { webcrypto } = require("crypto");
 
 const html = fs.readFileSync("index.html", "utf8");
+const performanceIntelligence = fs.readFileSync("performance-intelligence.js", "utf8");
+const worker = fs.readFileSync("worker.js", "utf8");
 const serviceMigration = fs.readFileSync("supabase/migrations/20260826_parts_maintenance.sql", "utf8");
 const garminMigration = fs.readFileSync("supabase/migrations/20260827_garmin_chronograph_import.sql", "utf8");
 const landingVersion = html.match(/<div class="landing-version">Version ([^<]+)<\/div>/)?.[1];
@@ -29,6 +31,8 @@ assert(html.includes('value="__new__">＋ New Bullet'), "import must allow creat
 assert(html.includes('＋ New Firearm'), "import must allow creating a Catalog firearm");
 assert(html.includes('onclick="taAutoSetup()"'), "target analyzer must expose one-touch auto setup");
 assert(html.includes('autoTargetKind=detection.kind'), "auto setup must preserve the detected target family for hit filtering");
+assert(performanceIntelligence.includes("typeof taAutoSetup==='function'"), "legacy target assist must yield to the native auto setup control");
+assert(worker.includes(`/performance-intelligence.js?v=${releaseVersion}`), "worker must load the current target-assist cache version");
 assert(html.includes("assets/parts-maintenance-masthead-v2.jpg"), "service page and PDF must use the cabin workbench masthead");
 assert(html.includes("Selected service records for this sixgun"), "service page must use the archival subtitle convention");
 assert(html.includes('name="include_maintenance"'), "PDF export must expose the Parts & Maintenance toggle");
@@ -100,7 +104,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,taFitLine,taProjectionPeriod,taProjectionPhase,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -110,6 +114,12 @@ assert.equal(api.taProjectionPeriod(periodicProjection, 20, 70).period, 30, "gri
 assert([0, 1].includes(api.taProjectionPhase(periodicProjection, 30)), "grid calibration must recover the printed-line phase");
 const fittedEdge = api.taFitLine([{x:0,y:10},{x:10,y:11},{x:20,y:12},{x:30,y:60},{x:40,y:14}]);
 assert(Math.abs(fittedEdge.a - 0.1) < 0.03, "target-edge fitting must reject a large clip/outlier");
+const targetW=240,targetH=360,targetPpi=20,targetPixels=new Uint8ClampedArray(targetW*targetH*4);
+for(let i=0;i<targetW*targetH;i++){targetPixels[i*4]=48;targetPixels[i*4+1]=50;targetPixels[i*4+2]=49;targetPixels[i*4+3]=255;}
+for(const [cx,cy] of [[76,128],[124,174],[167,229]])for(let y=cy-4;y<=cy+4;y++)for(let x=cx-4;x<=cx+4;x++)if((x-cx)**2+(y-cy)**2<=16){const i=(y*targetW+x)*4;targetPixels[i]=184;targetPixels[i+1]=181;targetPixels[i+2]=177;}
+for(let x=0;x<targetW;x++){const i=(347*targetW+x)*4;targetPixels[i]=238;targetPixels[i+1]=237;targetPixels[i+2]=230;}
+const neutralDamage=api.taNeutralDamageCandidates(targetPixels,targetW,targetH,targetPpi,58,24,48,332,14);
+assert.equal(neutralDamage.length,3,"reactive target damage must produce one marker per compact neutral splatter patch");
 const db = api.getDB();
 const catalog = api.ensureCatalog();
 const garminCsv = `"Pistol session started at 10:52"

@@ -7,7 +7,7 @@ export default {
     return new HTMLRewriter()
       .on('body', {
         element(element) {
-          element.append('<script src="/performance-intelligence.js?v=2.7.0"></script><script src="/status-hotfix.js?v=2.7.1"></script>', { html: true });
+          element.append('<script src="/performance-intelligence.js?v=2.8.2"></script><script src="/status-hotfix.js?v=2.7.1"></script>', { html: true });
         }
       })
       .transform(response);
