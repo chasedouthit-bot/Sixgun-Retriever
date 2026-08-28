@@ -142,6 +142,7 @@ main{padding:0 16px 24px;background:var(--bg)}
 .ta-controls{display:flex;gap:6px;padding:8px 12px calc(8px + var(--safe-b));background:var(--bg2);border-top:1px solid var(--line);flex-wrap:wrap;justify-content:center;align-items:center}
 .ta-btn{background:var(--card);border:1px solid var(--brass-dim);color:var(--ink);border-radius:8px;padding:10px 14px;font-family:Inter,sans-serif;font-weight:600;font-size:13px;cursor:pointer;flex:1;min-width:70px;max-width:130px}
 .ta-btn.primary{background:var(--brass);color:#241d0e;border-color:var(--brass)}
+.ta-btn.ta-auto{flex:1 0 100%;width:100%;max-width:none;padding:12px}
 .ta-btn:disabled{opacity:.4;cursor:default}
 .ta-target-del{position:absolute;top:8px;right:8px;z-index:2;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid var(--brass-dim);color:#f4e9d0;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .ta-input{background:var(--card);border:1px solid var(--brass-dim);color:var(--ink);border-radius:8px;padding:9px 11px;font-family:'JetBrains Mono',monospace;font-size:14px;width:88px;text-align:center}
@@ -1830,10 +1831,10 @@ document.querySelectorAll(".lib-nav-btn").forEach(b=>b.onclick=()=>{
 });
 
 /* ============================================================
-   TARGET ANALYZER — Phase 1 (manual measurement)
-   Raw taps + scale + distance are stored; group/MOA are always
-   recomputed from raw. No CV. Entirely client-side. Photo is
-   downscaled before it enters the offline photo queue and private Storage.
+   TARGET ANALYZER — rectification, grid calibration, and hit detection
+   Raw markers + scale + distance are stored; group/MOA are always
+   recomputed from raw. Computer vision remains entirely client-side. Photos
+   are downscaled before entering the offline queue and private Storage.
    ============================================================ */
 const TA={
   loadId:null, targetIndex:null, img:null, imgData:null, origImg:null, origData:null,
@@ -1849,13 +1850,15 @@ const TA={
   zoomMode:false,           // when true, two fingers pan/zoom the PHOTO
   drag:null,
   pinch:null,
-  canvas:null, ctx:null
+  canvas:null, ctx:null,
+  autoWorking:false, autoAligned:false, autoTargetKind:null, gridConfidence:0
 };
 
 function taOpen(loadId){
   TA.loadId=loadId; TA.targetIndex=null; TA.img=null; TA.imgData=null; TA.origImg=null; TA.origData=null; TA.mode="flatten";
   TA.rot=0; TA.pv=0; TA.ph=0;
   TA.scaleBox=null; TA.refInches=1; TA.holes=[]; TA.sel=null; TA.distanceYd=null;
+  TA.autoWorking=false;TA.autoAligned=false;TA.autoTargetKind=null;TA.gridConfidence=0;
   TA.base={scale:1,ox:0,oy:0}; TA.zoom=1; TA.panx=0; TA.pany=0; TA.zoomMode=false;
   TA.drag=null; TA.pinch=null; TA.vpinch=null;
   document.getElementById("taOverlay").classList.remove("hidden");
@@ -2000,6 +2003,7 @@ function taApplyFlatten(){
   const im=new Image();
   im.onload=()=>{
     TA.img=im; TA.mode="scale";TA.scaleBox=null;TA.holes=[];TA.sel=null;
+    TA.autoAligned=false;TA.autoTargetKind=null;TA.gridConfidence=0;
     TA.zoom=1;TA.panx=0;TA.pany=0;TA.zoomMode=false;
     fitImage(); taSetStep(); taRenderControls(); taDraw();
   };
@@ -2322,6 +2326,8 @@ function taSetStep(){
     el.textContent="Optional · Correct a tilted photo, then apply";
   }else if(TA.mode==="scale"){
     el.textContent="Scale · Match the green box to exactly ONE 1\" grid square — not the whole target";
+  }else if(TA.autoAligned){
+    el.textContent=TA.holes.length?`Auto setup complete · 1\" grid · review ${TA.holes.length} markers`:'Auto setup complete · 1" grid · tap to add holes';
   }else{
     el.textContent=TA.holes.length<1?"Holes · Tap each bullet hole":"Holes · Tap to add · drag to adjust · hold to delete";
   }
@@ -2353,6 +2359,7 @@ function taRenderControls(){
     </div>`;
     h+=`<button class="ta-btn" onclick="taResetFlatten()">Reset</button>`;
     h+=`<button class="ta-btn primary" onclick="taApplyFlatten()">Apply · Scale ›</button>`;
+    h+=`<button class="ta-btn ta-auto" onclick="taAutoSetup()" ${TA.autoWorking?'disabled':''}>${TA.autoWorking?'Finding target…':'✨ Auto setup'}</button>`;
     el.innerHTML=h;
     requestAnimationFrame(taRelayout);
     return;
@@ -2366,13 +2373,14 @@ function taRenderControls(){
   }
   if(TA.mode==="holes"){
     h+=`<button class="ta-btn primary" onclick="taAddBullet()">＋ Center marker</button>`;
-    h+=`<button class="ta-btn" onclick="taAutoDetect()">✨ Suggest</button>`;
+    h+=`<button class="ta-btn" onclick="taAutoDetect()">Find holes</button>`;
     h+=`<button class="ta-btn" onclick="taClear()">Clear all</button>`;
     h+=`<span style="display:flex;align-items:center;gap:6px"><input class="ta-input" id="taDist" inputmode="decimal" placeholder="yds" value="${TA.distanceYd||''}" oninput="taDist(this.value)"><span style="font-size:11px;color:var(--ink-faint)">yards</span></span>`;
   }
   // Zoom toggle — available in scale/holes. When ON, two fingers pan/zoom the photo.
   h+=`<button class="ta-btn ${TA.zoomMode?'primary':''}" onclick="taToggleZoom()">${TA.zoomMode?'Zoom: ON':'🔍 Zoom'}</button>`;
   if(TA.zoom!==1||TA.panx!==0||TA.pany!==0)h+=`<button class="ta-btn" onclick="taResetZoom()">Reset view</button>`;
+  h+=`<button class="ta-btn ta-auto" onclick="taAutoSetup()" ${TA.autoWorking?'disabled':''}>${TA.autoWorking?'Finding target…':'✨ Auto setup'}</button>`;
   el.innerHTML=h;
   requestAnimationFrame(taRelayout);
 }
@@ -2395,7 +2403,7 @@ function taBackToFlatten(){
   // return to flatten with the original image; keep current slider values so
   // the user can re-adjust. Holes/scale on the flattened image are discarded
   // only if they re-apply — warn implicitly by resetting scale.
-  TA.img=TA.origImg; TA.mode="flatten"; TA.scaleBox=null;
+  TA.img=TA.origImg; TA.mode="flatten"; TA.scaleBox=null;TA.autoAligned=false;TA.autoTargetKind=null;TA.gridConfidence=0;
   TA.zoom=1;TA.panx=0;TA.pany=0;TA.zoomMode=false;
   fitImage(); taSetStep(); taRenderControls(); taDraw();
 }
@@ -2407,92 +2415,189 @@ function taUndo(){if(TA.mode==="holes"){TA.holes.pop();}taDraw();taUpdateReadout
 function taClear(){if(TA.mode==="holes"){TA.holes=[];TA.sel=null;}taDraw();taUpdateReadout();taSetStep();taRenderControls();}
 function taDist(v){const n=parseFloat(v);TA.distanceYd=n>0?n:null;taUpdateReadout();}
 
-/* ---- OPTIONAL auto-detect: dark-blob hole finder (assistive) ----
-   Scans the image for dark, roughly-round, hole-sized clusters.
-   Uses the scale (px/inch) to expect a plausible hole size and to
-   reject grid lines and specks. Always user-confirmed afterward. */
-function taAutoDetect(){
-  if(!TA.img){toast("Load a photo first");return;}
-  if(!taScaleReady()){toast("Position the scale box first — it sizes the holes");return;}
-  toast("Scanning…");
-  setTimeout(()=>{ // let the toast paint before the heavy loop
-    const found=taFindHoles();
-    if(!found.length){toast("No holes auto-found — tap them manually");return;}
-    // merge with any existing, skip ones very close to already-placed markers
-    const ppi=taPPI();
-    const minGap=ppi*0.15; // don't double-place within .15"
-    let added=0;
-    found.forEach(f=>{
-      if(!TA.holes.some(h=>dist(h,f)<minGap)){TA.holes.push(f);added++;}
-    });
-    taDraw();taUpdateReadout();taRenderControls();taSetStep();
-    toast(added+" suggested · check & fix");
-  },40);
+/* ---- AUTO SETUP ----
+   Three deliberate stages replace the old whole-photo color-blob scan:
+   1. locate the printed target plane; 2. rectify it and solve the repeating
+   1" grid; 3. find dark bullet cores surrounded by fresh splatter. */
+function taImagePixels(img,maxSide=900){
+  const k=Math.min(1,maxSide/Math.max(img.width,img.height));
+  const w=Math.max(1,Math.round(img.width*k)),h=Math.max(1,Math.round(img.height*k));
+  const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
+  const ctx=canvas.getContext("2d",{willReadFrequently:true});ctx.drawImage(img,0,0,w,h);
+  return{canvas,w,h,data:ctx.getImageData(0,0,w,h).data,sx:img.width/w,sy:img.height/h};
 }
-function taFindHoles(){
-  const img=TA.img;
-  const w=img.width,h=img.height;
-  const oc=document.createElement("canvas");oc.width=w;oc.height=h;
-  const octx=oc.getContext("2d");octx.drawImage(img,0,0,w,h);
-  const data=octx.getImageData(0,0,w,h).data;
-  const ppi=taPPI();
-  const expR=ppi*0.22;
-  const minArea=Math.max(6,Math.PI*(expR*0.5)**2*0.4);
-  const maxArea=Math.PI*(expR*2.4)**2;
-  const N=w*h;
-  /* Detection mode:
-     Shoot-N-C style = BRIGHT high-chroma (yellow-green) reaction rings on a
-     dark/black field. We score each pixel as "hit-colored" when it is bright,
-     saturated, and green-dominant. Fallback for ordinary paper targets =
-     simple darkness. We auto-pick by sampling overall image brightness. */
-  let sum=0;
-  for(let i=0;i<N;i++){sum+=0.299*data[i*4]+0.587*data[i*4+1]+0.114*data[i*4+2];}
-  const meanL=sum/N;
-  const brightTarget=meanL<110; // mostly-dark image => treat as Shoot-N-C (bright holes)
-  const mark=new Uint8Array(N);
-  if(brightTarget){
-    // bright, saturated, green/yellow-dominant
-    for(let i=0;i<N;i++){
-      const r=data[i*4],g=data[i*4+1],b=data[i*4+2];
-      const mx=Math.max(r,g,b),mn=Math.min(r,g,b);
-      const L=0.299*r+0.587*g+0.114*b;
-      const sat=mx-mn;
-      // chartreuse: green high, blue low, red moderate-high
-      const greenish=(g>=b) && (g+ r > b*2);
-      if(L>90 && sat>40 && greenish) mark[i]=1;
-      else if(L>170) mark[i]=1; // very bright (torn paper backing showing white) also counts
-    }
+function taLuma(r,g,b){return 0.299*r+0.587*g+0.114*b;}
+function taLimePixel(r,g,b){
+  const mx=Math.max(r,g,b),L=taLuma(r,g,b);
+  return L>72&&g>82&&g>=r*.88&&b<g*.74&&(mx-Math.min(r,g,b))>38;
+}
+function taFitLine(points){
+  if(points.length<2)return{a:0,b:points[0]?.y||0};
+  const fit=pts=>{let sx=0,sy=0,sxx=0,sxy=0;for(const p of pts){sx+=p.x;sy+=p.y;sxx+=p.x*p.x;sxy+=p.x*p.y;}const n=pts.length,den=n*sxx-sx*sx;const a=Math.abs(den)>1e-6?(n*sxy-sx*sy)/den:0;return{a,b:(sy-a*sx)/n};};
+  const median=a=>{const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;},slopes=[];
+  for(let i=0;i<points.length;i++)for(let j=i+1;j<points.length;j++){const dx=points[j].x-points[i].x;if(Math.abs(dx)>1)slopes.push((points[j].y-points[i].y)/dx);}
+  const a0=median(slopes),b0=median(points.map(p=>p.y-a0*p.x)),residuals=points.map(p=>Math.abs(p.y-(a0*p.x+b0))),med=median(residuals),mad=median(residuals.map(r=>Math.abs(r-med))),cut=Math.max(2,med+3*Math.max(1,mad));
+  const trimmed=points.filter(p=>Math.abs(p.y-(a0*p.x+b0))<=cut);
+  return trimmed.length>3?fit(trimmed):{a:a0,b:b0};
+}
+function taBandBounds(mask,w,run){
+  const counts=new Int32Array(w),bandH=run.end-run.start+1;
+  for(let y=run.start;y<=run.end;y++)for(let x=0;x<w;x++)if(mask[y*w+x])counts[x]++;
+  const xs=[];for(let x=0;x<w;x++)if(counts[x]>=Math.max(2,bandH*.18))xs.push(x);
+  if(xs.length<20)return null;
+  return{left:xs[Math.floor(xs.length*.01)],right:xs[Math.floor(xs.length*.99)]};
+}
+function taDetectTargetQuad(img){
+  const work=taImagePixels(img,850),{w,h,data}=work,N=w*h,mask=new Uint8Array(N),rowCounts=new Int32Array(h);
+  for(let i=0;i<N;i++){
+    const j=i*4;if(taLimePixel(data[j],data[j+1],data[j+2])){mask[i]=1;rowCounts[(i/w)|0]++;}
+  }
+  const threshold=Math.max(24,w*.22),runs=[];let start=-1,gap=0;
+  for(let y=0;y<h;y++){
+    if(rowCounts[y]>=threshold){if(start<0)start=y;gap=0;}
+    else if(start>=0&&++gap>2){runs.push({start,end:y-gap,height:y-gap-start+1});start=-1;gap=0;}
+  }
+  if(start>=0)runs.push({start,end:h-1,height:h-start});
+  const bands=runs.filter(r=>r.height>=Math.max(4,h*.008)).map(r=>({...r,bounds:taBandBounds(mask,w,r)})).filter(r=>r.bounds&&r.bounds.right-r.bounds.left>w*.32);
+  let pair=null,best=0;
+  for(let i=0;i<bands.length;i++)for(let j=i+1;j<bands.length;j++){
+    const a=bands[i],b=bands[j],sep=b.start-a.end;if(sep<h*.35)continue;
+    const width=Math.min(a.bounds.right-a.bounds.left,b.bounds.right-b.bounds.left),score=sep*width*Math.sqrt(a.height*b.height);
+    if(score>best){best=score;pair=[a,b];}
+  }
+  if(!pair){
+    // Conservative fallback for grid targets without solid header/footer bands.
+    const xs=[],ys=[];for(let y=0;y<h;y+=2)for(let x=0;x<w;x+=2)if(mask[y*w+x]){xs.push(x);ys.push(y);}
+    if(xs.length<N*.002)return null;
+    xs.sort((a,b)=>a-b);ys.sort((a,b)=>a-b);const q=(a,p)=>a[Math.floor((a.length-1)*p)];
+    const l=q(xs,.03),r=q(xs,.97),t=q(ys,.03),b=q(ys,.97);
+    if(r-l<w*.3||b-t<h*.3)return null;
+    return{quad:[{x:l*work.sx,y:t*work.sy},{x:r*work.sx,y:t*work.sy},{x:r*work.sx,y:b*work.sy},{x:l*work.sx,y:b*work.sy}],kind:"grid",confidence:.55};
+  }
+  const [top,bottom]=pair,topPts=[],bottomPts=[];
+  for(let x=top.bounds.left;x<=top.bounds.right;x+=2){for(let y=Math.max(0,top.start-3);y<=Math.min(h-1,top.end);y++)if(mask[y*w+x]){topPts.push({x,y});break;}}
+  for(let x=bottom.bounds.left;x<=bottom.bounds.right;x+=2){for(let y=Math.min(h-1,bottom.end+3);y>=Math.max(0,bottom.start);y--)if(mask[y*w+x]){bottomPts.push({x,y});break;}}
+  const tl=taFitLine(topPts),bl=taFitLine(bottomPts),xTL=top.bounds.left,xTR=top.bounds.right,xBL=bottom.bounds.left,xBR=bottom.bounds.right;
+  const quad=[{x:xTL,y:tl.a*xTL+tl.b},{x:xTR,y:tl.a*xTR+tl.b},{x:xBR,y:bl.a*xBR+bl.b},{x:xBL,y:bl.a*xBL+bl.b}].map(p=>({x:p.x*work.sx,y:p.y*work.sy}));
+  return{quad,kind:"reactive-bands",confidence:.94};
+}
+function taWarpTarget(img,detection){
+  const q=detection.quad,avg=(a,b)=>(a+b)/2;
+  let w=Math.round(avg(dist(q[0],q[1]),dist(q[3],q[2]))),h=Math.round(avg(dist(q[0],q[3]),dist(q[1],q[2]))),ratio=w/h;
+  // This solid-band target family is 12x18. Its printed aspect makes the
+  // horizontal and vertical grid pitch physically identical after the warp.
+  if(detection.kind==="reactive-bands"&&ratio>.55&&ratio<.78)h=Math.round(w*1.5);
+  const k=Math.min(1,1400/Math.max(w,h));w=Math.max(180,Math.round(w*k));h=Math.max(240,Math.round(h*k));
+  const out=document.createElement("canvas");out.width=w;out.height=h;const ctx=out.getContext("2d");ctx.fillStyle="#0b0a08";ctx.fillRect(0,0,w,h);
+  const H=solveH(q),N=32,srcCanvas=document.createElement("canvas");srcCanvas.width=img.width;srcCanvas.height=img.height;srcCanvas.getContext("2d").drawImage(img,0,0);
+  for(let gy=0;gy<N;gy++)for(let gx=0;gx<N;gx++){
+    const u0=gx/N,u1=(gx+1)/N,v0=gy/N,v1=(gy+1)/N,s00=applyH(H,u0,v0),s10=applyH(H,u1,v0),s01=applyH(H,u0,v1);
+    drawAffineCell(ctx,srcCanvas,s00,s10,s01,u0*w,v0*h,(u1-u0)*w,(v1-v0)*h);
+  }
+  return out;
+}
+function taDetrend(values,windowSize){
+  const n=values.length,prefix=new Float64Array(n+1),out=new Float64Array(n);for(let i=0;i<n;i++)prefix[i+1]=prefix[i]+values[i];
+  for(let i=0;i<n;i++){const a=Math.max(0,i-windowSize),b=Math.min(n,i+windowSize+1);out[i]=values[i]-(prefix[b]-prefix[a])/(b-a);}
+  return out;
+}
+function taProjectionPeriod(values,minLag,maxLag){
+  const q=taDetrend(values,Math.max(4,Math.round(minLag*.55))),scores=[];let best=-Infinity;
+  for(let lag=minLag;lag<=maxLag;lag++){let s=0,n=0;for(let i=0;i+lag<q.length;i++){s+=q[i]*q[i+lag];n++;}s/=Math.max(1,n);scores[lag]=s;if(s>best)best=s;}
+  if(!(best>0))return null;
+  let period=0;for(let lag=minLag+1;lag<maxLag;lag++)if(scores[lag]>=best*.55&&scores[lag]>=scores[lag-1]&&scores[lag]>=scores[lag+1]){period=lag;break;}
+  if(!period){for(let lag=minLag;lag<=maxLag;lag++)if(scores[lag]===best){period=lag;break;}}
+  return{period,confidence:Math.max(0,Math.min(1,(scores[period]||0)/best))};
+}
+function taProjectionPhase(values,period,start=0,end=values.length){
+  const p=Math.max(2,Math.round(period));let best=0,bestScore=-Infinity;
+  for(let phase=0;phase<p;phase++){let s=0;for(let i=start+phase;i<end;i+=p)s+=values[i]||0;if(s>bestScore){bestScore=s;best=phase;}}
+  return best;
+}
+function taGridCalibration(canvas,detection){
+  const ctx=canvas.getContext("2d",{willReadFrequently:true}),w=canvas.width,h=canvas.height,data=ctx.getImageData(0,0,w,h).data,xp=new Float64Array(w),yp=new Float64Array(h);
+  const y0=Math.floor(h*.13),y1=Math.ceil(h*.95),x0=Math.floor(w*.035),x1=Math.ceil(w*.965);
+  for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){
+    const i=(y*w+x)*4,r=data[i],g=data[i+1],b=data[i+2],L=taLuma(r,g,b),score=Math.max(0,g-b-16)*Math.max(0,Math.min(1,(g-r+70)/100))*Math.max(0,Math.min(1,(L-45)/125));
+    xp[x]+=score;yp[y]+=score;
+  }
+  let px,py,confidence=.5;
+  if(detection.kind==="reactive-bands"){
+    const expectedX=w/12,expectedY=h/18,rx=taProjectionPeriod(xp,Math.max(7,Math.floor(expectedX*.68)),Math.ceil(expectedX*1.35)),ry=taProjectionPeriod(yp,Math.max(7,Math.floor(expectedY*.68)),Math.ceil(expectedY*1.35));
+    px=rx?.period||expectedX;py=ry?.period||expectedY;
+    if(Math.abs(px-expectedX)>expectedX*.18)px=expectedX;if(Math.abs(py-expectedY)>expectedY*.18)py=expectedY;confidence=.9;
   }else{
-    // ordinary: dark blobs
-    let vs=0;for(let i=0;i<N;i++){const d=(0.299*data[i*4]+0.587*data[i*4+1]+0.114*data[i*4+2])-meanL;vs+=d*d;}
-    const sd=Math.sqrt(vs/N);const thr=meanL-0.9*sd;
-    for(let i=0;i<N;i++){const L=0.299*data[i*4]+0.587*data[i*4+1]+0.114*data[i*4+2];if(L<thr)mark[i]=1;}
+    const rx=taProjectionPeriod(xp,Math.max(7,Math.floor(w/32)),Math.ceil(w/6)),ry=taProjectionPeriod(yp,Math.max(7,Math.floor(h/40)),Math.ceil(h/7));
+    if(!rx&&!ry)return null;px=rx?.period||ry.period;py=ry?.period||rx.period;
+    if(Math.max(px,py)/Math.min(px,py)>1.3){const p=rx?.confidence>=ry?.confidence?px:py;px=p;py=p;confidence=.5;}else confidence=.7;
   }
-  // connected components (4-neighbour)
-  const seen=new Uint8Array(N),blobs=[],stack=new Int32Array(N);
-  for(let p=0;p<N;p++){
-    if(!mark[p]||seen[p])continue;
-    let sp=0;stack[sp++]=p;seen[p]=1;
-    let cnt=0,sx=0,sy=0,minx=1e9,maxx=-1,miny=1e9,maxy=-1;
-    while(sp){
-      const q=stack[--sp];const qx=q%w,qy=(q/w)|0;
-      cnt++;sx+=qx;sy+=qy;
-      if(qx<minx)minx=qx;if(qx>maxx)maxx=qx;if(qy<miny)miny=qy;if(qy>maxy)maxy=qy;
-      if(qx>0){const n=q-1;if(mark[n]&&!seen[n]){seen[n]=1;stack[sp++]=n;}}
-      if(qx<w-1){const n=q+1;if(mark[n]&&!seen[n]){seen[n]=1;stack[sp++]=n;}}
-      if(qy>0){const n=q-w;if(mark[n]&&!seen[n]){seen[n]=1;stack[sp++]=n;}}
-      if(qy<h-1){const n=q+w;if(mark[n]&&!seen[n]){seen[n]=1;stack[sp++]=n;}}
+  const ppi=(px+py)/2,phaseX=taProjectionPhase(xp,px,x0,x1),phaseY=taProjectionPhase(yp,py,y0,y1),squareCenter=(phase,p,mid)=>{const n=Math.round((mid-phase)/p-.5);return phase+(n+.5)*p;};
+  return{ppi,confidence,box:{x:squareCenter(phaseX,px,w/2),y:squareCenter(phaseY,py,h/2),size:ppi}};
+}
+function taIntegral(values,w,h){
+  const stride=w+1,out=new Float64Array(stride*(h+1));
+  for(let y=0;y<h;y++){let row=0;for(let x=0;x<w;x++){row+=values[y*w+x];out[(y+1)*stride+x+1]=out[y*stride+x+1]+row;}}
+  return out;
+}
+function taBoxMean(integral,w,h,x,y,r){
+  const s=w+1,x0=Math.max(0,x-r),y0=Math.max(0,y-r),x1=Math.min(w,x+r+1),y1=Math.min(h,y+r+1),sum=integral[y1*s+x1]-integral[y0*s+x1]-integral[y1*s+x0]+integral[y0*s+x0];
+  return sum/Math.max(1,(x1-x0)*(y1-y0));
+}
+function taHoleCandidates(img){
+  const work=taImagePixels(img,900),{w,h,data}=work,N=w*h,lum=new Float64Array(N),reaction=new Uint8Array(N);let sum=0,sum2=0,count=0;
+  for(let i=0;i<N;i++){
+    const j=i*4,r=data[j],g=data[j+1],b=data[j+2],L=taLuma(r,g,b),mx=Math.max(r,g,b),mn=Math.min(r,g,b);lum[i]=L;
+    if((L>88&&g>b*1.16&&r>b*1.02&&g>r*.82&&(mx-mn)>32)||(L>188&&(mx-mn)<68))reaction[i]=1;
+    const x=i%w,y=(i/w)|0;if(x>w*.08&&x<w*.92&&y>h*.1&&y<h*.94){sum+=L;sum2+=L*L;count++;}
+  }
+  const mean=sum/Math.max(1,count),sd=Math.sqrt(Math.max(0,sum2/Math.max(1,count)-mean*mean)),reactive=mean<125,li=taIntegral(lum,w,h),ri=taIntegral(reaction,w,h),ppi=taPPI()/((work.sx+work.sy)/2);
+  if(!(ppi>5))return[];
+  const coreR=Math.max(1,Math.round(ppi*.105)),innerR=Math.max(coreR+1,Math.round(ppi*.18)),outerR=Math.max(innerR+2,Math.round(ppi*.43)),step=Math.max(1,Math.round(ppi/15)),margin=Math.max(outerR+2,Math.round(ppi*.66)),banded=TA.autoTargetKind==="reactive-bands",yStart=banded?Math.max(margin,Math.round(ppi*1.9)):margin,yEnd=banded?h-Math.max(margin,Math.round(ppi*.72)):h-margin,raw=[];
+  const response=(x,y)=>{
+    const core=taBoxMean(li,w,h,x,y,coreR),insideLum=taBoxMean(li,w,h,x,y,innerR),outerLum=taBoxMean(li,w,h,x,y,outerR),areaO=(outerR*2+1)**2,areaI=(innerR*2+1)**2,annLum=(outerLum*areaO-insideLum*areaI)/(areaO-areaI),contrast=annLum-core;
+    if(reactive){
+      const insideReact=taBoxMean(ri,w,h,x,y,innerR),outerReact=taBoxMean(ri,w,h,x,y,outerR),density=(outerReact*areaO-insideReact*areaI)/(areaO-areaI),point=lum[y*w+x];
+      if(point>Math.min(100,mean-3)||core>Math.min(105,mean+3)||contrast<Math.max(14,sd*.13)||density<.16)return null;
+      return{score:density*120+contrast*.72+(mean-core)*.2,density,contrast,core,x,y};
     }
-    if(cnt<minArea||cnt>maxArea)continue;
-    const bw=maxx-minx+1,bh=maxy-miny+1;
-    const aspect=Math.max(bw,bh)/Math.max(1,Math.min(bw,bh));
-    if(aspect>2.6)continue;
-    const fill=cnt/(bw*bh);
-    if(fill<0.30)continue;
-    blobs.push({x:sx/cnt,y:sy/cnt,cnt});
+    const darkness=mean-core;if(darkness<Math.max(18,sd*.42)||contrast<Math.max(13,sd*.28))return null;
+    return{score:contrast+darkness*.55,density:0,contrast,core,x,y};
+  };
+  for(let y=yStart;y<yEnd;y+=step)for(let x=margin;x<w-margin;x+=step){const c=response(x,y);if(c)raw.push(c);}
+  raw.sort((a,b)=>b.score-a.score);
+  // Refine coarse candidates to the strongest nearby pixel before suppression.
+  const refined=[];for(const c of raw.slice(0,180)){
+    let best=c,rr=Math.max(2,step);for(let y=Math.max(yStart,c.y-rr);y<=Math.min(yEnd-1,c.y+rr);y++)for(let x=Math.max(margin,c.x-rr);x<=Math.min(w-margin-1,c.x+rr);x++){const q=response(x,y);if(q&&q.score>best.score)best=q;}
+    if(!refined.some(p=>Math.hypot(p.x-best.x,p.y-best.y)<ppi*.27))refined.push(best);
   }
-  blobs.sort((a,b)=>b.cnt-a.cnt);
-  return blobs.slice(0,40).map(b=>({x:b.x,y:b.y}));
+  refined.sort((a,b)=>b.score-a.score);if(!refined.length)return[];
+  const selected=[],top=refined[0].score;
+  for(const c of refined){
+    const gap=selected.length?Math.min(...selected.map(p=>Math.hypot(p.x-c.x,p.y-c.y))):Infinity,high=reactive?(c.score>=top*.67&&c.density>.38):(c.score>=top*.62),isolated=reactive&&c.score>=top*.34&&c.density>.25&&c.contrast>Math.max(24,sd*.22)&&gap>ppi*.60;
+    if((high||isolated)&&gap>ppi*.27)selected.push(c);if(selected.length>=30)break;
+  }
+  return selected.map(c=>({x:c.x*work.sx,y:c.y*work.sy,score:c.score}));
+}
+function taFindHoles(){return taHoleCandidates(TA.img).map(({x,y})=>({x,y})).sort((a,b)=>a.y-b.y||a.x-b.x);}
+function taAutoDetect(){
+  if(!TA.img){toast("Load a photo first");return;}if(!taScaleReady()){toast("Run Auto setup or set the 1-inch scale first");return;}
+  toast("Finding bullet holes…");setTimeout(()=>{const found=taFindHoles();TA.holes=found;TA.sel=null;taDraw();taUpdateReadout();taRenderControls();taSetStep();toast(found.length?`${found.length} holes found · review markers`:"No holes found · tap to add them manually");},40);
+}
+function taAutoSetup(){
+  if(TA.autoWorking||!TA.img)return;TA.autoWorking=true;taRenderControls();document.getElementById("taStep").textContent="Auto setup · Finding target edges…";toast("Finding target…");
+  setTimeout(()=>{
+    try{
+      const source=TA.origImg||TA.img,detection=taDetectTargetQuad(source);if(!detection)throw new Error("I couldn't isolate the printed target");
+      document.getElementById("taStep").textContent="Auto setup · Straightening and reading the 1-inch grid…";
+      const warped=taWarpTarget(source,detection),grid=taGridCalibration(warped,detection);if(!grid)throw new Error("Target found, but the 1-inch grid wasn't clear enough");
+      TA.imgData=warped.toDataURL("image/jpeg",.9);const im=new Image();
+      im.onload=()=>{
+        TA.img=im;TA.scaleBox={...grid.box};TA.refInches=1;TA.holes=[];TA.sel=null;TA.mode="holes";TA.autoAligned=true;TA.autoTargetKind=detection.kind;TA.gridConfidence=grid.confidence;TA.zoom=1;TA.panx=0;TA.pany=0;TA.zoomMode=false;
+        fitImage();const found=taFindHoles();TA.holes=found;TA.autoWorking=false;taSetStep();taRenderControls();taDraw();taUpdateReadout();
+        toast(found.length?`Target aligned · 1-inch grid set · ${found.length} holes found`:"Target aligned and 1-inch grid set · add missing holes manually");
+      };im.onerror=()=>{TA.autoWorking=false;taRenderControls();toast("Auto setup couldn't render the corrected target");};im.src=TA.imgData;
+    }catch(e){TA.autoWorking=false;taRenderControls();taSetStep();toast(`${e.message} · use Adjust photo and Scale`);}
+  },50);
 }
 
 /* ---- save to the load ---- */
