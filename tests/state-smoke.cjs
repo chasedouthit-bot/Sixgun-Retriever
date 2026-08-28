@@ -31,6 +31,10 @@ assert(html.includes('value="__new__">＋ New Bullet'), "import must allow creat
 assert(html.includes('＋ New Firearm'), "import must allow creating a Catalog firearm");
 assert(html.includes('onclick="taAutoSetup()"'), "target analyzer must expose one-touch auto setup");
 assert(html.includes('autoTargetKind=detection.kind'), "auto setup must preserve the detected target family for hit filtering");
+assert(html.includes('targetResult[key]??session?.[key]'), "the load editor must prefer the newest analyzed target measurements");
+assert(html.includes('load.group=g.groupIn!=null'), "saving a target must mirror group inches onto its load");
+assert(html.includes('load.moa=g.moa!=null'), "saving a target must refresh MOA instead of retaining a stale value");
+assert(html.includes('button.type="submit"'), "editor primary actions must explicitly submit their form");
 assert(performanceIntelligence.includes("typeof taAutoSetup==='function'"), "legacy target assist must yield to the native auto setup control");
 assert(worker.includes(`/performance-intelligence.js?v=${releaseVersion}`), "worker must load the current target-assist cache version");
 assert(html.includes("assets/parts-maintenance-masthead-v2.jpg"), "service page and PDF must use the cabin workbench masthead");

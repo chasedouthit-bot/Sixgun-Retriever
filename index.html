@@ -414,7 +414,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.8.2</div>
+    <div class="landing-version">Version 2.8.3</div>
   </div>
 </div>
 
@@ -787,8 +787,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.8.2";
-const CACHE_VERSION="sixgun-retriever-v2.8.2";
+const RELEASE_VERSION="2.8.3";
+const CACHE_VERSION="sixgun-retriever-v2.8.3";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -841,7 +841,7 @@ function attachGunToCartridge(g,cart=g.caliber){const c=DB.cartridges[cart];if(!
 function addGunRecord(values){const model=String(values.model||"").trim();if(!model)throw new Error("Model is required");const g={_legacyKey:`catalog::${crypto.randomUUID()}`,make:String(values.make||"").trim(),model,caliber:String(values.caliber||DB.activeCartridge).trim(),serial:String(values.serial||"").trim(),purchase_date:values.purchase_date||null,source:String(values.source||"").trim(),price:values.price===""||values.price==null?null:Number(values.price),rotation_status:String(values.rotation_status||"in rotation").trim(),rotation_note:String(values.rotation_note||"").trim(),barrel_length:String(values.barrel_length||values.barrel||"").trim(),finish:String(values.finish||"").trim()};g.name=gunDisplay(g);if(exactGun(g.name,g.caliber))throw new Error("That gun is already in the Catalog");ensureCatalog().guns.push(g);attachGunToCartridge(g);return g;}
 function addPowderRecord(values){const name=String(values.name||"").trim();if(!name)throw new Error("Powder name is required");if(exactPowder(name))throw new Error("That powder is already in the Catalog");const p={_legacyKey:`catalog::${crypto.randomUUID()}`,name,notes:String(values.notes||"").trim()};ensureCatalog().powders.push(p);return p;}
 function addBulletRecord(values){const product=String(values.product||values.display||"").trim();if(!product)throw new Error("Bullet product/name is required");const b={_legacyKey:`bullet::${crypto.randomUUID()}`,manufacturer:String(values.manufacturer||"").trim(),product,weight_gr:values.weight_gr===""||values.weight_gr==null?null:Number(values.weight_gr),diameter:String(values.diameter||"").trim(),caliber:String(values.caliber||"").trim(),style:String(values.style||"").trim(),notes:String(values.notes||"").trim()};b.display=bulletDisplay(b);if(exactBullet(b.display))throw new Error("That bullet is already in the Catalog");ensureCatalog().bullets.push(b);return b;}
-function editorOpen(title,html,onSubmit){const scrim=document.getElementById("editorScrim"),form=document.getElementById("editorForm");document.getElementById("editorTitle").textContent=title;form.innerHTML=html;scrim.style.display="flex";form.onsubmit=async e=>{e.preventDefault();try{await onSubmit(new FormData(form),form);}catch(err){toast(err.message||"Could not save");}};}
+function editorOpen(title,html,onSubmit){const scrim=document.getElementById("editorScrim"),form=document.getElementById("editorForm");document.getElementById("editorTitle").textContent=title;form.innerHTML=html;scrim.style.display="flex";form.querySelectorAll('.editor-actions button:not([type])').forEach(button=>button.type="submit");form.querySelectorAll('input,select,textarea').forEach(field=>field.oninvalid=e=>{e.preventDefault();const label=field.closest('.field')?.querySelector('label')?.textContent?.replace('*','').trim()||'Required field';field.scrollIntoView({behavior:'smooth',block:'center'});field.focus({preventScroll:true});toast(`${label} needs attention`);});form.onsubmit=async e=>{e.preventDefault();const submitter=e.submitter||form.querySelector('.editor-actions .primary'),original=submitter?.textContent;if(submitter){submitter.disabled=true;submitter.textContent="Saving…";}try{await onSubmit(new FormData(form),form);}catch(err){toast(err.message||"Could not save");if(submitter?.isConnected){submitter.disabled=false;submitter.textContent=original;}}};}
 function editorClose(){document.getElementById("editorScrim").style.display="none";document.getElementById("editorForm").innerHTML="";}
 document.getElementById("editorClose").onclick=editorClose;document.getElementById("editorScrim").onclick=e=>{if(e.target.id==="editorScrim")editorClose();};
 function entityLists(){ensureCatalog();return `<datalist id="gunSuggestions">${DB.catalog.guns.map(g=>`<option value="${esc(gunDisplay(g))}">${esc(g.caliber||"")}</option>`).join("")}</datalist><datalist id="powderSuggestions">${DB.catalog.powders.map(p=>`<option value="${esc(p.name)}">${esc(p.notes||"")}</option>`).join("")}</datalist>`;}
@@ -1178,13 +1178,15 @@ function fmtDate(d){const dt=new Date(d+"T00:00");return dt.toLocaleDateString('
 function openLoadForm(loadId=null){
   ensureCatalog();const load=loadId?(C().loads||[]).find(l=>String(l.id)===String(loadId)):null;
   const sessions=load?.sessions||[],session=sessions.slice().sort((a,b)=>new Date(b.date||0)-new Date(a.date||0))[0]||null;
-  const result=(key)=>session?.[key]??load?.[key]??"";
+  const latestTarget=(load?.targets||[]).slice().reverse().sort((a,b)=>new Date(b.date||0)-new Date(a.date||0))[0]||null;
+  const targetResult={dist:latestTarget?.distanceYd,group:latestTarget?.groupIn,moa:latestTarget?.moa};
+  const result=(key)=>targetResult[key]??session?.[key]??load?.[key]??"";
   const tiers=Object.entries(C().tiers||{}).map(([k,t])=>`<option value="${esc(k)}" ${String(load?.tier??1)===String(k)?"selected":""}>${esc(C().groupNoun?`${C().groupNoun} ${k} · ${t.name}`:t.name)}</option>`).join("");
   const status=[['pending','Loaded'],['yes','Keeper'],['work','Watch'],['reshoot','Reshoot']].map(([v,l])=>`<option value="${v}" ${(load?.keep||'pending')===v?'selected':''}>${l}</option>`).join("");
   editorOpen(load?"Edit Load":"New Load",`${entityLists()}<div class="form-grid"><div class="field full"><label>Gun *</label><input id="loadGun" name="gun" list="gunSuggestions" value="${esc(load?.gun||activeGun||"")}" required autocomplete="off"><div class="entity-hint" id="loadGunHint"></div></div><div class="field full"><label>Powder *</label><input id="loadPowder" name="powder" list="powderSuggestions" value="${esc(load?.powder||"")}" required autocomplete="off"><div class="entity-hint" id="loadPowderHint"></div></div><div class="field full"><label>Bullet *</label><input name="bullet" value="${esc(load?.bullet||"")}" required></div><div class="field"><label>Bullet brand</label><input name="brand" value="${esc(load?.brand||"")}"></div><div class="field"><label>Charge (gr) *</label><input type="number" min="0" step="0.1" name="charge" value="${esc(load?.charge??"")}" required></div><div class="field"><label>Primer</label><input name="primer" value="${esc(load?.primer||"")}"></div><div class="field"><label>Case</label><input name="case" value="${esc(load?.case||"")}"></div><div class="field"><label>OAL (in.)</label><input type="number" min="0" step="0.001" name="oal" value="${esc(load?.oal??"")}"></div><div class="field"><label>Bullet diameter</label><input name="dia" value="${esc(load?.dia||"")}" placeholder=".452"></div><div class="field"><label>BHN</label><input type="number" min="0" step="0.1" name="bhn" value="${esc(load?.bhn??"")}"></div><div class="field"><label>Sizing</label><input name="sized" value="${esc(load?.sized||"")}" placeholder="As-cast"></div><div class="field"><label>${esc(C().groupNoun||"Tier")}</label><select name="tier">${tiers}</select></div><div class="field"><label>Status</label><select name="keep">${status}</select></div><div class="field full"><label>Load notes</label><textarea name="note">${esc(load?.note||"")}</textarea></div><div class="detail-label full">Latest session</div><div class="field"><label>Date</label><input type="date" name="session_date" value="${esc(result("date"))}"></div><div class="field"><label>Temperature (°F)</label><input type="number" step="1" name="temp" value="${esc(result("temp"))}"></div><div class="field"><label>Shots</label><input type="number" min="0" step="1" name="shots" value="${esc(result("shots"))}"></div><div class="field"><label>Average velocity (fps)</label><input type="number" min="0" step="0.1" name="avg" value="${esc(result("avg"))}"></div><div class="field"><label>SD</label><input type="number" min="0" step="0.1" name="sd" value="${esc(result("sd"))}"></div><div class="field"><label>ES</label><input type="number" min="0" step="0.1" name="es" value="${esc(result("es"))}"></div><div class="field"><label>Estimated velocity (fps)</label><input type="number" min="0" step="0.1" name="estvel" value="${esc(result("estvel"))}"></div><div class="field"><label>Estimated pressure</label><input name="estpress" value="${esc(result("estpress"))}"></div><div class="field"><label>Distance (yd)</label><input type="number" min="0" step="0.1" name="dist" value="${esc(result("dist"))}"></div><div class="field"><label>Group (in.)</label><input type="number" min="0" step="0.001" name="group" value="${esc(result("group"))}"></div><div class="field"><label>Group MOA</label><input type="number" min="0" step="0.001" name="moa" value="${esc(result("moa"))}"></div><div class="field full"><label>Session notes</label><textarea name="session_notes">${esc(session?.notes||"")}</textarea></div><div class="field full"><label><input type="checkbox" name="signature_load" value="1" ${load?.signature_load?"checked":""}> Signature load for this gun</label></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">${load?"Save Changes":"Add Load"}</button></div>`,async fd=>{
     const v=Object.fromEntries(fd),gun=exactGun(v.gun,DB.activeCartridge),powder=exactPowder(v.powder);if(!gun)throw new Error("Choose a Catalog gun or add it first");if(!powder)throw new Error("Choose a Catalog powder or add it first");attachGunToCartridge(gun,DB.activeCartridge);
     const optionalNumber=name=>v[name]===""?null:Number(v[name]);
-    const values={gun:gunDisplay(gun),gunCatalogKey:gun._legacyKey,powder:powder.name,powderCatalogKey:powder._legacyKey,bullet:v.bullet.trim(),brand:v.brand.trim(),charge:Number(v.charge),primer:v.primer.trim(),case:v.case.trim(),oal:optionalNumber("oal"),dia:v.dia.trim(),bhn:optionalNumber("bhn"),sized:v.sized.trim(),tier:Number(v.tier),keep:v.keep,note:v.note.trim(),signature_load:v.signature_load==="1",avg:optionalNumber("avg"),sd:optionalNumber("sd"),es:optionalNumber("es"),moa:optionalNumber("moa")};
+    const values={gun:gunDisplay(gun),gunCatalogKey:gun._legacyKey,powder:powder.name,powderCatalogKey:powder._legacyKey,bullet:v.bullet.trim(),brand:v.brand.trim(),charge:Number(v.charge),primer:v.primer.trim(),case:v.case.trim(),oal:optionalNumber("oal"),dia:v.dia.trim(),bhn:optionalNumber("bhn"),sized:v.sized.trim(),tier:Number(v.tier),keep:v.keep,note:v.note.trim(),signature_load:v.signature_load==="1",avg:optionalNumber("avg"),sd:optionalNumber("sd"),es:optionalNumber("es"),group:optionalNumber("group"),moa:optionalNumber("moa")};
     const sessionValues={date:v.session_date||null,temp:optionalNumber("temp"),shots:optionalNumber("shots"),avg:values.avg,sd:values.sd,es:values.es,estvel:optionalNumber("estvel"),estpress:v.estpress.trim()||null,dist:optionalNumber("dist"),group:optionalNumber("group"),moa:values.moa,notes:v.session_notes.trim()||null};
     const hasSession=Object.values(sessionValues).some(x=>x!==null&&x!=="");
     if(values.signature_load)for(const cx of Object.values(DB.cartridges||{}))for(const other of cx.loads||[])if(other!==load&&other.gunCatalogKey===gun._legacyKey)other.signature_load=false;
@@ -2627,7 +2629,7 @@ function taAutoSetup(){
 }
 
 /* ---- save to the load ---- */
-document.getElementById("taSave").onclick=function(){
+document.getElementById("taSave").onclick=async function(){
   const g=taGeometry(); if(!g)return;
   const load=findLoadById(TA.loadId); if(!load){toast("Load not found");return;}
   if(!load.targets)load.targets=[];
@@ -2645,9 +2647,10 @@ document.getElementById("taSave").onclick=function(){
     shots:TA.holes.length
   };
   if(TA.targetIndex!=null&&load.targets[TA.targetIndex])load.targets[TA.targetIndex]=targetRecord;else load.targets.push(targetRecord);
-  // convenience: mirror MOA onto the load if empty
-  if((load.moa==null||load.moa==="")&&g.moa!=null)load.moa=+g.moa.toFixed(2);
-  save();
+  // Keep the load editor/card synchronized with the newest analyzed target.
+  load.group=g.groupIn!=null?+g.groupIn.toFixed(3):null;
+  load.moa=g.moa!=null?+g.moa.toFixed(3):null;
+  await save();
   toast(TA.targetIndex!=null?"Target recalibrated":"Target saved to load");
   taClose();
   renderAll();
