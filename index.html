@@ -1151,10 +1151,12 @@ function fmtDate2(d){const dt=new Date(d);if(isNaN(dt))return d;return dt.toLoca
 
 /* ---------- render: BENCH ---------- */
 function renderBench(){
-  document.getElementById("nextTitle").textContent=C().bench.title;
-  document.getElementById("nextBody").textContent=C().bench.body;
-  document.getElementById("nextSteps").innerHTML=C().bench.steps.map(s=>`<li>${s}</li>`).join("");
   const entries=(C().journal||[]).slice().sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+  const latest=entries[0]||null,nextPlan=String(latest?.next||"").trim();
+  document.getElementById("nextTitle").textContent=nextPlan||"No next-session plan logged";
+  document.getElementById("nextBody").textContent=latest?`From the ${fmtDate(latest.date)} journal entry.`:"Add a journal entry to set the next-session plan.";
+  document.getElementById("nextSteps").innerHTML="";
+  document.getElementById("nextSteps").style.display="none";
   document.getElementById("journalList").innerHTML=entries.map(j=>`
     <div class="j-entry">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><span class="date">${fmtDate(j.date)}</span><span class="tag">${j.type}</span></div><button class="ta-btn" style="width:auto;padding:5px 10px" data-edit-journal="${esc(j._syncKey||"")}">Edit</button></div>
