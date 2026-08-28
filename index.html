@@ -410,7 +410,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.7.3</div>
+    <div class="landing-version">Version 2.7.4</div>
   </div>
 </div>
 
@@ -783,8 +783,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.7.3";
-const CACHE_VERSION="sixgun-retriever-v2.7.3";
+const RELEASE_VERSION="2.7.4";
+const CACHE_VERSION="sixgun-retriever-v2.7.4";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -799,7 +799,7 @@ function C(){return DB.cartridges[DB.activeCartridge];}
 /* ---------- catalog + editors ---------- */
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function norm(v){return String(v||"").trim().toLowerCase().replace(/\s+/g," ");}
-function gunDisplay(g){return g.name||[g.make,g.model].filter(Boolean).join(" ").trim()||"Unnamed gun";}
+function gunDisplay(g){return [g.make,g.model].filter(v=>String(v||"").trim()).join(" ").trim()||String(g.name||"").trim()||"Unnamed gun";}
 function bulletDisplay(b){return b.display||[b.manufacturer,b.product,b.weight_gr!=null?`${Number(b.weight_gr)}gr`:"",b.style].filter(Boolean).join(" ").trim()||"Unnamed bullet";}
 function bulletNorm(v){return String(v||"").toLowerCase().replace(/[’']/g,"").replace(/\b(grains?|grs?|gns?)\b/g,"gr").replace(/\bsemi[\s-]*wad[\s-]*cutter\b/g,"swc").replace(/\bround[\s-]*nose[\s-]*flat[\s-]*point\b/g,"rnfp").replace(/\bwide[\s-]*flat[\s-]*nose\b/g,"wfn").replace(/\bpowder[\s-]*coat(?:ed)?\b/g,"pc").replace(/(\d)\s*gr\b/g,"$1gr").replace(/[^a-z0-9.]+/g," ").trim().replace(/\s+/g," ");}
 function bulletFields(text,load={}){const raw=String(text||"").trim(),wm=raw.match(/\b(\d+(?:\.\d+)?)\s*(?:grains?|grs?|gns?)\b/i),dm=String(load.dia||"").match(/\.?\d+(?:\.\d+)?/);return{manufacturer:String(load.brand||"").trim(),product:raw,weight_gr:wm?Number(wm[1]):null,diameter:dm?dm[0]:"",caliber:"",style:"",notes:"",display:raw};}
