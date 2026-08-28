@@ -1134,6 +1134,7 @@ function loadDetail(l){
       <div class="session-date">${t.date?fmtDate2(t.date):"Target"}</div>
       ${t.photo?`<img src="${t.photo}" style="width:100%;max-height:200px;object-fit:contain;border-radius:8px;margin:6px 0;background:#0b0a08;pointer-events:none" draggable="false">`:''}
       <div class="dgrid">${bits.join("")}</div>
+      ${t.photo?`<button class="ta-btn" style="margin-top:8px" onclick="taEditTarget('${l.id}',${i})">Recalibrate / Edit Markers</button>`:""}
     </div>`;
   }).join("");
   return `<div class="detail">
@@ -1799,7 +1800,7 @@ document.querySelectorAll(".lib-nav-btn").forEach(b=>b.onclick=()=>{
    downscaled before it enters the offline photo queue and private Storage.
    ============================================================ */
 const TA={
-  loadId:null, img:null, imgData:null, origImg:null, origData:null,
+  loadId:null, targetIndex:null, img:null, imgData:null, origImg:null, origData:null,
   mode:"flatten",         // "flatten" → "scale" → "holes"
   rot:0, pv:0, ph:0,      // straighten angle (deg), vertical & horizontal perspective (-1..1)
   scaleBox:null,          // {x,y,size} in IMAGE space; size = pixels representing refInches
@@ -1816,7 +1817,7 @@ const TA={
 };
 
 function taOpen(loadId){
-  TA.loadId=loadId; TA.img=null; TA.imgData=null; TA.origImg=null; TA.origData=null; TA.mode="flatten";
+  TA.loadId=loadId; TA.targetIndex=null; TA.img=null; TA.imgData=null; TA.origImg=null; TA.origData=null; TA.mode="flatten";
   TA.rot=0; TA.pv=0; TA.ph=0;
   TA.scaleBox=null; TA.refInches=1; TA.holes=[]; TA.sel=null; TA.distanceYd=null;
   TA.base={scale:1,ox:0,oy:0}; TA.zoom=1; TA.panx=0; TA.pany=0; TA.zoomMode=false;
@@ -1835,6 +1836,11 @@ function taOpen(loadId){
   // real available space rather than an early, too-square estimate.
   requestAnimationFrame(()=>{sizeTaCanvas();if(TA.img)fitImage();taDraw();
     requestAnimationFrame(()=>{sizeTaCanvas();if(TA.img)fitImage();taDraw();});});
+}
+function taEditTarget(loadId,targetIndex){
+  const load=findLoadById(loadId),target=load?.targets?.[targetIndex];if(!target?.photo)return toast("Saved target photo unavailable");
+  taOpen(loadId);TA.targetIndex=targetIndex;TA.imgData=target.photo;TA.origData=target.photo;TA.refInches=Number(target.refInches)||1;TA.scaleBox=target.scaleBox?{...target.scaleBox}:null;TA.holes=(target.holes||[]).map(p=>({...p}));TA.distanceYd=target.distanceYd||null;
+  const im=new Image();im.onload=()=>{TA.img=im;TA.origImg=im;TA.mode="scale";document.getElementById("taEmpty").style.display="none";fitImage();taSetStep();taRenderControls();taDraw();taUpdateReadout();};im.src=target.photo;
 }
 function taRelayout(){sizeTaCanvas();if(TA.img)fitImage();taDraw();}
 function taClose(){document.getElementById("taOverlay").classList.add("hidden");}
@@ -1996,9 +2002,10 @@ function fitImage(){
   TA.base.scale=k;
   TA.base.ox=(TA.cssW-TA.img.width*k)/2;
   TA.base.oy=(TA.cssH-TA.img.height*k)/2;
-  // place a starting 1" box in the centre, ~1/6 of the image's shorter side
+  // Start small: target photos often include substantial background, so one
+  // printed 1" grid square can be only a few percent of the full image.
   if(!TA.scaleBox){
-    const s=Math.min(TA.img.width,TA.img.height)/6;
+    const s=Math.min(TA.img.width,TA.img.height)/20;
     TA.scaleBox={x:TA.img.width/2, y:TA.img.height/2, size:s};
   }
 }
@@ -2278,7 +2285,7 @@ function taSetStep(){
   if(TA.mode==="flatten"){
     el.textContent="Optional · Correct a tilted photo, then apply";
   }else if(TA.mode==="scale"){
-    el.textContent="Scale · Match the green box to one 1\" square";
+    el.textContent="Scale · Match the green box to exactly ONE 1\" grid square — not the whole target";
   }else{
     el.textContent=TA.holes.length<1?"Holes · Tap each bullet hole":"Holes · Tap to add · drag to adjust · hold to delete";
   }
@@ -2318,8 +2325,8 @@ function taRenderControls(){
   h+=`<button class="ta-btn ${TA.mode==='scale'?'primary':''}" onclick="taMode('scale')">Scale</button>`;
   h+=`<button class="ta-btn ${TA.mode==='holes'?'primary':''}" onclick="taMode('holes')" ${taScaleReady()?'':'disabled'}>Holes</button>`;
   if(TA.mode==="scale"){
-    h+=`<span style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:var(--ink-faint)">box =</span><input class="ta-input" style="width:60px" id="taRef" inputmode="decimal" value="${TA.refInches}" oninput="taSetRef(this.value)"><span style="font-size:11px;color:var(--ink-faint)">in</span></span>`;
-    h+=`<div class="ta-sliders"><div class="ta-slider-row"><label>Box size</label><input type="range" min="16" max="90" step="1" value="${taScalePercent()}" oninput="taSetScalePercent(this.value)"></div></div>`;
+    h+=`<span style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:var(--ink-faint)">green box =</span><input class="ta-input" style="width:60px" id="taRef" inputmode="decimal" value="${TA.refInches}" oninput="taSetRef(this.value)"><span style="font-size:11px;color:var(--ink-faint)">in</span></span>`;
+    h+=`<div class="ta-sliders"><div class="ta-slider-row"><label>Match one printed square</label><input type="range" min="1" max="90" step="0.5" value="${taScalePercent()}" oninput="taSetScalePercent(this.value)"></div></div>`;
   }
   if(TA.mode==="holes"){
     h+=`<button class="ta-btn primary" onclick="taAddBullet()">＋ Center marker</button>`;
@@ -2342,10 +2349,10 @@ function taAddBullet(point){
   taDraw(); taUpdateReadout(); taRenderControls(); taSetStep();
   toast("Marker added — drag to fine-tune");
 }
-function taScalePercent(){return TA.scaleBox&&TA.img?Math.round(TA.scaleBox.size/Math.min(TA.img.width,TA.img.height)*100):17;}
+function taScalePercent(){return TA.scaleBox&&TA.img?+(TA.scaleBox.size/Math.min(TA.img.width,TA.img.height)*100).toFixed(1):5;}
 function taSetScalePercent(v){
   if(!TA.scaleBox||!TA.img)return;
-  TA.scaleBox.size=Math.max(6,Math.min(TA.img.width,TA.img.height)*(parseFloat(v)||17)/100);
+  TA.scaleBox.size=Math.max(6,Math.min(TA.img.width,TA.img.height)*(parseFloat(v)||5)/100);
   taDraw();taUpdateReadout();
 }
 function taBackToFlatten(){
@@ -2457,7 +2464,7 @@ document.getElementById("taSave").onclick=function(){
   const g=taGeometry(); if(!g)return;
   const load=findLoadById(TA.loadId); if(!load){toast("Load not found");return;}
   if(!load.targets)load.targets=[];
-  load.targets.push({
+  const targetRecord={
     date:new Date().toISOString().slice(0,10),
     photo:TA.imgData,
     scaleBox:TA.scaleBox?{x:+TA.scaleBox.x.toFixed(1),y:+TA.scaleBox.y.toFixed(1),size:+TA.scaleBox.size.toFixed(1)}:null,
@@ -2469,11 +2476,12 @@ document.getElementById("taSave").onclick=function(){
     moa:g.moa!=null?+g.moa.toFixed(3):null,
     meanRadiusIn:g.mrIn!=null?+g.mrIn.toFixed(3):null,
     shots:TA.holes.length
-  });
+  };
+  if(TA.targetIndex!=null&&load.targets[TA.targetIndex])load.targets[TA.targetIndex]=targetRecord;else load.targets.push(targetRecord);
   // convenience: mirror MOA onto the load if empty
   if((load.moa==null||load.moa==="")&&g.moa!=null)load.moa=+g.moa.toFixed(2);
   save();
-  toast("Target saved to load");
+  toast(TA.targetIndex!=null?"Target recalibrated":"Target saved to load");
   taClose();
   renderAll();
 };
