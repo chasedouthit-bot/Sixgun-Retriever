@@ -98,7 +98,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -230,6 +230,13 @@ assert.equal(letterData.sessions, 1, "letter should count linked sessions live")
 const letter = api.gunLetter(gun);
 letter.prompt_answers.origin = "A test provenance paragraph.";
 assert.equal(api.letterPrompts(gun, letterData).length, 4, "letter editor should expose guided prompts");
+const archiveMarkup = api.archiveLetterMarkup(gun, { stageId: "smokeStage", pageId: "smokeLetter" });
+assert(archiveMarkup.includes('id="smokeLetter"') && archiveMarkup.includes("A test provenance paragraph."), "the inline binder preview must render the complete live archive letter");
+const rangeEvents = api.gunRangeEvents(gun);
+assert.equal(rangeEvents.length, 1, "linked load sessions should automatically create one Life Record range day");
+assert(rangeEvents[0].text.includes("1 chronograph string") && rangeEvents[0].text.includes("255gr Keith"), "automatic range notes should summarize strings and tested loads");
+const lifeRecord = api.gunLifeRecord(gun);
+assert(lifeRecord.some(item => item.kind === "range") && lifeRecord.some(item => item.kind === "manual"), "Life Record should merge automatic range days with personal notes");
 
 catalog.parts_modifications.push({_syncKey:"parts-modification::smoke",gun_key:gun._legacyKey,title:"Sight swap",description:"Installed a taller front sight.",date:"2026-08-20",vendor:"Test Smith",cost:75});
 catalog.maintenance_entries.push({_syncKey:"maintenance-entry::old",gun_key:gun._legacyKey,date:"2026-08-21",category:"Cleaning",notes:"Cleaned and lubricated.",round_count:150});
