@@ -215,6 +215,24 @@ main{padding:0 16px 24px;background:var(--bg)}
 .dfl{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
 .dfv{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
 .session-notes{font-size:12px;color:var(--ink-dim);line-height:1.45;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
+.session-pager-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-2px 0 8px}
+.session-pager-hint{font-size:10.5px;color:var(--ink-faint)}
+.session-pager-actions{display:flex;align-items:center;gap:6px;flex:none}
+.session-pager-actions button{width:30px;height:30px;border:1px solid var(--brass-dim);border-radius:50%;background:var(--bg3);color:var(--brass);font-size:19px;line-height:1;display:grid;place-items:center}
+.session-pager-actions button:disabled{opacity:.28}
+.session-pager{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -2px;padding:0 2px 3px}
+.session-pager::-webkit-scrollbar{display:none}
+.session-page{flex:0 0 100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always}
+.session-page-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+.session-page-date{font-family:Bitter,serif;font-weight:700;font-size:17px;color:var(--brass)}
+.session-page-count{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);white-space:nowrap}
+.session-page-section{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-weight:700;margin:10px 0 6px}
+.session-page .session{margin-bottom:7px}
+.session-page .session-date{font-size:11px;margin-bottom:7px;color:var(--ink-faint)}
+.session-empty{border:1px dashed var(--line);border-radius:10px;padding:12px;color:var(--ink-faint);font-size:11px;margin-bottom:7px}
+.session-dots{display:flex;align-items:center;justify-content:center;gap:6px;min-height:13px;margin:5px 0 3px}
+.session-dot{width:5px;height:5px;padding:0;border:0;border-radius:50%;background:var(--line)}
+.session-dot.on{width:15px;border-radius:99px;background:var(--brass)}
 .pending{opacity:.62}
 .pending .stat .v{color:var(--ink-faint)}
 
@@ -436,7 +454,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.9.5</div>
+    <div class="landing-version">Version 2.10.1</div>
   </div>
 </div>
 
@@ -833,8 +851,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.9.5";
-const CACHE_VERSION="sixgun-retriever-v2.9.5";
+const RELEASE_VERSION="2.10.1";
+const CACHE_VERSION="sixgun-retriever-v2.10.1";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -1197,19 +1215,19 @@ function loadDetail(l){
     ["Bullet dia.",l.dia||"—"],["BHN",l.bhn||"—"],["Sized",l.sized||"—"]
   ].filter(x=>(x[1]&&x[1]!=="—")||["OAL","Bullet dia.","BHN","Sized"].includes(x[0]));
   const specRows=spec.map(([k,v])=>`<div class="spec-row"><span class="sk">${esc(k)}</span><span class="sv">${esc(v)}</span></div>`).join("");
-  // sessions: use l.sessions if present, else synthesize one from the summary fields
+  // Sessions use the saved strings when present, otherwise keep the original
+  // pending/summary record visible as a single page.
   let sessions=l.sessions&&l.sessions.length?l.sessions.slice():[{
     date:l.date||null,temp:l.temp||null,shots:l.shots||null,estvel:l.estvel||null,
     estpress:l.estpress||null,avg:l.avg,sd:l.sd,es:l.es,dist:l.dist||null,group:l.group||null,moa:l.moa,notes:l.note||null
   }];
-  // newest first
-  sessions.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
-  const sessionBlocks=sessions.map(s=>{
+  const rawTargets=(l.targets||[]);
+  const pages=loadSessionPages(sessions,rawTargets);
+  const sessionBlock=s=>{
     const fired=s.avg!=null;
-    const dateStr=s.date?fmtDate2(s.date):(fired?"Undated session":"Not yet fired");
     const field=(k,v,unit="")=>v!=null&&v!==""?`<div class="df"><span class="dfl">${k}</span><span class="dfv">${v}${unit}</span></div>`:'';
     return `<div class="session ${fired?'':'session-pending'}">
-      <div class="session-date">${dateStr}${s.temp?` · ${s.temp}°F`:''}</div>
+      ${s.temp?`<div class="session-date">${s.temp}°F</div>`:''}
       <div class="dgrid">
         ${field("Avg vel.",s.avg,fired?" fps":"")}
         ${field("SD",s.sd)}
@@ -1223,11 +1241,9 @@ function loadDetail(l){
       </div>
       ${s.notes?`<div class="session-notes">${esc(s.notes)}</div>`:''}
     </div>`;
-  }).join("");
-  // saved targets (Phase 1) — long-press to delete
-  const rawTargets=(l.targets||[]);
-  const targets=rawTargets.map((t,i)=>({t,i})).sort((a,b)=>new Date(b.t.date||0)-new Date(a.t.date||0));
-  const targetBlocks=targets.map(({t,i})=>{
+  };
+  // Saved targets keep their original array index so edit/delete actions remain stable.
+  const targetBlock=({t,i},pageDate)=>{
     const bits=[];
     if(t.groupIn!=null)bits.push(`<div class="df"><span class="dfl">Group</span><span class="dfv">${t.groupIn.toFixed(2)}"</span></div>`);
     if(t.moa!=null)bits.push(`<div class="df"><span class="dfl">MOA</span><span class="dfv">${t.moa.toFixed(2)}</span></div>`);
@@ -1235,24 +1251,71 @@ function loadDetail(l){
     bits.push(`<div class="df"><span class="dfl">Shots</span><span class="dfv">${t.shots}</span></div>`);
     if(t.distanceYd)bits.push(`<div class="df"><span class="dfl">Distance</span><span class="dfv">${t.distanceYd} yd</span></div>`);
     const poi=tgTargetOffset(t);if(poi){bits.push(`<div class="df"><span class="dfl">Vertical POI</span><span class="dfv">${tgSigned(poi.yIn,2)}"</span></div>`);bits.push(`<div class="df"><span class="dfl">Windage</span><span class="dfv">${tgSigned(poi.xIn,2)}"</span></div>`);}
+    const analyzed=t.date&&t.date!==pageDate?`Analyzed ${fmtDate2(t.date)}`:'';
     return `<div class="session ta-target" data-load="${l.id}" data-tidx="${i}" style="position:relative">
       <button class="ta-target-del" data-del-load="${l.id}" data-del-idx="${i}" aria-label="Delete target">✕</button>
-      <div class="session-date">${t.date?fmtDate2(t.date):"Target"}</div>
+      ${analyzed?`<div class="session-date">${analyzed}</div>`:''}
       ${t.photo?`<img src="${t.photo}" style="width:100%;max-height:200px;object-fit:contain;border-radius:8px;margin:6px 0;background:#0b0a08;pointer-events:none" draggable="false">`:''}
       <div class="dgrid">${bits.join("")}</div>
       ${t.photo?`<button class="ta-btn" style="margin-top:8px" onclick="taEditTarget('${l.id}',${i})">Recalibrate / Edit Markers</button>`:""}
     </div>`;
-  }).join("");
+  };
+  const pagerId=`sessionPager-${String(l.id).replace(/[^a-zA-Z0-9_-]/g,'')}`;
+  const pageBlocks=pages.map((page,pageIndex)=>{
+    const dateLabel=page.date?fmtDate2(page.date):(page.sessions.some(s=>s.avg!=null)?"Undated session":"Not yet fired");
+    const chrono=page.sessions.map(sessionBlock).join('');
+    const targets=page.targets.map(target=>targetBlock(target,page.date)).join('');
+    return `<section class="session-page" data-session-page="${pageIndex}" aria-label="${esc(dateLabel)}, session ${pageIndex+1} of ${pages.length}">
+      <div class="session-page-head"><div class="session-page-date">${dateLabel}</div><div class="session-page-count">${pageIndex+1} of ${pages.length}</div></div>
+      ${chrono?`<div class="session-page-section">Chronograph${page.sessions.length>1?` · ${page.sessions.length} strings`:''}</div>${chrono}`:''}
+      <div class="session-page-section">Target analysis${page.targets.length>1?` · ${page.targets.length} targets`:''}</div>
+      ${targets||'<div class="session-empty">No target saved for this session.</div>'}
+    </section>`;
+  }).join('');
+  const pagerButtons=pages.length>1?`<div class="session-pager-actions"><button type="button" data-session-prev onclick="sessionPagerMove('${pagerId}',-1)" disabled aria-label="Previous session">‹</button><button type="button" data-session-next onclick="sessionPagerMove('${pagerId}',1)" aria-label="Next session">›</button></div>`:'';
+  const pagerDots=pages.length>1?`<div class="session-dots" aria-hidden="true">${pages.map((_,i)=>`<button type="button" class="session-dot ${i===0?'on':''}" data-session-dot="${i}" tabindex="-1"></button>`).join('')}</div>`:'';
   return `<div class="detail">
     <div class="detail-label">Recipe</div>
     <div class="spec">${specRows}</div>
     <div class="detail-label">Session history</div>
-    ${sessionBlocks}
-    <div class="detail-label">Target analysis</div>
-    ${targetBlocks||'<div style="font-size:12px;color:var(--ink-faint);padding:2px 0 8px">No targets analyzed yet.</div>'}
+    <div class="session-pager-head"><div class="session-pager-hint">Swipe through recorded range sessions</div>${pagerButtons}</div>
+    <div class="session-pager" id="${pagerId}" data-session-load="${esc(l.id)}" onscroll="sessionPagerSync(this)">${pageBlocks}</div>
+    ${pagerDots}
     <div style="display:flex;gap:8px;margin-top:6px"><button class="ta-btn" style="max-width:none" onclick="openLoadForm('${l.id}')">Edit Load</button><button class="ta-btn primary" style="max-width:none" onclick="taOpen('${l.id}')">＋ Analyze Target</button></div>
     ${tgEntryMarkup(l)}
   </div>`;
+}
+function sessionRecordDay(record){return record?.sessionDate||record?.date||String(record?.session_datetime||'').slice(0,10)||null;}
+function loadSessionPages(sessions,targets){
+  const pages=[],byDate=new Map();
+  const addPage=date=>{const key=date||`undated-${pages.length}`;if(date&&byDate.has(key))return byDate.get(key);const page={date,sessions:[],targets:[]};pages.push(page);if(date)byDate.set(key,page);return page;};
+  (sessions||[]).forEach(session=>addPage(sessionRecordDay(session)).sessions.push(session));
+  const datedSessionPages=pages.filter(page=>page.date&&page.sessions.length);
+  (targets||[]).forEach((target,index)=>{
+    const targetDate=sessionRecordDay(target);let page=targetDate?byDate.get(targetDate):null;
+    if(!page&&datedSessionPages.length&&targetDate){
+      const targetTime=new Date(`${targetDate}T12:00:00`).getTime();
+      page=[...datedSessionPages].sort((a,b)=>{
+        const at=new Date(`${a.date}T12:00:00`).getTime(),bt=new Date(`${b.date}T12:00:00`).getTime();
+        return Math.abs(at-targetTime)-Math.abs(bt-targetTime)||(bt-at);
+      })[0];
+    }
+    (page||addPage(targetDate)).targets.push({t:target,i:index});
+  });
+  if(!pages.length)addPage(null);
+  return pages.sort((a,b)=>new Date(`${b.date||'0001-01-01'}T12:00:00`)-new Date(`${a.date||'0001-01-01'}T12:00:00`));
+}
+function sessionPagerIndex(pager){
+  const pages=[...pager.querySelectorAll('[data-session-page]')];if(!pages.length)return 0;
+  const left=pager.scrollLeft;let best=0,distance=Infinity;
+  pages.forEach((page,index)=>{const d=Math.abs(page.offsetLeft-pager.offsetLeft-left);if(d<distance){distance=d;best=index;}});return best;
+}
+function sessionPagerMove(id,delta){
+  const pager=document.getElementById(id);if(!pager)return;const pages=[...pager.querySelectorAll('[data-session-page]')],next=Math.max(0,Math.min(pages.length-1,sessionPagerIndex(pager)+delta)),page=pages[next];
+  if(page)pager.scrollTo({left:page.offsetLeft-pager.offsetLeft,behavior:'smooth'});
+}
+function sessionPagerSync(pager){
+  if(pager.__sessionFrame)return;pager.__sessionFrame=requestAnimationFrame(()=>{pager.__sessionFrame=null;const page=sessionPagerIndex(pager),detail=pager.closest('.detail');detail?.querySelectorAll('[data-session-dot]').forEach((dot,index)=>dot.classList.toggle('on',index===page));const prev=detail?.querySelector('[data-session-prev]'),next=detail?.querySelector('[data-session-next]'),count=pager.querySelectorAll('[data-session-page]').length;if(prev)prev.disabled=page===0;if(next)next.disabled=page===count-1;});
 }
 function fmtDate2(d){const dt=new Date(d);if(isNaN(dt))return d;return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
 
@@ -2767,8 +2830,11 @@ document.getElementById("taSave").onclick=async function(){
   const g=taGeometry(); if(!g)return;
   const load=findLoadById(TA.loadId); if(!load){toast("Load not found");return;}
   if(!load.targets)load.targets=[];
+  const existingTarget=TA.targetIndex!=null?load.targets[TA.targetIndex]:null;
+  const latestSessionDate=(load.sessions||[]).map(sessionRecordDay).filter(Boolean).sort().pop()||null;
   const targetRecord={
-    date:new Date().toISOString().slice(0,10),
+    // A target belongs to the range session, even when its photo is analyzed later.
+    date:existingTarget?.date||latestSessionDate||new Date().toISOString().slice(0,10),
     photo:TA.imgData,
     scaleBox:TA.scaleBox?{x:+TA.scaleBox.x.toFixed(1),y:+TA.scaleBox.y.toFixed(1),size:+TA.scaleBox.size.toFixed(1)}:null,
     refInches:TA.refInches,

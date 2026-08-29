@@ -5,6 +5,7 @@ const { webcrypto } = require("crypto");
 
 const html = fs.readFileSync("index.html", "utf8");
 const performanceIntelligence = fs.readFileSync("performance-intelligence.js", "utf8");
+const filterControls = fs.readFileSync("filter-controls.js", "utf8");
 const worker = fs.readFileSync("worker.js", "utf8");
 const serviceMigration = fs.readFileSync("supabase/migrations/20260826_parts_maintenance.sql", "utf8");
 const garminMigration = fs.readFileSync("supabase/migrations/20260827_garmin_chronograph_import.sql", "utf8");
@@ -19,11 +20,13 @@ assert(html.includes('id="createImportAction"'), "the add menu must preserve Gar
 assert(!html.includes('id="importLoadBtn"'), "Loads must not retain the redundant top import action");
 assert(!html.includes('id="newLoadBtn"'), "Loads must not retain the redundant top new-load action");
 assert(html.includes('nav button[data-s]'), "tab navigation must exclude the centered add control");
-assert(html.includes('class="filter-toggle-label">Guns'), "Loads must expose a compact Guns filter control");
-assert(html.includes('class="filter-toggle-label">Powders'), "Loads must expose a compact Powders filter control");
-assert(html.includes('class="filter-toggle-label">Tiers'), "Loads must expose a compact Tiers filter control");
-assert(html.includes('function setFilterPanel(name)'), "load filter chips must open through the shared sliding drawer");
-assert(html.includes('setFilterPanel(null);'), "choosing a load filter must collapse the chip drawer");
+assert(filterControls.includes('["gun","Guns"]'), "Loads must expose a compact Guns filter control");
+assert(filterControls.includes('["powder","Powders"]'), "Loads must expose a compact Powders filter control");
+assert(filterControls.includes('["tier","Tiers"]'), "Loads must expose a compact Tiers filter control");
+assert(filterControls.includes('drawer.classList.toggle("open",!!openPanel)'), "load filter chips must open through the shared sliding drawer");
+assert(filterControls.includes('openPanel=null;refresh()'), "choosing a load filter must collapse the chip drawer");
+assert(html.includes('class="session-pager"'), "load detail must expose a swipeable session pager");
+assert(html.includes('function loadSessionPages(sessions,targets)'), "session history must group chronograph strings and targets together");
 const perfContext={window:{},document:{readyState:"loading",addEventListener(){}},console,tgSettingsFor(){return{velocity:900,bc:.18,sightHeight:.9};},tgTrajectoryFor(settings){return{settings,rows:settings.distances.map(distance=>({distance,offsetIn:distance===settings.zeroYd?0:-distance/10,velocity:settings.velocity-distance}))};}};
 perfContext.globalThis=perfContext;
 vm.createContext(perfContext);
@@ -147,11 +150,19 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
 const api = context.__test;
+const groupedSessions=api.loadSessionPages(
+  [{date:"2026-08-26",avg:1068.4},{date:"2026-08-10",avg:1020}],
+  [{date:"2026-08-27",moa:5.95},{date:"2026-08-10",moa:7.2}]
+);
+assert.equal(groupedSessions.length,2,"session pager must create one page per range date");
+assert.equal(groupedSessions[0].date,"2026-08-26","session pager must put the newest range session first");
+assert.equal(groupedSessions[0].targets.length,1,"a target analyzed the next day must stay with its closest range session");
+assert.equal(groupedSessions[1].targets.length,1,"an exactly dated target must stay with that session");
 const selectedTrajectory = api.tgTrajectoryFor({ mode: "selected", zeroYd: 25, distances: [10, 25, 50, 100], velocity: 1068.4, bc: 0.18, sightHeight: 0.9 });
 assert(Math.abs(selectedTrajectory.rows.find(r => r.distance === 25).offsetIn) < 0.02, "selected zero must cross the sight line at exactly 25 yards");
 assert(selectedTrajectory.rows.find(r => r.distance === 100).offsetIn < 0, "a revolver trajectory must show drop beyond its far zero");
