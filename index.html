@@ -422,7 +422,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.9.2</div>
+    <div class="landing-version">Version 2.9.3</div>
   </div>
 </div>
 
@@ -805,8 +805,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.9.2";
-const CACHE_VERSION="sixgun-retriever-v2.9.2";
+const RELEASE_VERSION="2.9.3";
+const CACHE_VERSION="sixgun-retriever-v2.9.3";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -926,8 +926,9 @@ function tgEntryMarkup(load){return `<div class="tg-entry"><div class="tg-entry-
 const TG={loadId:null,draft:null,returnAfterAim:null};
 function tgFindLoad(){return findLoadById(TG.loadId);}
 function tgReadForm(){const val=id=>document.getElementById(id)?.value;return{mode:document.querySelector("[data-tg-mode].on")?.dataset.tgMode||TG.draft?.mode||"selected",zeroYd:Number(val("tgZero"))||25,distances:String(val("tgDistances")||"").split(/[,\s]+/).map(Number).filter(v=>v>0),velocity:Number(val("tgVelocity")),bc:Number(val("tgBC")),bcSource:val("tgBCSource")||"suggested",sightHeight:Number(val("tgSight")),targetIndex:val("tgTarget")===""?null:Number(val("tgTarget"))};}
-function tgOpen(loadId,draft=null){const load=findLoadById(loadId);if(!load)return toast("Load not found");TG.loadId=loadId;TG.draft={...tgSettingsFor(load),...(draft||{})};document.getElementById("tgOverlay").classList.remove("hidden");tgRender();}
-function tgClose(){document.getElementById("tgOverlay").classList.add("hidden");TG.loadId=null;TG.draft=null;TG.returnAfterAim=null;}
+function tgResetSaveButton(){const button=document.getElementById("tgSave");if(button){button.disabled=false;button.textContent="Save";}}
+function tgOpen(loadId,draft=null){const load=findLoadById(loadId);if(!load)return toast("Load not found");tgResetSaveButton();TG.loadId=loadId;TG.draft={...tgSettingsFor(load),...(draft||{})};document.getElementById("tgOverlay").classList.remove("hidden");tgRender();}
+function tgClose(){document.getElementById("tgOverlay").classList.add("hidden");tgResetSaveButton();TG.loadId=null;TG.draft=null;TG.returnAfterAim=null;}
 function tgRequestAimPoint(load=tgFindLoad()){if(!load)return;const candidate=(load.targets||[]).map((target,index)=>({target,index})).filter(x=>x.target?.photo&&x.target?.scaleBox?.size&&(x.target?.holes||[]).length>=2&&Number(x.target?.distanceYd)>0).sort((a,b)=>String(b.target.date||"").localeCompare(String(a.target.date||"")))[0];if(!candidate)return toast("Reopen a saved target and mark its point of aim first");TG.returnAfterAim={loadId:load.id,draft:tgReadForm()};document.getElementById("tgOverlay").classList.add("hidden");taEditTarget(load.id,candidate.index,true);}
 function tgSetMode(mode){const load=tgFindLoad();if(mode==="measured"&&load&&!tgMeasuredTargets(load).length)return tgRequestAimPoint(load);TG.draft={...tgReadForm(),mode};tgRender();}
 function tgPresetBC(value){if(!value)return;const [bc,source]=value.split("|");document.getElementById("tgBC").value=bc;document.getElementById("tgBCSource").value=source||"suggested";tgRefresh();}

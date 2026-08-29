@@ -38,6 +38,8 @@ assert(html.includes('id="tgOverlay"'), "loads must expose the Zero & Holds traj
 assert(html.includes('function tgTrajectoryFor'), "trajectory calculations must be deterministic and local");
 assert(html.includes('type="button" class="tg-save"'), "trajectory save must be an explicit non-submit control");
 assert(html.includes('button.textContent="Saving…"'), "trajectory save must show immediate progress feedback");
+assert(html.includes('function tgResetSaveButton()'), "trajectory save state must be reset between guide openings");
+assert(html.includes('tgResetSaveButton();TG.loadId=loadId'), "opening a trajectory guide must restore its save button");
 assert(html.includes('renderAll();tgClose();toast("Zero & Holds settings saved")'), "a saved trajectory must close the guide and confirm completion");
 assert(html.includes('font-size:14px;z-index:900'), "save feedback must appear above full-screen tools");
 assert(!html.includes('class="tg-entry-title">${s.zeroYd}-yard default zero'), "the trajectory entry must not advertise a default zero");
