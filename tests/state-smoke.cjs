@@ -36,6 +36,14 @@ assert(html.includes('load.group=g.groupIn!=null'), "saving a target must mirror
 assert(html.includes('load.moa=g.moa!=null'), "saving a target must refresh MOA instead of retaining a stale value");
 assert(html.includes('id="tgOverlay"'), "loads must expose the Zero & Holds trajectory record");
 assert(html.includes('function tgTrajectoryFor'), "trajectory calculations must be deterministic and local");
+assert(html.includes('type="button" class="tg-save"'), "trajectory save must be an explicit non-submit control");
+assert(html.includes('button.textContent="Saving…"'), "trajectory save must show immediate progress feedback");
+assert(html.includes('renderAll();tgClose();toast("Zero & Holds settings saved")'), "a saved trajectory must close the guide and confirm completion");
+assert(html.includes('font-size:14px;z-index:900'), "save feedback must appear above full-screen tools");
+assert(!html.includes('class="tg-entry-title">${s.zeroYd}-yard default zero'), "the trajectory entry must not advertise a default zero");
+assert(html.includes('function tgRequestAimPoint'), "measured impact must route older targets through point-of-aim setup");
+assert(html.includes('onclick="tgSetMode(\'measured\')">Measured impact'), "measured impact must remain tappable without an existing aim point");
+assert(html.includes('mode:"measured",targetIndex'), "saving an aim point must return directly to measured impact");
 assert(html.includes('onclick="taMode(\'aim\')"'), "target analysis must allow marking the exact point of aim");
 assert(html.includes('poiYIn:g.poiYIn'), "saved targets must preserve measured vertical point of impact");
 assert(html.includes('button.type="submit"'), "editor primary actions must explicitly submit their form");
