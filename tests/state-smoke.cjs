@@ -19,6 +19,11 @@ assert(html.includes('id="createImportAction"'), "the add menu must preserve Gar
 assert(!html.includes('id="importLoadBtn"'), "Loads must not retain the redundant top import action");
 assert(!html.includes('id="newLoadBtn"'), "Loads must not retain the redundant top new-load action");
 assert(html.includes('nav button[data-s]'), "tab navigation must exclude the centered add control");
+assert(html.includes('class="filter-toggle-label">Guns'), "Loads must expose a compact Guns filter control");
+assert(html.includes('class="filter-toggle-label">Powders'), "Loads must expose a compact Powders filter control");
+assert(html.includes('class="filter-toggle-label">Tiers'), "Loads must expose a compact Tiers filter control");
+assert(html.includes('function setFilterPanel(name)'), "load filter chips must open through the shared sliding drawer");
+assert(html.includes('setFilterPanel(null);'), "choosing a load filter must collapse the chip drawer");
 const perfContext={window:{},document:{readyState:"loading",addEventListener(){}},console,tgSettingsFor(){return{velocity:900,bc:.18,sightHeight:.9};},tgTrajectoryFor(settings){return{settings,rows:settings.distances.map(distance=>({distance,offsetIn:distance===settings.zeroYd?0:-distance/10,velocity:settings.velocity-distance}))};}};
 perfContext.globalThis=perfContext;
 vm.createContext(perfContext);
