@@ -44,6 +44,8 @@ assert(!html.includes('class="tg-entry-title">${s.zeroYd}-yard default zero'), "
 assert(html.includes('function tgRequestAimPoint'), "measured impact must route older targets through point-of-aim setup");
 assert(html.includes('onclick="tgSetMode(\'measured\')">Measured impact'), "measured impact must remain tappable without an existing aim point");
 assert(html.includes('mode:"measured",targetIndex'), "saving an aim point must return directly to measured impact");
+assert(html.includes('Every square = 1 inch'), "trajectory targets must label their physical grid scale");
+assert(html.includes('tg-board tg-grid-board'), "trajectory targets must render as one-inch grid boards");
 assert(html.includes('onclick="taMode(\'aim\')"'), "target analysis must allow marking the exact point of aim");
 assert(html.includes('poiYIn:g.poiYIn'), "saved targets must preserve measured vertical point of impact");
 assert(html.includes('button.type="submit"'), "editor primary actions must explicitly submit their form");
@@ -120,7 +122,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -129,6 +131,10 @@ const selectedTrajectory = api.tgTrajectoryFor({ mode: "selected", zeroYd: 25, d
 assert(Math.abs(selectedTrajectory.rows.find(r => r.distance === 25).offsetIn) < 0.02, "selected zero must cross the sight line at exactly 25 yards");
 assert(selectedTrajectory.rows.find(r => r.distance === 100).offsetIn < 0, "a revolver trajectory must show drop beyond its far zero");
 assert(selectedTrajectory.zeros.some(z => Math.abs(z - 25) < 0.2), "zero-crossing report must include the selected 25-yard zero");
+const tenInchGrid = api.tgGridLayout([{offsetIn:0},{offsetIn:-10}]);
+assert.equal(tenInchGrid.impactY(-10)-tenInchGrid.aimY, 100, "a ten-inch drop must span ten one-inch grid squares");
+const gridMarkup = api.tgPaperMarkup({ gun: "Ruger Blackhawk", charge: 10, powder: "Unique" }, { zeroYd: 25, velocity: 1068.4, bc: 0.18, sightHeight: 0.9 }, selectedTrajectory);
+assert(gridMarkup.includes("tg-board tg-grid-board")&&gridMarkup.includes("Every square = 1 inch"), "the active trajectory renderer must use the physical grid layout");
 const measuredTrajectory = api.tgTrajectoryFor({ mode: "measured", zeroYd: 25, distances: [10, 25, 50], velocity: 1068.4, bc: 0.18, sightHeight: 0.9 }, { distanceYd: 10, poiYIn: -0.5, poiXIn: 0.2 });
 assert(Math.abs(measuredTrajectory.rows.find(r => r.distance === 10).offsetIn + 0.5) < 0.02, "measured mode must pass through the observed group-center offset");
 assert.deepEqual(JSON.parse(JSON.stringify(api.tgTargetOffset({ aimPoint: { x: 100, y: 100 }, holes: [{ x: 100, y: 80 }, { x: 120, y: 100 }], scaleBox: { size: 20 }, refInches: 1, distanceYd: 10 }))), { xIn: 0.5, yIn: 0.5, distanceYd: 10 });
