@@ -369,6 +369,20 @@ nav{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:rg
 nav button{flex:1;background:none;border:none;padding:9px 0 8px;color:var(--ink-faint);font-size:10.5px;font-weight:600;letter-spacing:.03em;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.15s}
 nav button svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7}
 nav button.on{color:var(--brass)}
+nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;color:#241d0e}
+.create-nav-disc{position:absolute;top:-18px;left:50%;display:grid;place-items:center;width:56px;height:56px;border:1px solid #d9b66e;border-radius:50%;background:linear-gradient(145deg,#d3a756,#b98532);box-shadow:0 7px 20px rgba(0,0,0,.42),0 0 0 5px rgba(26,22,19,.92);transform:translateX(-50%);transition:transform .2s ease,box-shadow .2s ease}
+.create-nav-disc svg{width:27px;height:27px;stroke:#241d0e;stroke-width:2}
+.create-nav:active .create-nav-disc{transform:translateX(-50%) scale(.94)}
+.create-nav.open .create-nav-disc{transform:translateX(-50%) rotate(45deg);box-shadow:0 4px 14px rgba(0,0,0,.35),0 0 0 5px rgba(26,22,19,.92)}
+.create-nav-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.create-sheet{padding-left:18px;padding-right:18px}
+.create-sheet .sheet-title{margin-bottom:10px;text-align:center}
+.create-option{display:flex;align-items:center;gap:13px;width:100%;margin-top:9px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg3);color:var(--ink);text-align:left;cursor:pointer}
+.create-option:active{border-color:var(--brass);background:rgba(199,154,75,.1)}
+.create-option-icon{display:grid;place-items:center;flex:none;width:40px;height:40px;border:1px solid var(--brass-dim);border-radius:10px;color:var(--brass);background:var(--bg)}
+.create-option-icon svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.create-option-copy strong{display:block;font:700 16px Bitter,serif}
+.create-option-copy span{display:block;margin-top:3px;color:var(--ink-faint);font-size:11px;line-height:1.35}
 .pr-postcard-moment{padding:1px 2px 7px;color:#6f512c;text-align:left;font:700 10px/1.1 "Playfair Display",Georgia,serif;letter-spacing:.09em;text-transform:uppercase}.pr-record-album{position:relative;z-index:1;padding:22px 0 10px}.pr-record-album .pr-album-page{position:relative;box-shadow:inset 0 0 0 4px rgba(255,250,235,.34),inset 0 0 24px rgba(91,65,34,.08)}.pr-record-album+.pr-end{padding-top:24px}.pr-viewer-caption{white-space:pre-line}
 @media(max-width:650px){.pr-record-album{padding-top:16px}.pr-album-page{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 10px;padding:14px 9px 20px}.pr-postcard{box-sizing:border-box;width:auto;max-width:100%;padding:6px 6px 8px}.pr-postcard:nth-child(2n){transform:rotate(1.1deg) translateY(4px)}.pr-postcard .pr-photo img{max-height:245px}.pr-postcard-moment{padding-bottom:5px;font-size:8px;letter-spacing:.07em}.pr-postcard-note{min-height:22px;padding-top:6px;font-size:11px;line-height:1.2}.pr-postcard-note-meta{font-size:7px;letter-spacing:.07em}.pr-album-end{margin-top:6px;font-size:7px}.pr-album-end:before,.pr-album-end:after{width:24px;margin-left:5px;margin-right:5px}}
 .pdf-postcard-moment{padding:1px 2px 7px;color:#6f512c;text-align:left;font:700 10px/1.1 "Playfair Display",Georgia,serif;letter-spacing:.09em;text-transform:uppercase}
@@ -422,7 +436,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.9.4</div>
+    <div class="landing-version">Version 2.9.5</div>
   </div>
 </div>
 
@@ -447,7 +461,6 @@ nav button.on{color:var(--brass)}
 <main>
   <!-- ============ LOADS ============ -->
   <section class="screen active" id="s-loads">
-    <div class="screen-actions"><button class="action-btn" id="importLoadBtn">Import Session</button><button class="action-btn primary" id="newLoadBtn">＋ New Load</button></div>
     <div class="chips" id="gunChips"></div>
     <div class="chips" id="tierChips"></div>
     <div class="chips" id="powderChips"></div>
@@ -524,9 +537,24 @@ nav button.on{color:var(--brass)}
 <nav>
   <button data-s="loads" class="on"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Loads</button>
   <button data-s="bench"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4M3 17l9 4 9-4"/></svg>Journal</button>
+  <button type="button" class="create-nav" id="createNavBtn" aria-label="Add" aria-haspopup="dialog" aria-expanded="false"><span class="create-nav-disc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span class="create-nav-label">Add</span></button>
   <button data-s="lib"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2V5z"/><path d="M4 19a2 2 0 0 0 2 2h12"/></svg>Library</button>
   <button data-s="catalog"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Catalog</button>
 </nav>
+
+<div class="sheet-scrim" id="createScrim"></div>
+<div class="sheet create-sheet" id="createSheet" role="dialog" aria-modal="true" aria-labelledby="createSheetTitle">
+  <div class="sheet-grip"></div>
+  <div class="sheet-title" id="createSheetTitle">Add to the loading book</div>
+  <button type="button" class="create-option" id="createLoadAction">
+    <span class="create-option-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+    <span class="create-option-copy"><strong>New Load</strong><span>Build and save a handload record</span></span>
+  </button>
+  <button type="button" class="create-option" id="createImportAction">
+    <span class="create-option-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 20h14"/></svg></span>
+    <span class="create-option-copy"><strong>Import Session</strong><span>Bring in Garmin ShotView chronograph strings</span></span>
+  </button>
+</div>
 
 <div id="editorScrim" class="editor-scrim" role="dialog" aria-modal="true"><div class="editor-card"><div class="editor-head"><div class="editor-title" id="editorTitle"></div><button class="editor-close" id="editorClose" aria-label="Close">✕</button></div><form id="editorForm"></form></div></div>
 
@@ -805,8 +833,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.9.4";
-const CACHE_VERSION="sixgun-retriever-v2.9.4";
+const RELEASE_VERSION="2.9.5";
+const CACHE_VERSION="sixgun-retriever-v2.9.5";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -1514,20 +1542,29 @@ function renderCatalog(){
   document.getElementById("addBulletBtn").onclick=openBulletForm;
   document.querySelectorAll(".bullet-edit").forEach(b=>b.onclick=()=>openBulletEdit(b.dataset.key));document.querySelectorAll(".bullet-merge").forEach(b=>b.onclick=()=>requestBulletMerge(b.dataset.key));document.querySelectorAll(".catalog-open").forEach(b=>b.onclick=()=>openBiography(b.dataset.openGun));document.querySelectorAll(".catalog-edit").forEach(b=>b.onclick=()=>openGunEdit(b.dataset.editGun));document.querySelectorAll(".catalog-delete").forEach(b=>b.onclick=()=>requestCatalogDelete(b.dataset.kind,b.dataset.key));
 }
-document.getElementById("addGunBtn").onclick=openGunForm;document.getElementById("addPowderBtn").onclick=openPowderForm;document.getElementById("newLoadBtn").onclick=()=>openLoadForm();document.getElementById("newJournalBtn").onclick=openJournalForm;document.getElementById("importLoadBtn").onclick=()=>openImport("loads");document.getElementById("importBackBtn").onclick=()=>{if(importReturnScreen==="landing")showLanding();else goto(importReturnScreen);};
+document.getElementById("addGunBtn").onclick=openGunForm;document.getElementById("addPowderBtn").onclick=openPowderForm;document.getElementById("newJournalBtn").onclick=openJournalForm;document.getElementById("importBackBtn").onclick=()=>{if(importReturnScreen==="landing")showLanding();else goto(importReturnScreen);};
 
 /* ---------- nav ---------- */
+const createNavBtn=document.getElementById("createNavBtn"),createSheet=document.getElementById("createSheet"),createScrim=document.getElementById("createScrim");
+function activeScreenName(){return document.querySelector(".screen.active")?.id?.replace(/^s-/,"")||"loads";}
+function closeCreateMenu(){createSheet.classList.remove("open");createScrim.classList.remove("open");createNavBtn.classList.remove("open");createNavBtn.setAttribute("aria-expanded","false");}
+function openCreateMenu(){document.getElementById("cartSheet").classList.remove("open");document.getElementById("cartScrim").classList.remove("open");createSheet.classList.add("open");createScrim.classList.add("open");createNavBtn.classList.add("open");createNavBtn.setAttribute("aria-expanded","true");}
+createNavBtn.onclick=()=>createSheet.classList.contains("open")?closeCreateMenu():openCreateMenu();
+createScrim.onclick=closeCreateMenu;
+document.getElementById("createLoadAction").onclick=()=>{closeCreateMenu();openLoadForm();};
+document.getElementById("createImportAction").onclick=()=>{const from=activeScreenName();closeCreateMenu();openImport(from);};
 function goto(s){
+  closeCreateMenu();
   document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
   document.getElementById("s-"+s).classList.add("active");
-  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
+  document.querySelectorAll("nav button[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
   // caliber switcher is meaningless in app-wide Library/Catalog; keep home reachable
   document.getElementById("cartSwitch").style.visibility=(s==="lib"||s==="catalog"||s==="biography"||s==="letter"||s==="photo-record"||s==="parts-maintenance"||s==="import")?"hidden":"visible";
   if(s==="lib")renderLibrary();
   if(s==="catalog")renderCatalog();
   window.scrollTo(0,0);
 }
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>goto(b.dataset.s));
+document.querySelectorAll("nav button[data-s]").forEach(b=>b.onclick=()=>goto(b.dataset.s));
 
 /* ---------- toast ---------- */
 let tt;

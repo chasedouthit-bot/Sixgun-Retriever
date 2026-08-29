@@ -13,6 +13,12 @@ const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)
 const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
 assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
+assert(html.includes('id="createNavBtn"'), "bottom navigation must expose the centered add control");
+assert(html.includes('id="createLoadAction"'), "the add menu must preserve New Load access");
+assert(html.includes('id="createImportAction"'), "the add menu must preserve Garmin import access");
+assert(!html.includes('id="importLoadBtn"'), "Loads must not retain the redundant top import action");
+assert(!html.includes('id="newLoadBtn"'), "Loads must not retain the redundant top new-load action");
+assert(html.includes('nav button[data-s]'), "tab navigation must exclude the centered add control");
 const perfContext={window:{},document:{readyState:"loading",addEventListener(){}},console,tgSettingsFor(){return{velocity:900,bc:.18,sightHeight:.9};},tgTrajectoryFor(settings){return{settings,rows:settings.distances.map(distance=>({distance,offsetIn:distance===settings.zeroYd?0:-distance/10,velocity:settings.velocity-distance}))};}};
 perfContext.globalThis=perfContext;
 vm.createContext(perfContext);
