@@ -34,6 +34,10 @@ assert(html.includes('autoTargetKind=detection.kind'), "auto setup must preserve
 assert(html.includes('targetResult[key]??session?.[key]'), "the load editor must prefer the newest analyzed target measurements");
 assert(html.includes('load.group=g.groupIn!=null'), "saving a target must mirror group inches onto its load");
 assert(html.includes('load.moa=g.moa!=null'), "saving a target must refresh MOA instead of retaining a stale value");
+assert(html.includes('id="tgOverlay"'), "loads must expose the Zero & Holds trajectory record");
+assert(html.includes('function tgTrajectoryFor'), "trajectory calculations must be deterministic and local");
+assert(html.includes('onclick="taMode(\'aim\')"'), "target analysis must allow marking the exact point of aim");
+assert(html.includes('poiYIn:g.poiYIn'), "saved targets must preserve measured vertical point of impact");
 assert(html.includes('button.type="submit"'), "editor primary actions must explicitly submit their form");
 assert(performanceIntelligence.includes("typeof taAutoSetup==='function'"), "legacy target assist must yield to the native auto setup control");
 assert(worker.includes(`/performance-intelligence.js?v=${releaseVersion}`), "worker must load the current target-assist cache version");
@@ -108,11 +112,18 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
 const api = context.__test;
+const selectedTrajectory = api.tgTrajectoryFor({ mode: "selected", zeroYd: 25, distances: [10, 25, 50, 100], velocity: 1068.4, bc: 0.18, sightHeight: 0.9 });
+assert(Math.abs(selectedTrajectory.rows.find(r => r.distance === 25).offsetIn) < 0.02, "selected zero must cross the sight line at exactly 25 yards");
+assert(selectedTrajectory.rows.find(r => r.distance === 100).offsetIn < 0, "a revolver trajectory must show drop beyond its far zero");
+assert(selectedTrajectory.zeros.some(z => Math.abs(z - 25) < 0.2), "zero-crossing report must include the selected 25-yard zero");
+const measuredTrajectory = api.tgTrajectoryFor({ mode: "measured", zeroYd: 25, distances: [10, 25, 50], velocity: 1068.4, bc: 0.18, sightHeight: 0.9 }, { distanceYd: 10, poiYIn: -0.5, poiXIn: 0.2 });
+assert(Math.abs(measuredTrajectory.rows.find(r => r.distance === 10).offsetIn + 0.5) < 0.02, "measured mode must pass through the observed group-center offset");
+assert.deepEqual(JSON.parse(JSON.stringify(api.tgTargetOffset({ aimPoint: { x: 100, y: 100 }, holes: [{ x: 100, y: 80 }, { x: 120, y: 100 }], scaleBox: { size: 20 }, refInches: 1, distanceYd: 10 }))), { xIn: 0.5, yIn: 0.5, distanceYd: 10 });
 const periodicProjection = Array.from({ length: 360 }, (_, i) => i % 30 < 2 ? 100 : 0);
 assert.equal(api.taProjectionPeriod(periodicProjection, 20, 70).period, 30, "grid calibration must recover a 30px repeating pitch");
 assert([0, 1].includes(api.taProjectionPhase(periodicProjection, 30)), "grid calibration must recover the printed-line phase");

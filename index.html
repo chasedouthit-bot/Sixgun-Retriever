@@ -150,6 +150,12 @@ main{padding:0 16px 24px;background:var(--bg)}
 .ta-slider-row{display:flex;align-items:center;gap:10px}
 .ta-slider-row label{font-family:Inter,sans-serif;font-size:11px;color:var(--ink-faint);width:74px;flex:none}
 .ta-slider-row input[type=range]{flex:1;accent-color:var(--brass);height:26px}
+/* ---- Zero & Holds trajectory record ---- */
+.tg-entry{margin-top:12px;padding:13px;border:1px solid var(--brass-dim);border-radius:12px;background:rgba(199,154,75,.055)}
+.tg-entry-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.tg-entry-kicker{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);font-weight:800}.tg-entry-title{font:700 17px Bitter,serif;margin-top:3px}.tg-entry-meta{font-size:10px;color:var(--ink-faint);margin-top:4px}.tg-entry button{flex:none;max-width:none;padding:10px 13px}
+.tg-overlay{position:fixed;inset:0;height:100dvh;z-index:760;background:var(--bg);display:flex;flex-direction:column}.tg-overlay.hidden{display:none}.tg-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(11px + var(--safe-t)) 14px 11px;border-bottom:1px solid var(--line);background:var(--bg2)}.tg-top-copy{min-width:0}.tg-kicker{font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:var(--brass);font-weight:800}.tg-title{font:700 19px Bitter,serif;margin-top:2px}.tg-close,.tg-save{height:40px;border-radius:9px;font-weight:800;cursor:pointer}.tg-close{width:40px;border:1px solid var(--line);background:var(--bg3);color:var(--ink);font-size:18px}.tg-save{padding:0 15px;border:1px solid var(--brass);background:var(--brass);color:#21170d}.tg-scroll{flex:1;overflow-y:auto;padding:12px 12px calc(28px + var(--safe-b));-webkit-overflow-scrolling:touch}.tg-controls{max-width:900px;margin:0 auto 12px;padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--bg2)}.tg-mode{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}.tg-mode button{padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--bg3);color:var(--ink-dim);font-weight:700}.tg-mode button.on{border-color:var(--brass);background:rgba(199,154,75,.14);color:var(--brass)}.tg-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.tg-field{min-width:0}.tg-field.full{grid-column:1/-1}.tg-field label{display:block;margin:0 0 5px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}.tg-field input,.tg-field select{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font:600 13px Inter,sans-serif}.tg-field small{display:block;margin-top:5px;color:var(--ink-faint);font-size:9px;line-height:1.35}.tg-measured-note{margin-top:9px;padding:9px 10px;border-left:3px solid var(--brass);background:rgba(199,154,75,.06);color:var(--ink-dim);font-size:10px;line-height:1.4}
+.tg-paper{--paper:#efe3c6;--p-ink:#3b2b1c;--p-muted:#776146;max-width:900px;margin:0 auto;color:var(--p-ink);border:1px solid #baa273;border-radius:3px;padding:28px clamp(14px,4vw,38px) 22px;background-color:var(--paper);background-image:radial-gradient(circle at 16% 7%,rgba(255,255,255,.42),transparent 25%),radial-gradient(circle at 84% 70%,rgba(120,84,43,.045),transparent 30%),repeating-linear-gradient(0deg,rgba(76,52,25,.018) 0,rgba(76,52,25,.018) 1px,transparent 1px,transparent 5px);box-shadow:0 16px 42px rgba(0,0,0,.42);position:relative;overflow:hidden}.tg-paper:after{content:"";position:absolute;inset:10px;border:1px solid rgba(82,58,29,.24);pointer-events:none}.tg-paper>*{position:relative;z-index:1}.tg-paper-head{text-align:center;padding-bottom:14px;border-bottom:1px solid rgba(91,65,33,.34)}.tg-paper-brand{font:italic 700 27px "Playfair Display",Georgia,serif}.tg-paper-private{margin-top:3px;font:700 8px Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase}.tg-paper-title{margin-top:17px;font:700 clamp(23px,4vw,34px) "Playfair Display",Georgia,serif;letter-spacing:.04em}.tg-paper-sub{margin-top:4px;color:var(--p-muted);font:italic 16px "EB Garamond",Georgia,serif}.tg-basis{display:grid;grid-template-columns:repeat(4,1fr);margin:14px 0;border:1px solid rgba(91,65,33,.28)}.tg-basis>div{padding:9px 7px;border-left:1px solid rgba(91,65,33,.22);text-align:center;min-width:0}.tg-basis>div:first-child{border-left:0}.tg-basis span{display:block;font:700 7px Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:var(--p-muted)}.tg-basis b{display:block;margin-top:4px;font:700 12px "JetBrains Mono",monospace;white-space:nowrap}.tg-scale-note{text-align:center;color:var(--p-muted);font:700 7px Inter,sans-serif;letter-spacing:.13em;text-transform:uppercase}.tg-targets{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px 2px 15px;scrollbar-width:none}.tg-targets::-webkit-scrollbar{display:none}.tg-target{flex:0 0 150px;scroll-snap-align:center;text-align:center}.tg-target-distance{font:700 18px "Playfair Display",Georgia,serif}.tg-board{position:relative;width:128px;height:182px;margin:7px auto 8px;border:2px solid #705334;border-radius:65px;background:rgba(255,250,235,.38);overflow:hidden}.tg-target.zero .tg-board{border:4px solid #a47b2d;box-shadow:inset 0 0 0 2px rgba(255,250,235,.7)}.tg-ring{position:absolute;left:50%;top:50%;border:1px solid rgba(91,65,33,.75);border-radius:50%;transform:translate(-50%,-50%)}.tg-ring.r1{width:86px;height:86px}.tg-ring.r2{width:54px;height:54px}.tg-ring.r3{width:22px;height:22px}.tg-cross:before,.tg-cross:after{content:"";position:absolute;background:rgba(91,65,33,.34)}.tg-cross:before{left:15%;right:15%;top:50%;height:1px}.tg-cross:after{top:20%;bottom:20%;left:50%;width:1px}.tg-impact{position:absolute;left:50%;width:14px;height:14px;border-radius:50%;background:#92372e;border:3px solid var(--paper);transform:translate(-50%,-50%);box-shadow:0 0 0 1px #92372e}.tg-target.zero .tg-impact{box-shadow:0 0 0 6px rgba(164,123,45,.7)}.tg-target-value{font:800 13px "JetBrains Mono",monospace}.tg-target-moa{margin-top:2px;color:var(--p-muted);font:10px "JetBrains Mono",monospace}.tg-target-tag{display:inline-block;margin-top:5px;padding:3px 6px;border:1px solid rgba(91,65,33,.32);border-radius:99px;color:#886626;font:700 7px Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase}.tg-table{width:100%;margin-top:9px;border-collapse:collapse}.tg-table th,.tg-table td{padding:7px 5px;border-bottom:1px solid rgba(91,65,33,.23);text-align:right;font:11px "JetBrains Mono",monospace}.tg-table th{color:var(--p-muted);font:700 7px Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase}.tg-table th:first-child,.tg-table td:first-child{text-align:left}.tg-zero-summary{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin:15px 0 0;padding:11px;border-top:1px solid rgba(91,65,33,.3);border-bottom:1px solid rgba(91,65,33,.3)}.tg-zero-summary span{font:700 8px Inter,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:var(--p-muted)}.tg-zero-summary b{margin-left:5px;color:var(--p-ink);font:700 11px "JetBrains Mono",monospace}.tg-paper-note{margin-top:14px;text-align:center;color:var(--p-muted);font:italic 13px "EB Garamond",Georgia,serif;line-height:1.35}.tg-paper-foot{margin-top:14px;text-align:center;font:700 7px Inter,sans-serif;letter-spacing:.17em;text-transform:uppercase}.tg-error{max-width:900px;margin:auto;padding:22px;border:1px solid var(--red);border-radius:12px;color:var(--ink);background:var(--bg2)}
+@media(max-width:620px){.tg-entry-top{align-items:flex-end}.tg-entry button{padding:9px 10px}.tg-form-grid{grid-template-columns:1fr 1fr}.tg-basis{grid-template-columns:1fr 1fr}.tg-basis>div:nth-child(3){border-left:0;border-top:1px solid rgba(91,65,33,.22)}.tg-basis>div:nth-child(4){border-top:1px solid rgba(91,65,33,.22)}.tg-paper{padding-top:23px}.tg-target{flex-basis:142px}.tg-table th,.tg-table td{font-size:9px;padding:6px 3px}.tg-table th{font-size:6px}}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 /* ---------- section head ---------- */
@@ -414,7 +420,7 @@ nav button.on{color:var(--brass)}
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.8.3</div>
+    <div class="landing-version">Version 2.9.0</div>
   </div>
 </div>
 
@@ -546,6 +552,16 @@ nav button.on{color:var(--brass)}
   </div>
   <div class="ta-readout" id="taReadout"></div>
   <div class="ta-controls" id="taControls"></div>
+</div>
+
+<!-- ============ ZERO & HOLDS ============ -->
+<div id="tgOverlay" class="tg-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="tgTitle">
+  <div class="tg-top">
+    <button class="tg-close" id="tgClose" aria-label="Close trajectory guide">✕</button>
+    <div class="tg-top-copy"><div class="tg-kicker">Load record</div><div class="tg-title" id="tgTitle">Zero &amp; Holds</div></div>
+    <button class="tg-save" id="tgSave">Save</button>
+  </div>
+  <div class="tg-scroll"><div id="tgBody"></div></div>
 </div>
 
 <div id="cloudAuth" class="cloud-auth hidden" role="dialog" aria-modal="true" aria-labelledby="cloudAuthTitle">
@@ -787,8 +803,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.8.3";
-const CACHE_VERSION="sixgun-retriever-v2.8.3";
+const RELEASE_VERSION="2.9.0";
+const CACHE_VERSION="sixgun-retriever-v2.9.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -838,21 +854,21 @@ function exactGun(name,cart=null){ensureCatalog();return DB.catalog.guns.find(g=
 function exactPowder(name){ensureCatalog();return DB.catalog.powders.find(p=>norm(p.name)===norm(name))||null;}
 function exactBullet(value){ensureCatalog();return DB.catalog.bullets.find(b=>b._legacyKey===value||bulletNorm(bulletDisplay(b))===bulletNorm(value))||null;}
 function attachGunToCartridge(g,cart=g.caliber){const c=DB.cartridges[cart];if(!c)return;if(!(c.guns||[]).some(x=>x._legacyKey===g._legacyKey||norm(x.name)===norm(gunDisplay(g))))c.guns.push({...clone(g),name:gunDisplay(g),caliber:cart});}
-function addGunRecord(values){const model=String(values.model||"").trim();if(!model)throw new Error("Model is required");const g={_legacyKey:`catalog::${crypto.randomUUID()}`,make:String(values.make||"").trim(),model,caliber:String(values.caliber||DB.activeCartridge).trim(),serial:String(values.serial||"").trim(),purchase_date:values.purchase_date||null,source:String(values.source||"").trim(),price:values.price===""||values.price==null?null:Number(values.price),rotation_status:String(values.rotation_status||"in rotation").trim(),rotation_note:String(values.rotation_note||"").trim(),barrel_length:String(values.barrel_length||values.barrel||"").trim(),finish:String(values.finish||"").trim()};g.name=gunDisplay(g);if(exactGun(g.name,g.caliber))throw new Error("That gun is already in the Catalog");ensureCatalog().guns.push(g);attachGunToCartridge(g);return g;}
+function addGunRecord(values){const model=String(values.model||"").trim();if(!model)throw new Error("Model is required");const g={_legacyKey:`catalog::${crypto.randomUUID()}`,make:String(values.make||"").trim(),model,caliber:String(values.caliber||DB.activeCartridge).trim(),serial:String(values.serial||"").trim(),purchase_date:values.purchase_date||null,source:String(values.source||"").trim(),price:values.price===""||values.price==null?null:Number(values.price),rotation_status:String(values.rotation_status||"in rotation").trim(),rotation_note:String(values.rotation_note||"").trim(),barrel_length:String(values.barrel_length||values.barrel||"").trim(),finish:String(values.finish||"").trim(),sight_height_in:values.sight_height_in===""||values.sight_height_in==null?null:Number(values.sight_height_in)};g.name=gunDisplay(g);if(exactGun(g.name,g.caliber))throw new Error("That gun is already in the Catalog");ensureCatalog().guns.push(g);attachGunToCartridge(g);return g;}
 function addPowderRecord(values){const name=String(values.name||"").trim();if(!name)throw new Error("Powder name is required");if(exactPowder(name))throw new Error("That powder is already in the Catalog");const p={_legacyKey:`catalog::${crypto.randomUUID()}`,name,notes:String(values.notes||"").trim()};ensureCatalog().powders.push(p);return p;}
-function addBulletRecord(values){const product=String(values.product||values.display||"").trim();if(!product)throw new Error("Bullet product/name is required");const b={_legacyKey:`bullet::${crypto.randomUUID()}`,manufacturer:String(values.manufacturer||"").trim(),product,weight_gr:values.weight_gr===""||values.weight_gr==null?null:Number(values.weight_gr),diameter:String(values.diameter||"").trim(),caliber:String(values.caliber||"").trim(),style:String(values.style||"").trim(),notes:String(values.notes||"").trim()};b.display=bulletDisplay(b);if(exactBullet(b.display))throw new Error("That bullet is already in the Catalog");ensureCatalog().bullets.push(b);return b;}
+function addBulletRecord(values){const product=String(values.product||values.display||"").trim();if(!product)throw new Error("Bullet product/name is required");const b={_legacyKey:`bullet::${crypto.randomUUID()}`,manufacturer:String(values.manufacturer||"").trim(),product,weight_gr:values.weight_gr===""||values.weight_gr==null?null:Number(values.weight_gr),diameter:String(values.diameter||"").trim(),caliber:String(values.caliber||"").trim(),style:String(values.style||"").trim(),bc_g1:values.bc_g1===""||values.bc_g1==null?null:Number(values.bc_g1),bc_source:String(values.bc_source||"").trim(),notes:String(values.notes||"").trim()};b.display=bulletDisplay(b);if(exactBullet(b.display))throw new Error("That bullet is already in the Catalog");ensureCatalog().bullets.push(b);return b;}
 function editorOpen(title,html,onSubmit){const scrim=document.getElementById("editorScrim"),form=document.getElementById("editorForm");document.getElementById("editorTitle").textContent=title;form.innerHTML=html;scrim.style.display="flex";form.querySelectorAll('.editor-actions button:not([type])').forEach(button=>button.type="submit");form.querySelectorAll('input,select,textarea').forEach(field=>field.oninvalid=e=>{e.preventDefault();const label=field.closest('.field')?.querySelector('label')?.textContent?.replace('*','').trim()||'Required field';field.scrollIntoView({behavior:'smooth',block:'center'});field.focus({preventScroll:true});toast(`${label} needs attention`);});form.onsubmit=async e=>{e.preventDefault();const submitter=e.submitter||form.querySelector('.editor-actions .primary'),original=submitter?.textContent;if(submitter){submitter.disabled=true;submitter.textContent="Saving…";}try{await onSubmit(new FormData(form),form);}catch(err){toast(err.message||"Could not save");if(submitter?.isConnected){submitter.disabled=false;submitter.textContent=original;}}};}
 function editorClose(){document.getElementById("editorScrim").style.display="none";document.getElementById("editorForm").innerHTML="";}
 document.getElementById("editorClose").onclick=editorClose;document.getElementById("editorScrim").onclick=e=>{if(e.target.id==="editorScrim")editorClose();};
 function entityLists(){ensureCatalog();return `<datalist id="gunSuggestions">${DB.catalog.guns.map(g=>`<option value="${esc(gunDisplay(g))}">${esc(g.caliber||"")}</option>`).join("")}</datalist><datalist id="powderSuggestions">${DB.catalog.powders.map(p=>`<option value="${esc(p.name)}">${esc(p.notes||"")}</option>`).join("")}</datalist>`;}
 function wireEntityInput(inputId,kind,cart){const input=document.getElementById(inputId),hint=document.getElementById(inputId+"Hint");if(!input||!hint)return;const update=()=>{const value=input.value.trim(),items=kind==="gun"?ensureCatalog().guns:ensureCatalog().powders,exact=kind==="gun"?exactGun(value,cart):exactPowder(value);if(!value||exact){hint.style.display="none";return;}const near=items.filter(x=>norm(kind==="gun"?gunDisplay(x):x.name).includes(norm(value))||norm(value).includes(norm(kind==="gun"?gunDisplay(x):x.name))).slice(0,3);hint.innerHTML=`${near.length?`Similar: ${near.map(x=>`<button type="button" data-pick="${esc(kind==="gun"?gunDisplay(x):x.name)}">${esc(kind==="gun"?gunDisplay(x):x.name)}</button>`).join(" · ")}<br>`:""}<button type="button" data-add="1">＋ Add “${esc(value)}” to ${kind==="gun"?"Guns":"Powders"}</button>`;hint.style.display="block";hint.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{input.value=b.dataset.pick;update();});hint.querySelector("[data-add]").onclick=()=>{try{const item=kind==="gun"?addGunRecord({model:value,caliber:cart}):addPowderRecord({name:value});input.value=kind==="gun"?gunDisplay(item):item.name;hint.style.display="none";save();renderAll();toast("Added to Catalog");}catch(e){toast(e.message);}};};input.addEventListener("input",update);input.addEventListener("change",update);update();}
-function gunFormHtml(g={}){const sourceOptions=["","Bought new","Inherited","Gifted","Traded"].map(v=>`<option value="${esc(v)}" ${norm(g.source)===norm(v)?"selected":""}>${v||"Choose…"}</option>`).join("");return `<div class="form-grid"><div class="field"><label>Make</label><input name="make" value="${esc(g.make||"")}"></div><div class="field"><label>Model *</label><input name="model" value="${esc(g.model||"")}" required></div><div class="field"><label>Caliber</label><input name="caliber" value="${esc(g.caliber||DB.activeCartridge)}" list="caliberSuggestions"><datalist id="caliberSuggestions">${Object.keys(DB.cartridges).map(c=>`<option value="${esc(c)}">`).join("")}</datalist></div><div class="field"><label>Serial</label><input name="serial" value="${esc(g.serial||"")}"></div><div class="field"><label>Barrel length</label><input name="barrel_length" value="${esc(g.barrel_length||g.barrel||"")}" placeholder="4 inches"></div><div class="field"><label>Finish</label><input name="finish" value="${esc(g.finish||"")}" placeholder="Blued, stainless…"></div><div class="field"><label>Purchase date</label><input type="date" name="purchase_date" value="${esc(g.purchase_date||"")}"></div><div class="field"><label>Source</label><select name="source">${sourceOptions}</select></div><div class="field"><label>Price</label><input type="number" min="0" step="0.01" name="price" value="${esc(g.price??"")}"></div><div class="field"><label>Rotation status</label><select name="rotation_status"><option value="in rotation" ${g.rotation_status!=="resting"?"selected":""}>In rotation</option><option value="resting" ${g.rotation_status==="resting"?"selected":""}>Resting</option></select></div><div class="field full"><label>Rotation note</label><textarea name="rotation_note">${esc(g.rotation_note||"")}</textarea></div></div>`;}
+function gunFormHtml(g={}){const sourceOptions=["","Bought new","Inherited","Gifted","Traded"].map(v=>`<option value="${esc(v)}" ${norm(g.source)===norm(v)?"selected":""}>${v||"Choose…"}</option>`).join("");return `<div class="form-grid"><div class="field"><label>Make</label><input name="make" value="${esc(g.make||"")}"></div><div class="field"><label>Model *</label><input name="model" value="${esc(g.model||"")}" required></div><div class="field"><label>Caliber</label><input name="caliber" value="${esc(g.caliber||DB.activeCartridge)}" list="caliberSuggestions"><datalist id="caliberSuggestions">${Object.keys(DB.cartridges).map(c=>`<option value="${esc(c)}">`).join("")}</datalist></div><div class="field"><label>Serial</label><input name="serial" value="${esc(g.serial||"")}"></div><div class="field"><label>Barrel length</label><input name="barrel_length" value="${esc(g.barrel_length||g.barrel||"")}" placeholder="4 inches"></div><div class="field"><label>Finish</label><input name="finish" value="${esc(g.finish||"")}" placeholder="Blued, stainless…"></div><div class="field"><label>Sight height over bore (in.)</label><input type="number" min="0.1" max="4" step="0.01" name="sight_height_in" value="${esc(g.sight_height_in??"")}" placeholder="0.90"></div><div class="field"><label>Purchase date</label><input type="date" name="purchase_date" value="${esc(g.purchase_date||"")}"></div><div class="field"><label>Source</label><select name="source">${sourceOptions}</select></div><div class="field"><label>Price</label><input type="number" min="0" step="0.01" name="price" value="${esc(g.price??"")}"></div><div class="field"><label>Rotation status</label><select name="rotation_status"><option value="in rotation" ${g.rotation_status!=="resting"?"selected":""}>In rotation</option><option value="resting" ${g.rotation_status==="resting"?"selected":""}>Resting</option></select></div><div class="field full"><label>Rotation note</label><textarea name="rotation_note">${esc(g.rotation_note||"")}</textarea></div></div>`;}
 function openGunForm(){editorOpen("Add Gun",gunFormHtml()+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Add Gun</button></div>`,async fd=>{addGunRecord(Object.fromEntries(fd));await save();editorClose();renderAll();toast("Gun added");});}
-function openGunEdit(key){ensureCatalog();const g=DB.catalog.guns.find(x=>x._legacyKey===key);if(!g)return;editorOpen("Edit Gun",gunFormHtml(g)+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Save Changes</button></div>`,async fd=>{const v=Object.fromEntries(fd),oldName=gunDisplay(g);Object.assign(g,{make:v.make.trim(),model:v.model.trim(),caliber:v.caliber.trim(),serial:v.serial.trim(),purchase_date:v.purchase_date||null,source:v.source,price:v.price===""?null:Number(v.price),rotation_status:v.rotation_status,rotation_note:v.rotation_note.trim(),barrel_length:v.barrel_length.trim(),finish:v.finish.trim()});g.name=gunDisplay(g);for(const cx of Object.values(DB.cartridges||{})){for(const cg of cx.guns||[])if(cg._legacyKey===key)Object.assign(cg,clone(g));for(const l of cx.loads||[])if(l.gunCatalogKey===key||norm(l.gun)===norm(oldName)){l.gun=g.name;l.gunCatalogKey=key;}for(const j of cx.journal||[])if(j.gunCatalogKey===key||norm(j.gun)===norm(oldName)){j.gun=g.name;j.gunCatalogKey=key;}}await save();editorClose();renderAll();if(activeBiographyKey===key)renderBiography();toast("Gun updated");});}
+function openGunEdit(key){ensureCatalog();const g=DB.catalog.guns.find(x=>x._legacyKey===key);if(!g)return;editorOpen("Edit Gun",gunFormHtml(g)+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Save Changes</button></div>`,async fd=>{const v=Object.fromEntries(fd),oldName=gunDisplay(g);Object.assign(g,{make:v.make.trim(),model:v.model.trim(),caliber:v.caliber.trim(),serial:v.serial.trim(),purchase_date:v.purchase_date||null,source:v.source,price:v.price===""?null:Number(v.price),rotation_status:v.rotation_status,rotation_note:v.rotation_note.trim(),barrel_length:v.barrel_length.trim(),finish:v.finish.trim(),sight_height_in:v.sight_height_in===""?null:Number(v.sight_height_in)});g.name=gunDisplay(g);for(const cx of Object.values(DB.cartridges||{})){for(const cg of cx.guns||[])if(cg._legacyKey===key)Object.assign(cg,clone(g));for(const l of cx.loads||[])if(l.gunCatalogKey===key||norm(l.gun)===norm(oldName)){l.gun=g.name;l.gunCatalogKey=key;}for(const j of cx.journal||[])if(j.gunCatalogKey===key||norm(j.gun)===norm(oldName)){j.gun=g.name;j.gunCatalogKey=key;}}await save();editorClose();renderAll();if(activeBiographyKey===key)renderBiography();toast("Gun updated");});}
 function openPowderForm(){editorOpen("Add Powder",`<div class="form-grid"><div class="field full"><label>Name *</label><input name="name" required autocomplete="off"></div><div class="field full"><label>Notes</label><textarea name="notes"></textarea></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Add Powder</button></div>`,async fd=>{addPowderRecord(Object.fromEntries(fd));await save();editorClose();renderAll();toast("Powder added");});}
-function bulletFormHtml(b={}){return `<div class="form-grid"><div class="field"><label>Manufacturer</label><input name="manufacturer" value="${esc(b.manufacturer||"")}"></div><div class="field"><label>Product / name *</label><input name="product" value="${esc(b.product||"")}" required></div><div class="field"><label>Weight (gr)</label><input type="number" min="0" step="0.1" name="weight_gr" value="${esc(b.weight_gr??"")}"></div><div class="field"><label>Diameter</label><input name="diameter" value="${esc(b.diameter||"")}" placeholder=".452"></div><div class="field"><label>Caliber</label><input name="caliber" value="${esc(b.caliber||"")}"></div><div class="field"><label>Style / type</label><input name="style" value="${esc(b.style||"")}" placeholder="SWC, RNFP, WFN…"></div><div class="field full"><label>Notes</label><textarea name="notes">${esc(b.notes||"")}</textarea></div></div>`;}
+function bulletFormHtml(b={}){const source=String(b.bc_source||"");return `<div class="form-grid"><div class="field"><label>Manufacturer</label><input name="manufacturer" value="${esc(b.manufacturer||"")}"></div><div class="field"><label>Product / name *</label><input name="product" value="${esc(b.product||"")}" required></div><div class="field"><label>Weight (gr)</label><input type="number" min="0" step="0.1" name="weight_gr" value="${esc(b.weight_gr??"")}"></div><div class="field"><label>Diameter</label><input name="diameter" value="${esc(b.diameter||"")}" placeholder=".452"></div><div class="field"><label>Caliber</label><input name="caliber" value="${esc(b.caliber||"")}"></div><div class="field"><label>Style / type</label><input name="style" value="${esc(b.style||"")}" placeholder="SWC, RNFP, WFN…"></div><div class="field"><label>Ballistic coefficient (G1)</label><input type="number" min="0.01" max="1" step="0.001" name="bc_g1" value="${esc(b.bc_g1??"")}" placeholder="0.180"></div><div class="field"><label>BC source</label><select name="bc_source"><option value="" ${!source?"selected":""}>Not recorded</option><option value="suggested" ${source==="suggested"?"selected":""}>App suggestion</option><option value="published" ${source==="published"?"selected":""}>Published value</option><option value="manufacturer" ${source==="manufacturer"?"selected":""}>Manufacturer value</option><option value="measured" ${source==="measured"?"selected":""}>User measured</option></select></div><div class="field full"><label>Notes</label><textarea name="notes">${esc(b.notes||"")}</textarea></div></div>`;}
 function openBulletForm(){editorOpen("Add Bullet",bulletFormHtml()+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Add Bullet</button></div>`,async fd=>{addBulletRecord(Object.fromEntries(fd));await save();editorClose();renderAll();toast("Bullet added");});}
-function openBulletEdit(key){const b=ensureCatalog().bullets.find(x=>x._legacyKey===key);if(!b)return;editorOpen("Edit Bullet",bulletFormHtml(b)+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Save Changes</button></div>`,async fd=>{const v=Object.fromEntries(fd);Object.assign(b,{manufacturer:v.manufacturer.trim(),product:v.product.trim(),weight_gr:v.weight_gr===""?null:Number(v.weight_gr),diameter:v.diameter.trim(),caliber:v.caliber.trim(),style:v.style.trim(),notes:v.notes.trim(),display:""});b.display=bulletDisplay(b);for(const c of Object.values(DB.cartridges||{}))for(const l of c.loads||[])if(l.bulletCatalogKey===key)l.bullet=b.display;await save();editorClose();renderAll();toast("Bullet updated");});}
+function openBulletEdit(key){const b=ensureCatalog().bullets.find(x=>x._legacyKey===key);if(!b)return;editorOpen("Edit Bullet",bulletFormHtml(b)+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Save Changes</button></div>`,async fd=>{const v=Object.fromEntries(fd);Object.assign(b,{manufacturer:v.manufacturer.trim(),product:v.product.trim(),weight_gr:v.weight_gr===""?null:Number(v.weight_gr),diameter:v.diameter.trim(),caliber:v.caliber.trim(),style:v.style.trim(),bc_g1:v.bc_g1===""?null:Number(v.bc_g1),bc_source:v.bc_source,notes:v.notes.trim(),display:""});b.display=bulletDisplay(b);for(const c of Object.values(DB.cartridges||{}))for(const l of c.loads||[])if(l.bulletCatalogKey===key)l.bullet=b.display;await save();editorClose();renderAll();toast("Bullet updated");});}
 function mergeBullets(retainKey,removeKey){if(!retainKey||retainKey===removeKey)throw new Error("Choose two different bullets");const keep=ensureCatalog().bullets.find(b=>b._legacyKey===retainKey),drop=DB.catalog.bullets.find(b=>b._legacyKey===removeKey);if(!keep||!drop)throw new Error("Bullet not found");for(const c of Object.values(DB.cartridges||{}))for(const l of c.loads||[])if(l.bulletCatalogKey===removeKey||(!l.bulletCatalogKey&&bulletNorm(l.bullet)===bulletNorm(bulletDisplay(drop)))){l.bulletCatalogKey=retainKey;l.bullet=bulletDisplay(keep);}DB.catalog.bullets=DB.catalog.bullets.filter(b=>b._legacyKey!==removeKey);return keep;}
 function requestBulletMerge(removeKey){const drop=DB.catalog.bullets.find(b=>b._legacyKey===removeKey),choices=DB.catalog.bullets.filter(b=>b._legacyKey!==removeKey).map(b=>`<option value="${esc(b._legacyKey)}">${esc(bulletDisplay(b))}</option>`).join("");if(!drop||!choices)return appAlert("Add another bullet before merging.");editorOpen(`Merge ${bulletDisplay(drop)}`,`<div class="field full"><label>Retain bullet</label><select name="retain">${choices}</select></div><p class="catalog-notes">Every load will be reassigned to the retained bullet before this duplicate is removed.</p><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Merge</button></div>`,async fd=>{mergeBullets(fd.get("retain"),removeKey);await save();editorClose();renderAll();toast("Bullets merged");});}
 
@@ -867,6 +883,57 @@ function stats(vels){
   if(n>1){const varr=v.reduce((a,b)=>a+(b-avg)**2,0)/(n-1);sd=Math.sqrt(varr);}
   return {n,avg:+avg.toFixed(1),sd:+sd.toFixed(1),es:+es.toFixed(1)};
 }
+
+/* ============================================================
+   ZERO & HOLDS — deterministic G1 exterior ballistics
+   Uses recorded velocity, a bullet/profile G1 BC, sight height, and either a
+   selected zero or an observed target offset. Calculations assume standard
+   atmosphere and are predictions until confirmed with live fire.
+   ============================================================ */
+const TG_G1_DRAG=[
+  [4230,1.477404177730177e-4,1.9565],[3680,1.920339268755614e-4,1.925],[3450,2.894751026819746e-4,1.875],[3295,4.349905111115636e-4,1.825],[3130,6.520421871892662e-4,1.775],[2960,9.748073694078696e-4,1.725],[2830,1.453721560187286e-3,1.675],[2680,2.162887202930376e-3,1.625],[2460,3.209559783129881e-3,1.575],[2225,3.904368218691249e-3,1.55],[2015,3.222942271262336e-3,1.575],[1890,2.203329542297809e-3,1.625],[1810,1.511001028891904e-3,1.675],[1730,8.609957592468259e-4,1.75],[1595,4.086146797305117e-4,1.85],[1520,1.954473210037398e-4,1.95],[1420,5.431896266462351e-5,2.125],[1360,8.847742581674416e-6,2.375],[1315,1.456922328720298e-6,2.625],[1280,2.419485191895565e-7,2.875],[1220,1.657956321067612e-8,3.25],[1185,4.745469537157371e-10,3.75],[1150,1.379746590025088e-11,4.25],[1100,4.070157961147882e-13,4.75],[1060,2.938236954847331e-14,5.125],[1025,1.228597370774746e-14,5.25],[980,2.916938264100495e-14,5.125],[945,3.855099424807451e-13,4.75],[905,3.953721585388727e-12,4.5],[860,1.375465145861182e-11,4.375],[810,3.574054819334786e-11,4.25],[780,1.055000426218894e-10,4.125],[750,3.02865108244904e-10,4],[700,1.194846433060878e-9,3.75],[640,5.92182174254121e-9,3.5],[600,4.3917343795117e-8,3.25],[550,1.50908613519615e-7,3.125],[250,3.513508099398214e-6,2.75],[100,1.20380366377675e-5,2.625],[65,1.861757625895938e-5,2.5],[0,5.71117468873424e-5,2.25]
+];
+function tgG1Retardation(fps,bc){const row=TG_G1_DRAG.find(r=>fps>=r[0])||TG_G1_DRAG[TG_G1_DRAG.length-1];return row[1]*Math.pow(Math.max(1,fps),row[2])/bc;}
+function tgStateAtDistance(muzzleFps,bc,angleRad,sightHeightIn,distanceYd){
+  const targetFt=Number(distanceYd)*3,dt=.0005,g=32.174;let x=0,y=-Number(sightHeightIn)/12,vx=muzzleFps*Math.cos(angleRad),vy=muzzleFps*Math.sin(angleRad),time=0;
+  let px=x,py=y,pv=Math.hypot(vx,vy),pt=0;
+  while(x<targetFt&&time<4&&vx>20){px=x;py=y;pv=Math.hypot(vx,vy);pt=time;const speed=pv,drag=tgG1Retardation(speed,bc),ax=-drag*vx/speed,ay=-g-drag*vy/speed;vx+=ax*dt;vy+=ay*dt;x+=vx*dt;y+=vy*dt;time+=dt;}
+  if(x<=px)return{offsetIn:y*12,velocity:Math.hypot(vx,vy),time};const f=Math.max(0,Math.min(1,(targetFt-px)/(x-px)));return{offsetIn:(py+(y-py)*f)*12,velocity:pv+(Math.hypot(vx,vy)-pv)*f,time:pt+(time-pt)*f};
+}
+function tgSolveAngle(muzzleFps,bc,sightHeightIn,distanceYd,offsetIn=0){let lo=-.04,hi=.16;for(let i=0;i<44;i++){const mid=(lo+hi)/2,y=tgStateAtDistance(muzzleFps,bc,mid,sightHeightIn,distanceYd).offsetIn;if(y<offsetIn)lo=mid;else hi=mid;}return(lo+hi)/2;}
+function tgZeroCrossings(muzzleFps,bc,angleRad,sightHeightIn,maxYd=300){
+  const maxFt=maxYd*3,dt=.0005,g=32.174;let x=0,y=-sightHeightIn/12,vx=muzzleFps*Math.cos(angleRad),vy=muzzleFps*Math.sin(angleRad),time=0,px=x,py=y;const zeros=[];
+  while(x<maxFt&&time<5&&vx>20){px=x;py=y;const speed=Math.hypot(vx,vy),drag=tgG1Retardation(speed,bc),ax=-drag*vx/speed,ay=-g-drag*vy/speed;vx+=ax*dt;vy+=ay*dt;x+=vx*dt;y+=vy*dt;time+=dt;if((py<0&&y>=0)||(py>0&&y<=0)){const f=(0-py)/(y-py||1),yd=(px+(x-px)*f)/3;if(yd>.2&&(!zeros.length||Math.abs(yd-zeros[zeros.length-1])>.4))zeros.push(yd);}}
+  return zeros.slice(0,2);
+}
+function tgTrajectoryFor(settings,observation=null){
+  const muzzleFps=Number(settings.velocity),bc=Number(settings.bc),sightHeightIn=Number(settings.sightHeight),mode=settings.mode==="measured"&&observation?"measured":"selected",zeroYd=Number(settings.zeroYd),distances=[...new Set((settings.distances||[]).map(Number).filter(v=>v>0&&v<=500))].sort((a,b)=>a-b);
+  if(!(muzzleFps>=200&&muzzleFps<=4000))throw new Error("Enter a recorded velocity between 200 and 4,000 fps.");if(!(bc>=.01&&bc<=1))throw new Error("Enter a valid G1 ballistic coefficient.");if(!(sightHeightIn>=.1&&sightHeightIn<=6))throw new Error("Enter the firearm’s sight height over bore.");if(!distances.length)throw new Error("Enter at least one display distance.");if(mode==="selected"&&!(zeroYd>0&&zeroYd<=500))throw new Error("Enter a valid zero distance.");
+  const anchorYd=mode==="measured"?Number(observation.distanceYd):zeroYd,anchorOffset=mode==="measured"?Number(observation.poiYIn):0;if(!(anchorYd>0))throw new Error("The measured target needs a distance.");
+  const angle=tgSolveAngle(muzzleFps,bc,sightHeightIn,anchorYd,anchorOffset),rows=distances.map(distance=>{const p=tgStateAtDistance(muzzleFps,bc,angle,sightHeightIn,distance),inPerMoa=distance*36*Math.tan(Math.PI/10800);return{distance,offsetIn:p.offsetIn,moa:p.offsetIn/inPerMoa,velocity:p.velocity,time:p.time};});
+  return{mode,angle,rows,zeros:tgZeroCrossings(muzzleFps,bc,angle,sightHeightIn,Math.max(300,...distances)),anchorYd,anchorOffset,observation};
+}
+function tgBulletForLoad(load){return ensureCatalog().bullets.find(b=>b._legacyKey===load?.bulletCatalogKey)||exactBullet(load?.bullet)||null;}
+function tgGunForLoad(load){return ensureCatalog().guns.find(g=>g._legacyKey===load?.gunCatalogKey)||exactGun(load?.gun)||null;}
+function tgSuggestedBC(load,bullet=tgBulletForLoad(load)){const text=norm([bullet?.product,bullet?.style,load?.bullet].filter(Boolean).join(" ")),weight=Number(bullet?.weight_gr||(text.match(/(\d+(?:\.\d+)?)\s*gr/)||[])[1]||0);if(/45.?270.?saa|270saa/.test(text))return{value:.193,label:"RCBS 45-270-SAA",source:"published"};if(/452424|keith/.test(text)&&weight>=235&&weight<=275)return{value:.180,label:"Keith-style SWC",source:"published"};if(/wadcutter|\bwc\b/.test(text)&&!/semi|swc/.test(text))return{value:.105,label:"Wadcutter estimate",source:"suggested"};if(/rnfp|round nose flat/.test(text))return{value:.190,label:"RNFP estimate",source:"suggested"};if(/wfn|lfn|wide flat|long flat/.test(text))return{value:.200,label:"Flat-nose estimate",source:"suggested"};if(/swc|semi/.test(text))return{value:.150,label:"SWC estimate",source:"suggested"};if(/jhp|hollow/.test(text))return{value:.145,label:"JHP estimate",source:"suggested"};return{value:.165,label:"Revolver bullet estimate",source:"suggested"};}
+function tgRecordedVelocity(load){if(window.srPerformance){const v=window.srPerformance(load)?.avg;if(v>0)return v;}const sessions=(load?.sessions||[]).filter(s=>Number(s.avg)>0),shots=sessions.reduce((n,s)=>n+(Number(s.shots)||1),0);if(shots)return sessions.reduce((n,s)=>n+Number(s.avg)*(Number(s.shots)||1),0)/shots;return Number(load?.avg)||null;}
+function tgTargetOffset(target){if(target?.poiYIn!=null)return{xIn:Number(target.poiXIn)||0,yIn:Number(target.poiYIn),distanceYd:Number(target.distanceYd)};if(!target?.aimPoint||(target.holes||[]).length<2||!target.scaleBox?.size)return null;const cx=target.holes.reduce((n,p)=>n+Number(p.x),0)/target.holes.length,cy=target.holes.reduce((n,p)=>n+Number(p.y),0)/target.holes.length,ppi=Number(target.scaleBox.size)/(Number(target.refInches)||1);return{xIn:(cx-target.aimPoint.x)/ppi,yIn:(target.aimPoint.y-cy)/ppi,distanceYd:Number(target.distanceYd)};}
+function tgMeasuredTargets(load){return(load?.targets||[]).map((target,index)=>({target,index,offset:tgTargetOffset(target)})).filter(x=>x.offset&&x.offset.distanceYd>0).sort((a,b)=>String(b.target.date||"").localeCompare(String(a.target.date||"")));}
+function tgSettingsFor(load){const stored=load?.trajectory||{},bullet=tgBulletForLoad(load),gun=tgGunForLoad(load),suggested=tgSuggestedBC(load,bullet),measured=tgMeasuredTargets(load);return{mode:stored.mode==="measured"&&measured.length?"measured":"selected",zeroYd:Number(stored.zeroYd)||25,distances:Array.isArray(stored.distances)&&stored.distances.length?stored.distances:[10,25,50,75,100],velocity:Number(stored.velocity)||tgRecordedVelocity(load)||null,bc:Number(stored.bc)||Number(bullet?.bc_g1)||suggested.value,bcSource:stored.bcSource||bullet?.bc_source||suggested.source,sightHeight:Number(stored.sightHeight)||Number(gun?.sight_height_in)||.9,targetIndex:stored.targetIndex!=null?Number(stored.targetIndex):(measured[0]?.index??null)};}
+function tgEntryMarkup(load){const s=tgSettingsFor(load),measured=tgMeasuredTargets(load).length,velocity=tgRecordedVelocity(load);return `<div class="tg-entry"><div class="tg-entry-top"><div><div class="tg-entry-kicker">Zero &amp; holds</div><div class="tg-entry-title">${s.zeroYd}-yard default zero</div><div class="tg-entry-meta">${velocity?`${velocity.toFixed(1)} fps · `:""}${measured?`${measured} measured target${measured===1?"":"s"} available`:"Add an aim point to a target for measured zero"}</div></div><button class="ta-btn primary" onclick="tgOpen('${load.id}')">View Guide</button></div></div>`;}
+const TG={loadId:null,draft:null};
+function tgFindLoad(){return findLoadById(TG.loadId);}
+function tgReadForm(){const val=id=>document.getElementById(id)?.value;return{mode:document.querySelector("[data-tg-mode].on")?.dataset.tgMode||TG.draft?.mode||"selected",zeroYd:Number(val("tgZero"))||25,distances:String(val("tgDistances")||"").split(/[,\s]+/).map(Number).filter(v=>v>0),velocity:Number(val("tgVelocity")),bc:Number(val("tgBC")),bcSource:val("tgBCSource")||"suggested",sightHeight:Number(val("tgSight")),targetIndex:val("tgTarget")===""?null:Number(val("tgTarget"))};}
+function tgOpen(loadId){const load=findLoadById(loadId);if(!load)return toast("Load not found");TG.loadId=loadId;TG.draft=tgSettingsFor(load);document.getElementById("tgOverlay").classList.remove("hidden");tgRender();}
+function tgClose(){document.getElementById("tgOverlay").classList.add("hidden");TG.loadId=null;TG.draft=null;}
+function tgSetMode(mode){TG.draft={...tgReadForm(),mode};tgRender();}
+function tgPresetBC(value){if(!value)return;const [bc,source]=value.split("|");document.getElementById("tgBC").value=bc;document.getElementById("tgBCSource").value=source||"suggested";tgRefresh();}
+function tgRender(){const load=tgFindLoad();if(!load)return tgClose();const s=TG.draft||tgSettingsFor(load),measured=tgMeasuredTargets(load),suggested=tgSuggestedBC(load),targetOptions=measured.map(x=>`<option value="${x.index}" ${Number(s.targetIndex)===x.index?"selected":""}>${x.target.date?fmtDate2(x.target.date):"Target"} · ${x.offset.distanceYd} yd · ${tgSigned(x.offset.yIn,2)} in</option>`).join("");document.getElementById("tgTitle").textContent=`Zero & Holds · ${Number(load.charge).toFixed(1)}gr ${load.powder}`;document.getElementById("tgBody").innerHTML=`<div class="tg-controls"><div class="tg-mode"><button data-tg-mode="selected" class="${s.mode!=="measured"?"on":""}" onclick="tgSetMode('selected')">Selected zero</button><button data-tg-mode="measured" class="${s.mode==="measured"?"on":""}" onclick="tgSetMode('measured')" ${measured.length?"":"disabled"}>Measured impact</button></div><div class="tg-form-grid"><div class="tg-field"><label>Zero distance</label><input id="tgZero" type="number" min="1" max="500" step="1" value="${s.zeroYd}" ${s.mode==="measured"?"disabled":""} onchange="tgRefresh()"></div><div class="tg-field"><label>Recorded velocity (fps)</label><input id="tgVelocity" type="number" min="200" max="4000" step="0.1" value="${s.velocity??""}" onchange="tgRefresh()"></div><div class="tg-field"><label>G1 ballistic coefficient</label><input id="tgBC" type="number" min=".01" max="1" step=".001" value="${Number(s.bc).toFixed(3)}" onchange="tgRefresh()"></div><div class="tg-field"><label>BC source</label><select id="tgBCSource" onchange="tgRefresh()"><option value="suggested" ${s.bcSource==="suggested"?"selected":""}>App suggestion</option><option value="published" ${s.bcSource==="published"?"selected":""}>Published value</option><option value="manufacturer" ${s.bcSource==="manufacturer"?"selected":""}>Manufacturer value</option><option value="measured" ${s.bcSource==="measured"?"selected":""}>User measured</option></select></div><div class="tg-field"><label>Common bullet defaults</label><select onchange="tgPresetBC(this.value)"><option value="">Choose…</option><option value="${suggested.value}|${suggested.source}">${esc(suggested.label)} · ${suggested.value.toFixed(3)}</option><option value="0.180|published">Lyman 452424 Keith · 0.180</option><option value="0.193|published">RCBS 45-270-SAA · 0.193</option><option value="0.150|suggested">Generic SWC · 0.150</option><option value="0.190|suggested">Generic RNFP · 0.190</option><option value="0.105|suggested">Generic wadcutter · 0.105</option></select></div><div class="tg-field"><label>Sight height over bore (in.)</label><input id="tgSight" type="number" min=".1" max="6" step=".01" value="${Number(s.sightHeight).toFixed(2)}" onchange="tgRefresh()"></div><div class="tg-field full"><label>Distances to display (yards)</label><input id="tgDistances" value="${esc(s.distances.join(", "))}" onchange="tgRefresh()"><small>Default: 10, 25, 50, 75, and 100 yards. Add or remove any distance.</small></div>${s.mode==="measured"?`<div class="tg-field full"><label>Measured target anchor</label><select id="tgTarget" onchange="tgRefresh()">${targetOptions}</select></div>`:`<input type="hidden" id="tgTarget" value="${s.targetIndex??""}">`}</div><div class="tg-measured-note">${s.mode==="measured"?"Measured mode uses the analyzed group center relative to the point of aim you marked on the target.":"Selected-zero mode shows the trajectory after the sights are adjusted to intersect at the chosen distance."} BC and sight height are reused with this bullet and firearm.</div></div><div id="tgPreview"></div>`;tgRefresh();}
+function tgSigned(v,d=1){const n=Number(v);if(Math.abs(n)<Math.pow(10,-d)/2)return Number(0).toFixed(d);return`${n>0?"+":"−"}${Math.abs(n).toFixed(d)}`;}
+function tgRefresh(){const load=tgFindLoad();if(!load)return;TG.draft=tgReadForm();const measured=tgMeasuredTargets(load),chosen=measured.find(x=>x.index===TG.draft.targetIndex)||measured[0]||null,observation=chosen?{distanceYd:chosen.offset.distanceYd,poiYIn:chosen.offset.yIn,poiXIn:chosen.offset.xIn,date:chosen.target.date}:null,preview=document.getElementById("tgPreview");try{const result=tgTrajectoryFor(TG.draft,observation);preview.innerHTML=tgPaperMarkup(load,TG.draft,result);}catch(e){preview.innerHTML=`<div class="tg-error"><b>Trajectory unavailable</b><div style="margin-top:6px;color:var(--ink-dim)">${esc(e.message)}</div></div>`;}}
+function tgPaperMarkup(load,s,result){const gun=tgGunForLoad(load),max=Math.max(1,...result.rows.map(r=>Math.abs(r.offsetIn))),targets=result.rows.map(r=>{const dot=Math.max(12,Math.min(88,50-r.offsetIn/max*36)),selectedZero=result.mode==="selected"&&Math.abs(r.distance-s.zeroYd)<.01,isZero=selectedZero||Math.abs(r.offsetIn)<.05,measured=result.mode==="measured"&&Math.abs(r.distance-result.anchorYd)<.01,tag=selectedZero?"Selected zero":measured?"Measured anchor":isZero?"Calculated zero":"";return `<div class="tg-target ${isZero?"zero":""}"><div class="tg-target-distance">${r.distance} YD</div><div class="tg-board"><div class="tg-ring r1"></div><div class="tg-ring r2"></div><div class="tg-ring r3"></div><div class="tg-cross"></div><div class="tg-impact" style="top:${dot}%"></div></div><div class="tg-target-value">${Math.abs(r.offsetIn)<.05?"ZERO":tgSigned(r.offsetIn,1)+" IN"}</div><div class="tg-target-moa">${Math.abs(r.moa)<.05?"0.0":tgSigned(r.moa,1)} MOA</div>${tag?`<div class="tg-target-tag">${tag}</div>`:""}</div>`;}).join(""),zeros=result.zeros.length?result.zeros.map(v=>`${v.toFixed(1)} yd`).join(" / "):"None within 300 yd",wind=result.observation?`${tgSigned(result.observation.poiXIn,2)} in ${result.observation.poiXIn>=0?"right":"left"}`:"—";return `<section class="tg-paper"><div class="tg-paper-head"><div class="tg-paper-brand">The Sixgun Retriever</div><div class="tg-paper-private">Private collection record</div><div class="tg-paper-title">LOAD TRAJECTORY RECORD</div><div class="tg-paper-sub">${result.mode==="measured"?"Observed impact projected across distance":"Predicted point of impact for the selected zero"}</div></div><div class="tg-basis"><div><span>Firearm</span><b>${esc(gun?gunDisplay(gun):load.gun)}</b></div><div><span>Load</span><b>${Number(load.charge).toFixed(1)}gr ${esc(load.powder)}</b></div><div><span>Velocity</span><b>${Number(s.velocity).toFixed(1)} fps</b></div><div><span>G1 BC</span><b>${Number(s.bc).toFixed(3)}</b></div></div><div class="tg-scale-note">Shared vertical scale · center hold on every target</div><div class="tg-targets">${targets}</div><table class="tg-table"><thead><tr><th>Distance</th><th>Impact</th><th>Impact / MOA</th><th>Velocity</th><th>Time</th></tr></thead><tbody>${result.rows.map(r=>`<tr><td>${r.distance} yd</td><td>${tgSigned(r.offsetIn,2)} in</td><td>${tgSigned(r.moa,2)}</td><td>${Math.round(r.velocity)} fps</td><td>${r.time.toFixed(3)} s</td></tr>`).join("")}</tbody></table><div class="tg-zero-summary"><span>${result.mode==="measured"?"Calculated zero crossings":"Zero crossings"}<b>${zeros}</b></span>${result.mode==="measured"?`<span>Observed windage<b>${wind}</b></span>`:""}<span>Sight height<b>${Number(s.sightHeight).toFixed(2)} in</b></span></div><div class="tg-paper-note">${result.mode==="measured"?`Anchored to the ${result.anchorYd}-yard target${result.observation?.date?` recorded ${fmtDate2(result.observation.date)}`:""}. `:""}Predicted values are a starting point. Confirm actual point of impact at the range.</div><div class="tg-paper-foot">Prepared from recorded load data · The Sixgun Retriever</div></section>`;}
+async function tgSave(){const load=tgFindLoad();if(!load)return;const s=tgReadForm();load.trajectory={...s,updatedAt:new Date().toISOString()};const bullet=tgBulletForLoad(load),gun=tgGunForLoad(load);if(bullet){bullet.bc_g1=s.bc;bullet.bc_source=s.bcSource;}if(gun){gun.sight_height_in=s.sightHeight;for(const c of Object.values(DB.cartridges||{}))for(const cg of c.guns||[])if(cg._legacyKey===gun._legacyKey)cg.sight_height_in=s.sightHeight;}await save();renderAll();toast("Zero & Holds settings saved");}
+document.getElementById("tgClose").onclick=tgClose;document.getElementById("tgSave").onclick=tgSave;
 
 /* ---------- Garmin ShotView CSV import ---------- */
 let importRows=[],importReturnScreen="loads";
@@ -1133,6 +1200,7 @@ function loadDetail(l){
     if(t.meanRadiusIn!=null)bits.push(`<div class="df"><span class="dfl">Mean R</span><span class="dfv">${t.meanRadiusIn.toFixed(2)}"</span></div>`);
     bits.push(`<div class="df"><span class="dfl">Shots</span><span class="dfv">${t.shots}</span></div>`);
     if(t.distanceYd)bits.push(`<div class="df"><span class="dfl">Distance</span><span class="dfv">${t.distanceYd} yd</span></div>`);
+    const poi=tgTargetOffset(t);if(poi){bits.push(`<div class="df"><span class="dfl">Vertical POI</span><span class="dfv">${tgSigned(poi.yIn,2)}"</span></div>`);bits.push(`<div class="df"><span class="dfl">Windage</span><span class="dfv">${tgSigned(poi.xIn,2)}"</span></div>`);}
     return `<div class="session ta-target" data-load="${l.id}" data-tidx="${i}" style="position:relative">
       <button class="ta-target-del" data-del-load="${l.id}" data-del-idx="${i}" aria-label="Delete target">✕</button>
       <div class="session-date">${t.date?fmtDate2(t.date):"Target"}</div>
@@ -1149,6 +1217,7 @@ function loadDetail(l){
     <div class="detail-label">Target analysis</div>
     ${targetBlocks||'<div style="font-size:12px;color:var(--ink-faint);padding:2px 0 8px">No targets analyzed yet.</div>'}
     <div style="display:flex;gap:8px;margin-top:6px"><button class="ta-btn" style="max-width:none" onclick="openLoadForm('${l.id}')">Edit Load</button><button class="ta-btn primary" style="max-width:none" onclick="taOpen('${l.id}')">＋ Analyze Target</button></div>
+    ${tgEntryMarkup(l)}
   </div>`;
 }
 function fmtDate2(d){const dt=new Date(d);if(isNaN(dt))return d;return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
@@ -1845,6 +1914,7 @@ const TA={
   scaleBox:null,          // {x,y,size} in IMAGE space; size = pixels representing refInches
   refInches:1,            // the box represents this many inches (default 1" square)
   holes:[],               // [{x,y}] in image space
+  aimPoint:null,          // exact point held on the target, in image space
   sel:null,               // index of currently selected hole (for move/delete)
   distanceYd:null,
   base:{scale:1,ox:0,oy:0}, // fit transform (image → canvas at 1x)
@@ -1859,7 +1929,7 @@ const TA={
 function taOpen(loadId){
   TA.loadId=loadId; TA.targetIndex=null; TA.img=null; TA.imgData=null; TA.origImg=null; TA.origData=null; TA.mode="flatten";
   TA.rot=0; TA.pv=0; TA.ph=0;
-  TA.scaleBox=null; TA.refInches=1; TA.holes=[]; TA.sel=null; TA.distanceYd=null;
+  TA.scaleBox=null; TA.refInches=1; TA.holes=[]; TA.aimPoint=null; TA.sel=null; TA.distanceYd=null;
   TA.autoWorking=false;TA.autoAligned=false;TA.autoTargetKind=null;TA.gridConfidence=0;
   TA.base={scale:1,ox:0,oy:0}; TA.zoom=1; TA.panx=0; TA.pany=0; TA.zoomMode=false;
   TA.drag=null; TA.pinch=null; TA.vpinch=null;
@@ -1880,7 +1950,7 @@ function taOpen(loadId){
 }
 function taEditTarget(loadId,targetIndex){
   const load=findLoadById(loadId),target=load?.targets?.[targetIndex];if(!target?.photo)return toast("Saved target photo unavailable");
-  taOpen(loadId);TA.targetIndex=targetIndex;TA.imgData=target.photo;TA.origData=target.photo;TA.refInches=Number(target.refInches)||1;TA.scaleBox=target.scaleBox?{...target.scaleBox}:null;TA.holes=(target.holes||[]).map(p=>({...p}));TA.distanceYd=target.distanceYd||null;
+  taOpen(loadId);TA.targetIndex=targetIndex;TA.imgData=target.photo;TA.origData=target.photo;TA.refInches=Number(target.refInches)||1;TA.scaleBox=target.scaleBox?{...target.scaleBox}:null;TA.holes=(target.holes||[]).map(p=>({...p}));TA.aimPoint=target.aimPoint?{...target.aimPoint}:null;TA.distanceYd=target.distanceYd||null;
   const im=new Image();im.onload=()=>{TA.img=im;TA.origImg=im;TA.mode="scale";document.getElementById("taEmpty").style.display="none";fitImage();taSetStep();taRenderControls();taDraw();taUpdateReadout();};im.src=target.photo;
 }
 function taRelayout(){sizeTaCanvas();if(TA.img)fitImage();taDraw();}
@@ -2004,7 +2074,7 @@ function taApplyFlatten(){
   TA.imgData=fc.toDataURL("image/jpeg",0.85);
   const im=new Image();
   im.onload=()=>{
-    TA.img=im; TA.mode="scale";TA.scaleBox=null;TA.holes=[];TA.sel=null;
+    TA.img=im; TA.mode="scale";TA.scaleBox=null;TA.holes=[];TA.aimPoint=null;TA.sel=null;
     TA.autoAligned=false;TA.autoTargetKind=null;TA.gridConfidence=0;
     TA.zoom=1;TA.panx=0;TA.pany=0;TA.zoomMode=false;
     fitImage(); taSetStep(); taRenderControls(); taDraw();
@@ -2124,6 +2194,9 @@ function taDraw(){
       ctx.fillStyle="#f4e9d0";ctx.font="bold "+labelPx+"px Inter, sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(i+1,c.x,c.y);
     });
   }
+  if(TA.aimPoint){
+    const c=toCanvas(TA.aimPoint);ctx.save();ctx.strokeStyle="#a93f35";ctx.fillStyle="rgba(169,63,53,.16)";ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(c.x,c.y,14,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(c.x-22,c.y);ctx.lineTo(c.x+22,c.y);ctx.moveTo(c.x,c.y-22);ctx.lineTo(c.x,c.y+22);ctx.stroke();ctx.fillStyle="#f4e9d0";ctx.font="bold 10px Inter, sans-serif";ctx.textAlign="left";ctx.textBaseline="bottom";ctx.fillText("AIM",c.x+17,c.y-8);ctx.restore();
+  }
 }
 
 /* ---- geometry / MOA (true angular) ---- */
@@ -2143,16 +2216,17 @@ function taGeometry(){
   const hSpanPx=Math.max(...xs)-Math.min(...xs), vSpanPx=Math.max(...ys)-Math.min(...ys);
   // mean radius
   const mr=TA.holes.reduce((a,p)=>a+dist(p,center),0)/TA.holes.length;
-  let ppi=null,groupIn=null,moa=null,hIn=null,vIn=null,mrIn=null;
+  let ppi=null,groupIn=null,moa=null,hIn=null,vIn=null,mrIn=null,poiXIn=null,poiYIn=null;
   ppi=taPPI();
   if(ppi){
     groupIn=mx/ppi; hIn=hSpanPx/ppi; vIn=vSpanPx/ppi; mrIn=mr/ppi;
+    if(TA.aimPoint){poiXIn=(center.x-TA.aimPoint.x)/ppi;poiYIn=(TA.aimPoint.y-center.y)/ppi;}
     if(TA.distanceYd>0){
       const inPerMOA=(TA.distanceYd*36)*Math.tan((Math.PI/180)/60);
       moa=groupIn/inPerMOA;
     }
   }
-  return {esPair:pair,center,esPx:mx,groupIn,moa,hIn,vIn,mrIn,ppi};
+  return {esPair:pair,center,esPx:mx,groupIn,moa,hIn,vIn,mrIn,ppi,poiXIn,poiYIn};
 }
 
 /* ---- pointer handling ----
@@ -2162,6 +2236,7 @@ function taGeometry(){
 function taMarkerRadius(){const ppi=taPPI();return ppi?(ppi*0.2255)*vScale():7;}
 function taHit(cx,cy){
   const R=Math.max(22,taMarkerRadius()+10); // accessible touch target, independent of drawn size
+  if(TA.mode==="aim"&&TA.aimPoint){const c=toCanvas(TA.aimPoint);if(Math.hypot(c.x-cx,c.y-cy)<=Math.max(24,R))return{type:"aim"};}
   for(let i=TA.holes.length-1;i>=0;i--){const c=toCanvas(TA.holes[i]);if(Math.hypot(c.x-cx,c.y-cy)<=R)return{type:"hole",idx:i};}
   return null;
 }
@@ -2214,6 +2289,8 @@ function taDown(e){
     if(hit){
       taHoleLongTimer=setTimeout(()=>{taHoleLongTimer=null;taLongPressed=true;taConfirmDeleteSelected();},550);
     }
+  }else if(TA.mode==="aim"){
+    const hit=taHit(p.x,p.y);TA.drag=hit?.type==="aim"?{type:"aim"}:null;if(TA.drag){TA.aimStart={...TA.aimPoint};TA.aimDragStart=p;}
   }else if(TA.mode==="scale"){
     TA.drag={type:"box"};
     TA.boxStart={x:TA.scaleBox.x,y:TA.scaleBox.y,px:p.x,py:p.y};
@@ -2282,6 +2359,8 @@ function taMove(e){
       y:Math.max(0,Math.min(TA.img.height,TA.holeStart.y+dy))
     };
     taDraw(); taUpdateReadout();
+  }else if(TA.drag.type==="aim"){
+    const dx=(p.x-TA.aimDragStart.x)/vScale(),dy=(p.y-TA.aimDragStart.y)/vScale();TA.aimPoint={x:Math.max(0,Math.min(TA.img.width,TA.aimStart.x+dx)),y:Math.max(0,Math.min(TA.img.height,TA.aimStart.y+dy))};taDraw();taUpdateReadout();
   }
 }
 function taClampPan(){
@@ -2306,12 +2385,13 @@ function taUp(e){
   if(TA.pinch){if(remaining<2)TA.pinch=null;if(!remaining)taGestureMulti=false;taUpdateReadout();return;}
   const wasDrag=taMoved;
   const dp=taDownPos,up=endPts[0]||dp;
-  TA.drag=null; taDownPos=null;TA.holeStart=null;TA.holeDragStart=null;
+  TA.drag=null; taDownPos=null;TA.holeStart=null;TA.holeDragStart=null;TA.aimStart=null;TA.aimDragStart=null;
   if(TA.mode==="holes"&&!wasDrag&&!taGestureMulti&&!taLongPressed&&dp&&up){
     const hit=taHit(dp.x,dp.y);
     if(hit)TA.sel=hit.idx;
     else taAddBullet(up);
   }
+  if(TA.mode==="aim"&&!wasDrag&&!taGestureMulti&&dp&&up){TA.aimPoint=toImage(up.x,up.y);toast("Point of aim marked — drag to fine-tune");}
   if(!remaining)taGestureMulti=false;
   taMoved=false;
   taDraw(); taUpdateReadout(); taRenderControls(); taSetStep();
@@ -2328,6 +2408,8 @@ function taSetStep(){
     el.textContent="Optional · Correct a tilted photo, then apply";
   }else if(TA.mode==="scale"){
     el.textContent="Scale · Match the green box to exactly ONE 1\" grid square — not the whole target";
+  }else if(TA.mode==="aim"){
+    el.textContent=TA.aimPoint?"Point of aim · drag the red marker to the exact hold":"Point of aim · tap the exact spot held with the sights";
   }else if(TA.autoAligned){
     el.textContent=TA.holes.length?`Auto setup complete · 1\" grid · review ${TA.holes.length} markers`:'Auto setup complete · 1" grid · tap to add holes';
   }else{
@@ -2344,6 +2426,8 @@ function taUpdateReadout(){
   if(g&&g.groupIn!=null)cells.push(`<div><span class="ro-k">Group</span><span class="ro-v">${g.groupIn.toFixed(2)}"</span></div>`);
   if(g&&g.moa!=null)cells.push(`<div><span class="ro-k">MOA</span><span class="ro-v">${g.moa.toFixed(2)}</span></div>`);
   if(g&&g.mrIn!=null)cells.push(`<div><span class="ro-k">Mean R</span><span class="ro-v">${g.mrIn.toFixed(2)}"</span></div>`);
+  if(g&&g.poiYIn!=null)cells.push(`<div><span class="ro-k">Vertical POI</span><span class="ro-v">${tgSigned(g.poiYIn,2)}"</span></div>`);
+  if(g&&g.poiXIn!=null)cells.push(`<div><span class="ro-k">Windage</span><span class="ro-v">${tgSigned(g.poiXIn,2)}"</span></div>`);
   el.innerHTML=cells.join("");
   document.getElementById("taSave").disabled=!(g&&g.groupIn!=null&&TA.holes.length>=2);
 }
@@ -2369,6 +2453,7 @@ function taRenderControls(){
   h+=`<button class="ta-btn" onclick="taBackToFlatten()">Adjust photo</button>`;
   h+=`<button class="ta-btn ${TA.mode==='scale'?'primary':''}" onclick="taMode('scale')">Scale</button>`;
   h+=`<button class="ta-btn ${TA.mode==='holes'?'primary':''}" onclick="taMode('holes')" ${taScaleReady()?'':'disabled'}>Holes</button>`;
+  h+=`<button class="ta-btn ${TA.mode==='aim'?'primary':''}" onclick="taMode('aim')" ${taScaleReady()?'':'disabled'}>Aim point</button>`;
   if(TA.mode==="scale"){
     h+=`<span style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:var(--ink-faint)">green box =</span><input class="ta-input" style="width:60px" id="taRef" inputmode="decimal" value="${TA.refInches}" oninput="taSetRef(this.value)"><span style="font-size:11px;color:var(--ink-faint)">in</span></span>`;
     h+=`<div class="ta-sliders"><div class="ta-slider-row"><label>Match one printed square</label><input type="range" min="1" max="90" step="0.5" value="${taScalePercent()}" oninput="taSetScalePercent(this.value)"></div></div>`;
@@ -2377,6 +2462,11 @@ function taRenderControls(){
     h+=`<button class="ta-btn primary" onclick="taAddBullet()">＋ Center marker</button>`;
     h+=`<button class="ta-btn" onclick="taAutoDetect()">Find holes</button>`;
     h+=`<button class="ta-btn" onclick="taClear()">Clear all</button>`;
+    h+=`<span style="display:flex;align-items:center;gap:6px"><input class="ta-input" id="taDist" inputmode="decimal" placeholder="yds" value="${TA.distanceYd||''}" oninput="taDist(this.value)"><span style="font-size:11px;color:var(--ink-faint)">yards</span></span>`;
+  }
+  if(TA.mode==="aim"){
+    h+=`<button class="ta-btn primary" onclick="taSetAimCenter()">Center aim point</button>`;
+    h+=`<button class="ta-btn" onclick="taClear()">Clear aim point</button>`;
     h+=`<span style="display:flex;align-items:center;gap:6px"><input class="ta-input" id="taDist" inputmode="decimal" placeholder="yds" value="${TA.distanceYd||''}" oninput="taDist(this.value)"><span style="font-size:11px;color:var(--ink-faint)">yards</span></span>`;
   }
   // Zoom toggle — available in scale/holes. When ON, two fingers pan/zoom the photo.
@@ -2395,6 +2485,7 @@ function taAddBullet(point){
   taDraw(); taUpdateReadout(); taRenderControls(); taSetStep();
   toast("Marker added — drag to fine-tune");
 }
+function taSetAimCenter(){if(!TA.img)return;TA.aimPoint={x:TA.img.width/2,y:TA.img.height/2};taDraw();taUpdateReadout();taSetStep();toast("Aim point centered — drag it onto the exact hold");}
 function taScalePercent(){return TA.scaleBox&&TA.img?+(TA.scaleBox.size/Math.min(TA.img.width,TA.img.height)*100).toFixed(1):5;}
 function taSetScalePercent(v){
   if(!TA.scaleBox||!TA.img)return;
@@ -2411,10 +2502,10 @@ function taBackToFlatten(){
 }
 function taToggleZoom(){TA.zoomMode=!TA.zoomMode;taRenderControls();taSetStep();toast(TA.zoomMode?"Zoom mode: two fingers to zoom/pan":"Zoom off");}
 function taResetZoom(){TA.zoom=1;TA.panx=0;TA.pany=0;taDraw();taRenderControls();}
-function taMode(m){if(m==="holes"&&!taScaleReady()){toast("Position the scale box first");return;}TA.mode=m;taSetStep();taRenderControls();taDraw();}
+function taMode(m){if((m==="holes"||m==="aim")&&!taScaleReady()){toast("Position the scale box first");return;}TA.mode=m;taSetStep();taRenderControls();taDraw();}
 function taSetRef(v){const n=parseFloat(v);if(n>0){TA.refInches=n;taUpdateReadout();}}
 function taUndo(){if(TA.mode==="holes"){TA.holes.pop();}taDraw();taUpdateReadout();taSetStep();taRenderControls();}
-function taClear(){if(TA.mode==="holes"){TA.holes=[];TA.sel=null;}taDraw();taUpdateReadout();taSetStep();taRenderControls();}
+function taClear(){if(TA.mode==="holes"){TA.holes=[];TA.sel=null;}if(TA.mode==="aim")TA.aimPoint=null;taDraw();taUpdateReadout();taSetStep();taRenderControls();}
 function taDist(v){const n=parseFloat(v);TA.distanceYd=n>0?n:null;taUpdateReadout();}
 
 /* ---- AUTO SETUP ----
@@ -2620,7 +2711,7 @@ function taAutoSetup(){
       const warped=taWarpTarget(source,detection),grid=taGridCalibration(warped,detection);if(!grid)throw new Error("Target found, but the 1-inch grid wasn't clear enough");
       TA.imgData=warped.toDataURL("image/jpeg",.9);const im=new Image();
       im.onload=()=>{
-        TA.img=im;TA.scaleBox={...grid.box};TA.refInches=1;TA.holes=[];TA.sel=null;TA.mode="holes";TA.autoAligned=true;TA.autoTargetKind=detection.kind;TA.gridConfidence=grid.confidence;TA.zoom=1;TA.panx=0;TA.pany=0;TA.zoomMode=false;
+        TA.img=im;TA.scaleBox={...grid.box};TA.refInches=1;TA.holes=[];TA.aimPoint=null;TA.sel=null;TA.mode="holes";TA.autoAligned=true;TA.autoTargetKind=detection.kind;TA.gridConfidence=grid.confidence;TA.zoom=1;TA.panx=0;TA.pany=0;TA.zoomMode=false;
         fitImage();const found=taFindHoles();TA.holes=found;TA.autoWorking=false;taSetStep();taRenderControls();taDraw();taUpdateReadout();
         toast(found.length?`Target aligned · 1-inch grid set · ${found.length} holes found`:"Target aligned and 1-inch grid set · add missing holes manually");
       };im.onerror=()=>{TA.autoWorking=false;taRenderControls();toast("Auto setup couldn't render the corrected target");};im.src=TA.imgData;
@@ -2639,11 +2730,14 @@ document.getElementById("taSave").onclick=async function(){
     scaleBox:TA.scaleBox?{x:+TA.scaleBox.x.toFixed(1),y:+TA.scaleBox.y.toFixed(1),size:+TA.scaleBox.size.toFixed(1)}:null,
     refInches:TA.refInches,
     holes:TA.holes.map(p=>({x:+p.x.toFixed(1),y:+p.y.toFixed(1)})),
+    aimPoint:TA.aimPoint?{x:+TA.aimPoint.x.toFixed(1),y:+TA.aimPoint.y.toFixed(1)}:null,
     distanceYd:TA.distanceYd,
     // computed snapshot (reproducible from raw above)
     groupIn:g.groupIn!=null?+g.groupIn.toFixed(3):null,
     moa:g.moa!=null?+g.moa.toFixed(3):null,
     meanRadiusIn:g.mrIn!=null?+g.mrIn.toFixed(3):null,
+    poiXIn:g.poiXIn!=null?+g.poiXIn.toFixed(3):null,
+    poiYIn:g.poiYIn!=null?+g.poiYIn.toFixed(3):null,
     shots:TA.holes.length
   };
   if(TA.targetIndex!=null&&load.targets[TA.targetIndex])load.targets[TA.targetIndex]=targetRecord;else load.targets.push(targetRecord);
@@ -2714,7 +2808,7 @@ document.addEventListener("click",function(e){
    ============================================================ */
 const SUPABASE_URL="https://risuqltejfwjokdsrkmj.supabase.co";
 const SUPABASE_KEY="sb_publishable_xGQGXi9U4GxEE7GisKQVuw_k0HvBWPx";
-const CLOUD_SCHEMA_VERSION=5;
+const CLOUD_SCHEMA_VERSION=6;
 const IDB_NAME="sixgun_retriever_cloud_v1";
 let sb=null,cloudUser=null,cloudFlushing=false,cloudSaveTimer=null;
 
