@@ -13,6 +13,14 @@ const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)
 const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
 assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
+const perfContext={window:{},document:{readyState:"loading",addEventListener(){}},console,tgSettingsFor(){return{velocity:900,bc:.18,sightHeight:.9};},tgTrajectoryFor(settings){return{settings,rows:settings.distances.map(distance=>({distance,offsetIn:distance===settings.zeroYd?0:-distance/10,velocity:settings.velocity-distance}))};}};
+perfContext.globalThis=perfContext;
+vm.createContext(perfContext);
+vm.runInContext(performanceIntelligence.replace(/\}\)\(\);\s*$/,"globalThis.__perfTest={compareDistances,comparisonTrajectories};})();"),perfContext);
+assert.deepEqual(JSON.parse(JSON.stringify(perfContext.__perfTest.compareDistances("100, 25, 50, 25"))),[25,50,100],"comparison distances must be unique and ordered");
+const compared=perfContext.__perfTest.comparisonTrajectories([{l:{id:"a"},p:{avg:800}},{l:{id:"b"},p:{avg:1000}}],25,[25,100]);
+assert(compared.every(x=>x.result.settings.zeroYd===25),"compared trajectories must share one zero distance");
+assert.deepEqual(compared.map(x=>x.result.settings.velocity),[800,1000],"trajectory comparison must use each load's recorded velocity");
 assert(html.includes("body>header{"), "top-bar styles must be scoped away from page-level header elements");
 assert(!html.includes("\nheader{\n"), "page-level headers must not inherit the sticky top-bar layout");
 assert(html.includes(".field{display:flex;min-width:0"), "editor fields must be allowed to shrink within their grid column");
@@ -52,6 +60,10 @@ assert(html.includes('onclick="taMode(\'aim\')"'), "target analysis must allow m
 assert(html.includes('poiYIn:g.poiYIn'), "saved targets must preserve measured vertical point of impact");
 assert(html.includes('button.type="submit"'), "editor primary actions must explicitly submit their form");
 assert(performanceIntelligence.includes("typeof taAutoSetup==='function'"), "legacy target assist must yield to the native auto setup control");
+assert(performanceIntelligence.includes('Trajectory Comparison'), "load comparison must include bullet-drop comparison");
+assert(performanceIntelligence.includes("all loads use a ${zeroYd}-yard zero"), "trajectory comparison must normalize loads to one shared zero");
+assert(performanceIntelligence.includes('Every square = 1 inch'), "trajectory comparison must retain the physical one-inch grid");
+assert(performanceIntelligence.includes("Difference</th>"), "trajectory comparison must report the impact difference between loads");
 assert(worker.includes(`/performance-intelligence.js?v=${releaseVersion}`), "worker must load the current target-assist cache version");
 assert(html.includes("assets/parts-maintenance-masthead-v2.jpg"), "service page and PDF must use the cabin workbench masthead");
 assert(html.includes("Selected service records for this sixgun"), "service page must use the archival subtitle convention");
