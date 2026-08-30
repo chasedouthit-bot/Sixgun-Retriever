@@ -26,6 +26,9 @@ for(const table of ["Pearce .38 Special — Standard Pressure (17,000 psi)","Pea
   assert(html.includes(table),`Tables must include ${table}`);
 }
 for(const page of [58,59,60,61,62,63,64,65])assert(fs.existsSync(`assets/articles/pearce-handloading-38-special/page-${page}.jpeg`),`.38 Special scan page ${page} must exist`);
+assert(html.includes('id:"scovill-bears"'), "Library must include Scovill's complete Bears article");
+assert.equal((html.match(/assets\/articles\/scovill-bears\/page-/g)||[]).length, 6, "Bears article must preserve all six scanned pages");
+for(const page of ["08","09","10","11","70","71"])assert(fs.existsSync(`assets/articles/scovill-bears/page-${page}.jpeg`),`Bears scan page ${page} must exist`);
 assert(html.includes('id="createNavBtn"'), "bottom navigation must expose the centered add control");
 assert(html.includes('id="createLoadAction"'), "the add menu must preserve New Load access");
 assert(html.includes('id="createImportAction"'), "the add menu must preserve Garmin import access");
