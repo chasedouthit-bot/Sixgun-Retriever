@@ -1,7 +1,7 @@
-/* Sixgun Retriever 2.13.5 — Library / Tables split */
+/* Sixgun Retriever 2.13.6 — Library / Tables split */
 (function(){
   'use strict';
-  const VERSION='2.13.5';
+  const VERSION='2.13.6';
   let srMode='library';
   let tableQuery='';
   let tablePowder='all';

@@ -14,6 +14,12 @@ const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)
 const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
 assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
+assert(html.includes('<link rel="manifest" href="/manifest.webmanifest?v=2.13.6">'), "app must expose a versioned web manifest");
+assert(html.includes('<link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=2.13.6">'), "iOS must use the dog-logo touch icon");
+for(const icon of ["apple-touch-icon.png","favicon-32.png","icon-192.png","icon-512.png","icon-maskable-512.png"])assert(fs.existsSync(`assets/icons/${icon}`),`app icon ${icon} must exist`);
+const manifest=JSON.parse(fs.readFileSync("manifest.webmanifest","utf8"));
+assert.equal(manifest.short_name,"Sixgun Retriever","manifest must use the app name");
+assert.equal(manifest.icons.length,3,"manifest must expose regular and maskable dog-logo icons");
 assert(html.includes('id:"pearce-understanding-45-colt"'), "Library must include Pearce's complete Understanding the .45 Colt article");
 assert.equal((html.match(/assets\/articles\/pearce-understanding-45-colt\/page-/g)||[]).length, 7, "Pearce article must preserve all seven scanned pages");
 for(const tier of ["14,000-psi Loads","16,000- to 19,000-psi Loads","23,000-psi Loads","32,000-CUP Loads","50,000-psi Loads"]){
