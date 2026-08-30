@@ -27,6 +27,9 @@ assert(filterControls.includes('drawer.classList.toggle("open",!!openPanel)'), "
 assert(filterControls.includes('openPanel=null;refresh()'), "choosing a load filter must collapse the chip drawer");
 assert(html.includes('class="session-pager"'), "load detail must expose a swipeable session pager");
 assert(html.includes('function loadSessionPages(sessions,targets)'), "session history must group chronograph strings and targets together");
+assert(html.includes('sb.from("target_analyses").select("legacy_key,photo_path")'), "cloud hydration must recover permanent target photo paths");
+assert(html.includes('if(local?.value)DB=local.value;await signTargetPhotos();renderAll()'), "pending sync hydration must refresh target photo URLs before rendering");
+assert(html.includes('if(local){DB=local;await signTargetPhotos();renderAll();}'), "completed sync must refresh target photo URLs before rendering");
 const perfContext={window:{},document:{readyState:"loading",addEventListener(){}},console,tgSettingsFor(){return{velocity:900,bc:.18,sightHeight:.9};},tgTrajectoryFor(settings){return{settings,rows:settings.distances.map(distance=>({distance,offsetIn:distance===settings.zeroYd?0:-distance/10,velocity:settings.velocity-distance}))};}};
 perfContext.globalThis=perfContext;
 vm.createContext(perfContext);

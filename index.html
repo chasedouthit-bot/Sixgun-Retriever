@@ -454,7 +454,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.10.1</div>
+    <div class="landing-version">Version 2.10.2</div>
   </div>
 </div>
 
@@ -851,8 +851,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.10.1";
-const CACHE_VERSION="sixgun-retriever-v2.10.1";
+const RELEASE_VERSION="2.10.2";
+const CACHE_VERSION="sixgun-retriever-v2.10.2";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -3027,7 +3027,7 @@ async function syncNormalized(state){
 }
 async function flushCloudQueue(){
   if(cloudFlushing||!cloudUser||!navigator.onLine)return;const job=await idbGet("queue","snapshot");if(!job){cloudStatus("Synced","ok");return;}
-  cloudFlushing=true;cloudStatus("Syncing…","warn");try{const synced=await syncNormalized(job.state);await idbDelete("queue","snapshot");localStorage.removeItem(KEY);cloudStatus("Synced","ok");const local=(await idbGet("state","current"))?.value;if(local){DB=local;renderAll();}}catch(e){console.error("Sixgun sync",e);cloudStatus(/relation|schema cache|bucket/i.test(e.message||"")?"Setup needed · see SUPABASE_SETUP.md":"Sync paused · will retry","error");}finally{cloudFlushing=false;}
+  cloudFlushing=true;cloudStatus("Syncing…","warn");try{const synced=await syncNormalized(job.state);await idbDelete("queue","snapshot");localStorage.removeItem(KEY);cloudStatus("Synced","ok");const local=(await idbGet("state","current"))?.value;if(local){DB=local;await signTargetPhotos();renderAll();}}catch(e){console.error("Sixgun sync",e);cloudStatus(/relation|schema cache|bucket/i.test(e.message||"")?"Setup needed · see SUPABASE_SETUP.md":"Sync paused · will retry","error");}finally{cloudFlushing=false;}
 }
 async function signTargetPhotos(){
   const paths=[];(DB.catalog?.gun_entries||[]).forEach(e=>{if(e.photo_path)paths.push(e.photo_path);});(DB.catalog?.moment_photos||[]).forEach(p=>{if(p.display_path)paths.push(p.display_path);if(p.print_path)paths.push(p.print_path);});Object.values(DB.cartridges||{}).forEach(c=>{(c.loads||[]).forEach(l=>(l.targets||[]).forEach(t=>{if(t.photoPath)paths.push(t.photoPath);}));(c.journal||[]).forEach(j=>(j.photoPaths||[]).forEach(p=>paths.push(p)));});if(!paths.length)return;
@@ -3037,18 +3037,19 @@ function mergeCloudCatalog(gunRows=[],powderRows=[],bulletRows=[]){
   for(const row of powderRows){const item={_legacyKey:row.legacy_key,_cloudId:row.id,name:row.name,notes:row.notes||""},found=DB.catalog.powders.find(p=>p._legacyKey===item._legacyKey||norm(p.name)===norm(item.name));if(found)Object.assign(found,item);else DB.catalog.powders.push(item);}for(const row of bulletRows){const item={...(row.metadata||{}),_legacyKey:row.legacy_key,_cloudId:row.id,manufacturer:row.manufacturer||"",product:row.product,weight_gr:row.weight_gr,diameter:row.diameter||"",caliber:row.caliber||"",style:row.style||"",notes:row.notes||""};item.display=bulletDisplay(item);const found=DB.catalog.bullets.find(b=>b._legacyKey===item._legacyKey);if(found)Object.assign(found,item);else DB.catalog.bullets.push(item);}ensureCatalog();
 }
 async function hydrateCloud(){
-  const pending=await idbGet("queue","snapshot");if(pending){const local=await idbGet("state","current");if(local?.value)DB=local.value;renderAll();await flushCloudQueue();return;}
+  const pending=await idbGet("queue","snapshot");if(pending){const local=await idbGet("state","current");if(local?.value)DB=local.value;await signTargetPhotos();renderAll();await flushCloudQueue();return;}
   const stateResult=await sb.from("app_state").select("state").maybeSingle();if(stateResult.error)throw stateResult.error;
   if(stateResult.data?.state)DB=stateResult.data.state;else await saveCloudState();
-  const [notes,tables,guns,powders,gunEntries,gunLetters,appSettings,photoRecords,photoMoments,momentPhotosRows,partRows,maintenanceRows]=await Promise.all([
+  const [notes,tables,guns,powders,gunEntries,gunLetters,appSettings,photoRecords,photoMoments,momentPhotosRows,partRows,maintenanceRows,targetPhotoRows]=await Promise.all([
     sb.from("library_entries").select("data").order("id"),sb.from("library_tables").select("data").order("id"),sb.from("guns").select("id,legacy_key,make,model,caliber,serial,purchase_date,source,price,rotation_status,rotation_note,barrel_length,finish,metadata").order("model"),sb.from("powders").select("id,legacy_key,name,notes").order("name"),sb.from("gun_entries").select("legacy_key,gun_id,date,text,photo_path,guns!inner(legacy_key)").order("date",{ascending:false}),sb.from("gun_letters").select("legacy_key,opening,prompt_answers,guns!inner(legacy_key)"),sb.from("app_settings").select("letterhead_name,signature_name").maybeSingle(),
-    sb.from("gun_photo_records").select("title,subtitle,guns!inner(legacy_key)"),sb.from("gun_photo_moments").select("id,legacy_key,title,subtitle,moment_date,season_year,location,caption,sort_position,is_featured,guns!inner(legacy_key)").order("sort_position"),sb.from("gun_moment_photos").select("legacy_key,display_path,print_path,original_filename,mime_type,pixel_width,pixel_height,sort_position,is_featured,gun_photo_moments!inner(legacy_key)").order("sort_position"),sb.from("parts_modifications").select("legacy_key,title,description,date,cost,vendor,guns!inner(legacy_key)").order("date",{ascending:false}),sb.from("maintenance_entries").select("legacy_key,date,category,notes,round_count,guns!inner(legacy_key)").order("date",{ascending:false})
+    sb.from("gun_photo_records").select("title,subtitle,guns!inner(legacy_key)"),sb.from("gun_photo_moments").select("id,legacy_key,title,subtitle,moment_date,season_year,location,caption,sort_position,is_featured,guns!inner(legacy_key)").order("sort_position"),sb.from("gun_moment_photos").select("legacy_key,display_path,print_path,original_filename,mime_type,pixel_width,pixel_height,sort_position,is_featured,gun_photo_moments!inner(legacy_key)").order("sort_position"),sb.from("parts_modifications").select("legacy_key,title,description,date,cost,vendor,guns!inner(legacy_key)").order("date",{ascending:false}),sb.from("maintenance_entries").select("legacy_key,date,category,notes,round_count,guns!inner(legacy_key)").order("date",{ascending:false}),sb.from("target_analyses").select("legacy_key,photo_path")
   ]);if(!notes.error&&notes.data?.length)LIB_ENTRIES=notes.data.map(x=>x.data);if(!tables.error&&tables.data?.length)LIB_TABLES=tables.data.map(x=>x.data);if(!guns.error&&!powders.error)mergeCloudCatalog(guns.data||[],powders.data||[]);if(!gunEntries.error)DB.catalog.gun_entries=(gunEntries.data||[]).map(e=>({_syncKey:e.legacy_key,gun_key:e.guns.legacy_key,date:e.date,text:e.text,photo_path:e.photo_path}));if(!gunLetters.error)DB.catalog.gun_letters=(gunLetters.data||[]).map(x=>({_syncKey:x.legacy_key,gun_key:x.guns.legacy_key,opening:x.opening||"",prompt_answers:x.prompt_answers||{}}));if(!appSettings.error&&appSettings.data)DB.settings={...(DB.settings||{}),letterhead_name:appSettings.data.letterhead_name||"The Sixgun Retriever",signature_name:appSettings.data.signature_name||""};
   if(!photoRecords.error)DB.catalog.photo_records=(photoRecords.data||[]).map(r=>({gun_key:r.guns.legacy_key,title:r.title,subtitle:r.subtitle||""}));
   if(!photoMoments.error)DB.catalog.photo_moments=(photoMoments.data||[]).map(m=>({_syncKey:m.legacy_key,gun_key:m.guns.legacy_key,title:m.title,subtitle:m.subtitle||"",moment_date:m.moment_date,season_year:m.season_year||"",location:m.location||"",caption:m.caption||"",sort_position:m.sort_position,is_featured:m.is_featured}));
   if(!momentPhotosRows.error)DB.catalog.moment_photos=(momentPhotosRows.data||[]).map(p=>({_syncKey:p.legacy_key,moment_key:p.gun_photo_moments.legacy_key,display_path:p.display_path,print_path:p.print_path,original_filename:p.original_filename,mime_type:p.mime_type,pixel_width:p.pixel_width,pixel_height:p.pixel_height,sort_position:p.sort_position,is_featured:p.is_featured}));
   if(!partRows.error)DB.catalog.parts_modifications=(partRows.data||[]).map(p=>({_syncKey:p.legacy_key,gun_key:p.guns.legacy_key,title:p.title,description:p.description||"",date:p.date,cost:p.cost,vendor:p.vendor||""}));
   if(!maintenanceRows.error)DB.catalog.maintenance_entries=(maintenanceRows.data||[]).map(m=>({_syncKey:m.legacy_key,gun_key:m.guns.legacy_key,date:m.date,category:m.category,notes:m.notes||"",round_count:m.round_count}));
+  if(!targetPhotoRows.error){const paths=new Map((targetPhotoRows.data||[]).filter(row=>row.photo_path).map(row=>[row.legacy_key,row.photo_path]));for(const [cart,c] of Object.entries(DB.cartridges||{}))for(const load of c.loads||[])(load.targets||[]).forEach((target,index)=>{const path=paths.get(targetKey(cart,load,index,target));if(path)target.photoPath=path;});}
   await signTargetPhotos();await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});renderAll();cloudStatus("Synced","ok");if(pendingLoadMerges){pendingLoadMerges=0;await saveCloudState();}
 }
 async function onSignedIn(session){cloudUser=session.user;document.getElementById("cloudAuth").classList.add("hidden");cloudStatus("Connecting…","warn");try{await hydrateCloud();}catch(e){console.error(e);cloudStatus("Setup needed · run Supabase SQL","error");toast("Supabase setup is not finished yet");}}

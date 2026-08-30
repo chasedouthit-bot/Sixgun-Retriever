@@ -1,6 +1,6 @@
 (function(){
   const version=document.querySelector(".landing-version");
-  if(version)version.textContent="Version 2.10.1";
+  if(version)version.textContent="Version 2.10.2";
   if(document.getElementById("filterDrawer"))return;
 
   const screen=document.getElementById("s-loads");
