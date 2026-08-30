@@ -1,7 +1,7 @@
-/* Sixgun Retriever 2.10.7 — text-only Library reader */
+/* Sixgun Retriever 2.10.8 — text-only Library reader */
 (function(){
   'use strict';
-  const VERSION='2.10.7';
+  const VERSION='2.10.8';
 
   function addStyles(){
     if(document.getElementById('srLibraryReaderHotfixStyles')) return;
@@ -14,6 +14,9 @@
       .article-page{margin-top:0!important}
       .article-card{grid-template-columns:1fr!important}
       .article-card-cover{display:none!important}
+      .fragment-table-open{display:none!important}
+      .fragment-table-summary{cursor:default!important}
+      .fragment-table-content{display:block!important}
     `;
     document.head.appendChild(style);
   }
@@ -23,24 +26,31 @@
     if(tagline) tagline.textContent='A working archive of sixgun knowledge.';
   }
 
+  function arrangeAndOpenTables(){
+    const out=document.getElementById('libraryResults');
+    if(!out) return;
+    const tables=[...out.querySelectorAll(':scope > .fragment-table')];
+    tables.forEach(table=>table.open=true);
+    const articles=[...out.querySelectorAll(':scope > .article-card')];
+    const notes=[...out.querySelectorAll(':scope > .fragment-card:not(.fragment-table)')];
+    [...articles,...tables,...notes].forEach(el=>out.appendChild(el));
+  }
+
   function keepTablesVisible(){
     const out=document.getElementById('libraryResults');
-    if(!out || out.__srTableOrder) return;
-    out.__srTableOrder=true;
+    if(!out || out.__srTablesVisible) return;
+    out.__srTablesVisible=true;
     let arranging=false;
-    const arrange=()=>{
+    const refresh=()=>{
       if(arranging) return;
       arranging=true;
-      const articles=[...out.querySelectorAll(':scope > .article-card')];
-      const tables=[...out.querySelectorAll(':scope > .fragment-table')];
-      const notes=[...out.querySelectorAll(':scope > .fragment-card:not(.fragment-table)')];
-      [...articles,...tables,...notes].forEach(el=>out.appendChild(el));
+      arrangeAndOpenTables();
       arranging=false;
     };
     new MutationObserver(()=>{
-      if(!arranging) requestAnimationFrame(arrange);
-    }).observe(out,{childList:true});
-    arrange();
+      if(!arranging) requestAnimationFrame(refresh);
+    }).observe(out,{childList:true,subtree:false});
+    refresh();
   }
 
   function patchReader(){
