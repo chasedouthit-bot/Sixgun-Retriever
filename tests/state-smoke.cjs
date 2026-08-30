@@ -33,6 +33,10 @@ assert(html.includes('id:"pearce-traditional-45-colt-loads"'), "Library must inc
 assert.equal((html.match(/assets\/articles\/pearce-traditional-45-colt-loads\/page-/g)||[]).length, 4, "Traditional .45 Colt article must preserve all four scanned pages");
 assert(html.includes("Pearce Traditional .45 Colt — 250gr RNFP at 860 fps"), "Tables must include all traditional .45 Colt load data");
 for(const page of [18,19,20,21])assert(fs.existsSync(`assets/articles/pearce-traditional-45-colt-loads/page-${page}.jpeg`),`Traditional .45 Colt scan page ${page} must exist`);
+assert(html.includes('id:"pearce-ruger-redhawk-45-colt-handloads"'), "Library must include Pearce's complete Ruger Redhawk .45 Colt Handloads article");
+assert.equal((html.match(/assets\/articles\/pearce-ruger-redhawk-45-colt-handloads\/page-/g)||[]).length, 4, "Ruger Redhawk article must preserve all four scanned pages");
+assert(html.includes("Pearce Ruger Redhawk .45 Colt — Heavy-Bullet Loads (REDHAWK ONLY)"), "Tables must include the complete Redhawk-only load data");
+for(const page of [18,19,20,21])assert(fs.existsSync(`assets/articles/pearce-ruger-redhawk-45-colt-handloads/page-${page}.jpeg`),`Ruger Redhawk scan page ${page} must exist`);
 assert(html.includes('id="createNavBtn"'), "bottom navigation must expose the centered add control");
 assert(html.includes('id="createLoadAction"'), "the add menu must preserve New Load access");
 assert(html.includes('id="createImportAction"'), "the add menu must preserve Garmin import access");
