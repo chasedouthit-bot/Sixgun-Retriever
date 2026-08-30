@@ -348,6 +348,11 @@ main{padding:0 16px 24px;background:var(--bg)}
 @media(max-width:520px){.article-card{grid-template-columns:72px 1fr;gap:11px}.article-card-cover{width:72px}.article-card-summary{display:none}.article-reader{padding-left:8px;padding-right:8px}.article-transcript{font-size:16px;padding:25px 19px}.article-reader-hero{padding:15px}.article-reader-title{font-size:27px}}
 
 
+/* unified library shelf */
+.library-view-btn{flex:1;padding:11px 8px;border:none;background:none;color:var(--ink-faint);font-family:Bitter,serif;font-size:14px;font-weight:700;border-radius:8px;cursor:pointer;letter-spacing:.02em;transition:.15s}.library-view-btn.on{background:var(--brass);color:#241d0e}.library-search-wrap{display:grid;grid-template-columns:21px minmax(0,1fr) 34px;align-items:center;gap:7px;margin:14px 0 10px;padding:3px 5px 3px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}.library-search-wrap:focus-within{border-color:var(--brass)}.library-search-wrap svg{width:19px;height:19px;fill:none;stroke:var(--ink-faint);stroke-width:1.8;stroke-linecap:round}.library-search-wrap input{width:100%;border:0;background:none;color:var(--ink);padding:10px 0;font:500 13px Inter,sans-serif;outline:0}.library-search-wrap input::placeholder{color:var(--ink-faint)}.library-search-wrap button{display:none;width:32px;height:32px;border:0;border-radius:50%;background:var(--bg3);color:var(--ink-faint);cursor:pointer}.library-search-wrap.has-query button{display:block}.library-tag-strip{display:flex;gap:7px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.library-tag-strip::-webkit-scrollbar{display:none}.library-tag{flex:none;border:1px solid var(--line);border-radius:999px;background:var(--bg2);color:var(--ink-dim);padding:7px 11px;font:700 11px Inter,sans-serif;cursor:pointer;white-space:nowrap}.library-tag.on{border-color:var(--brass);background:var(--walnut);color:var(--ink)}#libraryResults{margin-top:12px}.library-kind{font:700 9px/1 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}.fragment-card{position:relative;background:linear-gradient(158deg,var(--bg2),var(--bg3));border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;overflow:hidden}.fragment-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--brass)}.fragment-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}.fragment-source{font:italic 12px/1.4 Bitter,serif;color:var(--ink-faint);margin-top:4px}.fragment-body{font-size:14.5px;color:var(--ink);line-height:1.58}.fragment-body b{color:var(--brass);font-weight:600}.fragment-link{display:inline-block;margin-top:11px;color:var(--brass);font-size:12px;font-weight:700;text-decoration:none}.library-item-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}.library-item-tags span{border:1px solid var(--line);border-radius:999px;background:var(--bg);padding:3px 7px;color:var(--ink-faint);font-size:9px}.fragment-table{padding:0}.fragment-table-summary{display:block;list-style:none;padding:16px;cursor:pointer}.fragment-table-summary::-webkit-details-marker{display:none}.fragment-table-title{font:700 18px/1.2 Bitter,serif;margin-top:6px}.fragment-table-meta{font:italic 12px/1.4 Bitter,serif;color:var(--ink-faint);margin-top:5px}.fragment-table-open{display:inline-flex;align-items:center;gap:6px;color:var(--brass);font-size:11px;font-weight:700;margin-top:10px}.fragment-table-open:after{content:"↓"}.fragment-table[open] .fragment-table-open:after{content:"↑"}.fragment-table-content{border-top:1px solid var(--line)}.fragment-table .ltable-body{padding-top:8px}.fragment-table .ltable-note{border-top:1px dashed var(--line)}.fragment-table .library-item-tags{margin:0;padding:12px 16px;border-top:1px dashed var(--line)}.library-empty{text-align:center;padding:42px 18px;color:var(--ink-faint);font:italic 14px/1.5 Bitter,serif}.article-card .library-kind{display:block}.article-card .library-item-tags{padding-top:0;border-top:0;margin-top:9px}.article-card .library-item-tags span{background:var(--bg)}
+@media(max-width:520px){.lib-masthead{padding-top:0}.lib-title{font-size:29px}.lib-tagline{padding:0 8px}.lib-nav{margin-top:14px}.library-view-btn{font-size:13px}.fragment-card{padding:14px}.article-card .article-card-kicker{display:none}}
+
+
 /* ---------- journal ---------- */
 .j-entry{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
 .j-entry .date{font-size:11px;color:var(--brass);font-weight:700;letter-spacing:.08em}
@@ -509,7 +514,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.12.0</div>
+    <div class="landing-version">Version 2.13.0</div>
   </div>
 </div>
 
@@ -602,36 +607,29 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
   <section class="screen" id="s-photo-record"><div class="pr-toolbar"><button class="bio-back" id="photoRecordBackBtn">‹ Biography</button><div class="pr-tools"><button class="action-btn" id="photoRecordEditBtn">Edit Record</button><button class="action-btn primary" id="photoRecordAddBtn">＋ Add Photos</button></div></div><div id="photoRecordContent"></div></section>
   <section class="screen" id="s-parts-maintenance"><div class="pr-toolbar"><button class="bio-back" id="partsMaintenanceBackBtn">‹ Biography</button><div class="pr-tools"><button class="action-btn" id="addPartBtn">＋ Add Part</button><button class="action-btn primary" id="addMaintenanceBtn">＋ Log Maintenance</button></div></div><div id="partsMaintenanceContent"></div></section>
 
-    <!-- ============ LIBRARY ============ -->
+      <!-- ============ LIBRARY ============ -->
   <section class="screen" id="s-lib">
     <div class="lib-masthead">
-      <div class="lib-kick">The</div>
-      <div class="lib-title">Sixgun Library</div>
+      <div class="lib-kick">The Sixgun Retriever</div>
+      <div class="lib-title">Library</div>
       <div class="lib-rule"></div>
-      <div class="lib-tagline">The tradition, on the shelf. Kept separate from your own bench data.</div>
+      <div class="lib-tagline">Full articles and useful fragments, kept together and easy to find.</div>
     </div>
-    <div class="lib-nav">
-      <button class="lib-nav-btn on" data-libview="notes">Notes</button>
-      <button class="lib-nav-btn" data-libview="tables">Tables</button>
-      <button class="lib-nav-btn" data-libview="articles">Articles</button>
+    <div class="lib-nav" role="tablist" aria-label="Library view">
+      <button class="library-view-btn on" data-library-view="all" role="tab" aria-selected="true">All</button>
+      <button class="library-view-btn" data-library-view="articles" role="tab" aria-selected="false">Articles</button>
+      <button class="library-view-btn" data-library-view="fragments" role="tab" aria-selected="false">Fragments</button>
     </div>
-    <div class="lib-calfilter" id="libCalFilter"></div>
-    <div id="libNotesView">
-      <div class="shapes" id="shapeFilter"></div>
-      <div class="lib-count" id="showing"></div>
-      <div class="entries" id="entryList"></div>
+    <div class="library-search-wrap">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg>
+      <input id="librarySearch" type="search" placeholder="Search articles, fragments, or tags…" aria-label="Search library">
+      <button type="button" id="librarySearchClear" aria-label="Clear search">✕</button>
     </div>
-    <div id="libTablesView" style="display:none">
-      <div class="tbl-filters" id="tblFilters"></div>
-      <div class="lib-count" id="tblShowing"></div>
-      <div id="tableList"></div>
-    </div>
-    <div id="libArticlesView" style="display:none">
-      <div class="article-tools"><input class="article-search" id="articleSearch" type="search" placeholder="Search full articles…" aria-label="Search full articles"></div>
-      <div class="lib-count" id="articleShowing"></div>
-      <div id="articleList"></div>
-    </div>
-    <div class="lib-foot">A working library, built from the shelf. Entries marked <b>verify</b> are drafts to check against the source before trusting.</div>
+    <div class="library-tag-strip" id="libraryTagFilter" aria-label="Filter by tag"></div>
+    <div class="lib-count" id="libraryShowing"></div>
+    <div id="libraryResults"></div>
+    <input id="articleSearch" type="hidden" aria-hidden="true">
+    <div class="lib-foot">Articles preserve the complete source. Fragments keep the useful pieces close at hand.</div>
   </section>
 </main>
 
@@ -1994,6 +1992,7 @@ const LIB_ARTICLES=[{
   publication:"Handloader No. 285",
   date:"August–September 2013",
   department:"Reloader’s Press",
+  tags:[".45 Colt",".44 Special","+P","+P+","2400","Unique","pressure","revolver wear","Dave Scovill"],
   cartridges:[".45 Colt",".44 Special"],
   summary:"Scovill examines the meaning of +P and +P+ in the .45 Colt and .44 Special, then connects pressure, velocity, gun variation, loading-die changes and long-term revolver wear.",
   pages:[
@@ -2199,6 +2198,49 @@ document.querySelectorAll(".lib-nav-btn").forEach(b=>b.onclick=()=>{
 });
 
 /* ============================================================
+/* Unified Library: All / Articles / Fragments with shared search and tags. */
+let libraryView="all",libraryTag="all",libraryQuery="";
+function libraryPlainText(v){return String(v??"").replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();}
+function libraryUniqueTags(values){const seen=new Set();return values.flat().filter(Boolean).map(x=>String(x).trim()).filter(x=>{const k=x.toLowerCase();if(!k||seen.has(k))return false;seen.add(k);return true;});}
+function libraryArticleTags(a){return libraryUniqueTags([a.tags||[],a.cartridges||[],a.author]);}
+function libraryNoteTags(e){return libraryUniqueTags([e.tags||[],e.cartridge,e.who]);}
+function libraryTableTags(t){return libraryUniqueTags([t.tags||[],t.cartridge,t.writer||t.who,t.powders||[]]);}
+function libraryItems(){
+  const articles=LIB_ARTICLES.map(a=>({kind:"article",data:a,tags:libraryArticleTags(a),search:libraryPlainText([a.title,a.author,a.publication,a.date,a.department,a.summary,a.tags,a.cartridges,a.transcript?.map(s=>s.html)].flat().join(" ")).toLowerCase()}));
+  const notes=LIB_ENTRIES.map((e,i)=>({kind:"fragment",subtype:"note",key:`note-${i}`,data:e,tags:libraryNoteTags(e),search:libraryPlainText([e.body,e.who,e.source,e.cartridge,e.tags].flat().join(" ")).toLowerCase()}));
+  const tables=LIB_TABLES.map((t,i)=>({kind:"fragment",subtype:"table",key:`table-${i}`,data:t,tags:libraryTableTags(t),search:libraryPlainText([t.title,t.who,t.source,t.cartridge,t.writer,t.powders,t.conditions?.flat(),t.head,t.rows?.flat(),t.note].flat().join(" ")).toLowerCase()}));
+  return [...articles,...notes,...tables];
+}
+function libraryScopedItems(){return libraryItems().filter(x=>(libraryView==="all"||libraryView==="articles"&&x.kind==="article"||libraryView==="fragments"&&x.kind==="fragment"));}
+function libraryFilteredItems(){const q=libraryQuery.trim().toLowerCase();return libraryScopedItems().filter(x=>(libraryTag==="all"||x.tags.some(t=>t.toLowerCase()===libraryTag.toLowerCase()))&&(!q||x.search.includes(q)));}
+function renderLibraryTags(){
+  const el=document.getElementById("libraryTagFilter"),items=libraryScopedItems(),counts=new Map();
+  items.forEach(x=>x.tags.forEach(t=>{const k=t.toLowerCase(),prior=counts.get(k);counts.set(k,{label:prior?.label||t,count:(prior?.count||0)+1});}));
+  const tags=[...counts.values()].sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label));
+  if(libraryTag!=="all"&&!tags.some(t=>t.label.toLowerCase()===libraryTag.toLowerCase()))libraryTag="all";
+  el.innerHTML=`<button type="button" class="library-tag ${libraryTag==="all"?"on":""}" data-library-tag="all">All tags</button>`+tags.map(t=>`<button type="button" class="library-tag ${libraryTag.toLowerCase()===t.label.toLowerCase()?"on":""}" data-library-tag="${esc(t.label)}">${esc(t.label)}</button>`).join("");
+  el.querySelectorAll("[data-library-tag]").forEach(b=>b.onclick=()=>{libraryTag=b.dataset.libraryTag;renderLibraryShelf();});
+}
+function libraryTagMarkup(tags){return `<span class="library-item-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</span>`;}
+function libraryArticleCard(item){const a=item.data;return `<button type="button" class="article-card" data-article="${esc(a.id)}"><img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}"><span><span class="library-kind">Article · ${a.pages.length} original pages</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span>${libraryTagMarkup(item.tags)}</span></button>`;}
+function libraryNoteCard(item){const e=item.data;return `<article class="fragment-card"><div class="fragment-head"><div><div class="library-kind">Fragment</div><div class="fragment-source">${esc(e.who)} · ${esc(e.source)}</div></div>${e.verify?'<span class="vbadge">Verify</span>':''}</div><div class="fragment-body">${e.body}</div>${e.link?`<a class="fragment-link" href="${esc(e.link)}" target="_blank" rel="noopener">Open source →</a>`:""}${libraryTagMarkup(item.tags)}</article>`;}
+function libraryTableCard(item){const t=item.data,ch=Math.max(0,t.head.indexOf("Charge"));return `<details class="fragment-card fragment-table"><summary class="fragment-table-summary"><span class="library-kind">Fragment · Reference table</span><span class="fragment-table-title">${esc(t.title)}</span><span class="fragment-table-meta">${esc(t.who)} · ${esc(t.source)}</span><span class="fragment-table-open">View table</span></summary><div class="fragment-table-content"><div class="ltable-body"><table class="ldata"><thead><tr>${t.head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${t.rows.map((r,i)=>`<tr>${r.map((c,ci)=>`<td class="${i===t.maxRow&&ci===ch?"max":""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>${t.note?`<div class="ltable-note">${esc(t.note)}</div>`:""}${t.link?`<a class="ltable-link" href="${esc(t.link)}" target="_blank" rel="noopener">Open source →</a>`:""}${libraryTagMarkup(item.tags)}</div></details>`;}
+function renderLibraryShelf(){
+  document.querySelectorAll("[data-library-view]").forEach(b=>{const on=b.dataset.libraryView===libraryView;b.classList.toggle("on",on);b.setAttribute("aria-selected",String(on));});
+  const search=document.getElementById("librarySearch"),wrap=search.closest(".library-search-wrap");if(search.value!==libraryQuery)search.value=libraryQuery;wrap.classList.toggle("has-query",!!libraryQuery);
+  renderLibraryTags();const items=libraryFilteredItems();
+  const total=libraryScopedItems().length,label=libraryView==="articles"?"articles":libraryView==="fragments"?"fragments":"items";
+  document.getElementById("libraryShowing").innerHTML=`Showing <b>${items.length}</b> of ${total} ${label}`;
+  const out=document.getElementById("libraryResults");out.innerHTML=items.map(x=>x.kind==="article"?libraryArticleCard(x):x.subtype==="table"?libraryTableCard(x):libraryNoteCard(x)).join("")||`<div class="library-empty">Nothing on the shelf matches that search and tag.</div>`;
+  out.querySelectorAll("[data-article]").forEach(b=>b.onclick=()=>openArticle(b.dataset.article));
+}
+function renderLibrary(){renderLibraryShelf();}
+document.querySelectorAll("[data-library-view]").forEach(b=>b.onclick=()=>{libraryView=b.dataset.libraryView;libraryTag="all";renderLibraryShelf();});
+document.getElementById("librarySearch").addEventListener("input",e=>{libraryQuery=e.target.value;renderLibraryShelf();});
+document.getElementById("librarySearchClear").onclick=()=>{libraryQuery="";document.getElementById("librarySearch").value="";renderLibraryShelf();document.getElementById("librarySearch").focus();};
+
+/* ============================================================
+
 /* ============================================================
    TARGET ANALYZER — rectification, grid calibration, and hit detection
    Raw markers + scale + distance are stored; group/MOA are always
