@@ -20,6 +20,12 @@ for(const tier of ["14,000-psi Loads","16,000- to 19,000-psi Loads","23,000-psi 
   assert(html.includes(`Pearce .45 Colt — ${tier}`), `Tables must include Pearce's ${tier} data`);
 }
 for(const page of [36,37,38,39,40,41,42])assert(fs.existsSync(`assets/articles/pearce-understanding-45-colt/page-${page}.jpeg`),`Pearce scan page ${page} must exist`);
+assert(html.includes('id:"pearce-handloading-38-special"'), "Library must include Pearce's complete Handloading the .38 S&W Special article");
+assert.equal((html.match(/assets\/articles\/pearce-handloading-38-special\/page-/g)||[]).length, 8, ".38 Special article must preserve all eight scanned pages");
+for(const table of ["Pearce .38 Special — Standard Pressure (17,000 psi)","Pearce .38 Special +P — 20,000 psi","Pearce — Selected .38 Special Factory Ammunition"]){
+  assert(html.includes(table),`Tables must include ${table}`);
+}
+for(const page of [58,59,60,61,62,63,64,65])assert(fs.existsSync(`assets/articles/pearce-handloading-38-special/page-${page}.jpeg`),`.38 Special scan page ${page} must exist`);
 assert(html.includes('id="createNavBtn"'), "bottom navigation must expose the centered add control");
 assert(html.includes('id="createLoadAction"'), "the add menu must preserve New Load access");
 assert(html.includes('id="createImportAction"'), "the add menu must preserve Garmin import access");
