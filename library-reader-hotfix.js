@@ -1,7 +1,7 @@
-/* Sixgun Retriever 2.10.5 — text-only Library reader */
+/* Sixgun Retriever 2.10.6 — text-only Library reader */
 (function(){
   'use strict';
-  const VERSION='2.10.5';
+  const VERSION='2.10.6';
 
   function addStyles(){
     if(document.getElementById('srLibraryReaderHotfixStyles')) return;
@@ -21,22 +21,6 @@
   function patchTagline(){
     const tagline=document.querySelector('.lib-tagline');
     if(tagline) tagline.textContent='A working archive of sixgun knowledge.';
-  }
-
-  function patchArticleCards(){
-    try{
-      if(typeof libraryArticleCard==='function' && !libraryArticleCard.__srTextOnly){
-        const patched=function(item){
-          const a=item.data;
-          return `<button type="button" class="article-card" data-article="${esc(a.id)}"><span><span class="library-kind">Article</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span>${libraryTagMarkup(item.tags)}</span></button>`;
-        };
-        patched.__srTextOnly=true;
-        libraryArticleCard=patched;
-        if(typeof renderLibraryShelf==='function') renderLibraryShelf();
-      }
-    }catch(e){
-      console.warn('Library article card patch',e);
-    }
   }
 
   function patchReader(){
@@ -84,7 +68,6 @@
   function init(){
     addStyles();
     patchTagline();
-    patchArticleCards();
     patchReader();
     stampVersion();
   }
