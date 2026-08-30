@@ -1,7 +1,7 @@
-/* Sixgun Retriever 2.10.6 — text-only Library reader */
+/* Sixgun Retriever 2.10.7 — text-only Library reader */
 (function(){
   'use strict';
-  const VERSION='2.10.6';
+  const VERSION='2.10.7';
 
   function addStyles(){
     if(document.getElementById('srLibraryReaderHotfixStyles')) return;
@@ -21,6 +21,26 @@
   function patchTagline(){
     const tagline=document.querySelector('.lib-tagline');
     if(tagline) tagline.textContent='A working archive of sixgun knowledge.';
+  }
+
+  function keepTablesVisible(){
+    const out=document.getElementById('libraryResults');
+    if(!out || out.__srTableOrder) return;
+    out.__srTableOrder=true;
+    let arranging=false;
+    const arrange=()=>{
+      if(arranging) return;
+      arranging=true;
+      const articles=[...out.querySelectorAll(':scope > .article-card')];
+      const tables=[...out.querySelectorAll(':scope > .fragment-table')];
+      const notes=[...out.querySelectorAll(':scope > .fragment-card:not(.fragment-table)')];
+      [...articles,...tables,...notes].forEach(el=>out.appendChild(el));
+      arranging=false;
+    };
+    new MutationObserver(()=>{
+      if(!arranging) requestAnimationFrame(arrange);
+    }).observe(out,{childList:true});
+    arrange();
   }
 
   function patchReader(){
@@ -69,6 +89,7 @@
     addStyles();
     patchTagline();
     patchReader();
+    keepTablesVisible();
     stampVersion();
   }
 
