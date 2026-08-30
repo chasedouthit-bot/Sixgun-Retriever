@@ -14,9 +14,11 @@ const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)
 const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
 assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
-assert(html.includes('<link rel="manifest" href="/manifest.webmanifest?v=2.13.6">'), "app must expose a versioned web manifest");
-assert(html.includes('<link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=2.13.6">'), "iOS must use the dog-logo touch icon");
+assert(html.includes('<link rel="manifest" href="/manifest.webmanifest?v=2.13.7">'), "app must expose a versioned web manifest");
+assert(html.includes('<link rel="apple-touch-icon" href="/apple-touch-icon.png">'), "iOS must use the conventional root dog-logo touch icon");
+assert(html.includes('<link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png">'), "older iOS versions must use the root precomposed dog-logo icon");
 for(const icon of ["apple-touch-icon.png","favicon-32.png","icon-192.png","icon-512.png","icon-maskable-512.png"])assert(fs.existsSync(`assets/icons/${icon}`),`app icon ${icon} must exist`);
+for(const icon of ["apple-touch-icon.png","apple-touch-icon-180x180.png","apple-touch-icon-precomposed.png"])assert(fs.existsSync(icon),`root iOS icon ${icon} must exist`);
 const manifest=JSON.parse(fs.readFileSync("manifest.webmanifest","utf8"));
 assert.equal(manifest.short_name,"Sixgun Retriever","manifest must use the app name");
 assert.equal(manifest.icons.length,3,"manifest must expose regular and maskable dog-logo icons");
