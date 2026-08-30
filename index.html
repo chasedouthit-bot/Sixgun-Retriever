@@ -341,6 +341,13 @@ main{padding:0 16px 24px;background:var(--bg)}
 .ltable-link{display:block;font-size:12.5px;font-weight:600;color:var(--brass);padding:12px 16px 14px;border-top:1px solid var(--line);text-decoration:none}
 .ltable-link:active{opacity:.6}
 
+/* full article shelf + reader */
+.article-tools{display:flex;align-items:center;gap:9px;margin:16px 0 12px}.article-search{width:100%;border:1px solid var(--line);border-radius:11px;background:var(--bg2);color:var(--ink);padding:11px 13px;font:500 13px Inter,sans-serif;outline:none}.article-search:focus{border-color:var(--brass)}
+.article-card{width:100%;display:grid;grid-template-columns:88px minmax(0,1fr);gap:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(158deg,var(--bg2),var(--bg3));color:var(--ink);text-align:left;cursor:pointer;margin-bottom:12px}.article-card:active{transform:scale(.995)}.article-card-cover{width:88px;aspect-ratio:3/4;object-fit:cover;object-position:50% 8%;border:1px solid var(--brass-dim);border-radius:7px;background:#16130f;box-shadow:0 5px 14px rgba(0,0,0,.28)}.article-card-kicker,.article-card-title,.article-card-byline,.article-card-summary{display:block}.article-card-kicker{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--brass);font-weight:700}.article-card-title{font:700 17px/1.2 Bitter,serif;margin-top:5px}.article-card-byline{font:italic 12px/1.4 Bitter,serif;color:var(--ink-dim);margin-top:5px}.article-card-summary{font-size:12px;line-height:1.45;color:var(--ink-faint);margin-top:8px}.article-card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.article-card-tags span{border:1px solid var(--line);border-radius:999px;padding:3px 7px;font-size:9px;color:var(--ink-faint)}
+.article-reader{position:fixed;inset:0;z-index:500;overflow-y:auto;background:var(--bg);padding:calc(12px + var(--safe-t)) 12px calc(28px + var(--safe-b))}.article-reader[hidden]{display:none}.article-reader-shell{width:min(920px,100%);margin:0 auto}.article-reader-bar{position:sticky;top:calc(0px - var(--safe-t));z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0 12px;background:linear-gradient(var(--bg) 74%,transparent)}.article-reader-close{border:0;background:none;color:var(--brass);font-weight:700;font-size:13px;padding:9px 4px;cursor:pointer}.article-reader-modes{display:flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--bg2)}.article-mode{border:0;background:none;color:var(--ink-faint);border-radius:7px;padding:7px 10px;font:700 11px Inter,sans-serif;cursor:pointer}.article-mode.on{background:var(--brass);color:#241d0e}.article-reader-hero{padding:17px 17px 20px;border:1px solid var(--line);border-radius:14px;background:var(--walnut);margin-bottom:14px}.article-reader-kicker{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--brass);font-weight:700}.article-reader-title{font:700 clamp(25px,5vw,42px)/1.08 Bitter,serif;margin-top:7px}.article-reader-meta{font:italic 13px/1.5 Bitter,serif;color:var(--ink-dim);margin-top:9px}.article-scans{display:grid;gap:14px}.article-scan{margin:0 auto;width:min(100%,760px);padding:7px 7px 10px;background:#d9caa6;border:1px solid #95794b;border-radius:5px;box-shadow:0 12px 30px rgba(0,0,0,.35)}.article-scan img{display:block;width:100%;height:auto;background:#1b1712}.article-scan figcaption{font:italic 12px/1.3 Bitter,serif;color:#493922;text-align:center;padding-top:7px}.article-transcript{background:#eee4ca;color:#34281b;border:1px solid #bca77b;border-radius:5px;padding:clamp(22px,5vw,58px);font:17px/1.67 "EB Garamond",Georgia,serif;box-shadow:0 18px 55px rgba(0,0,0,.34)}.article-transcript h2{font:700 clamp(27px,5vw,44px)/1.08 "Playfair Display",Georgia,serif;text-align:center}.article-transcript-byline{text-align:center;color:#765f42;font-style:italic;margin:8px 0 28px}.article-page{padding-top:22px;margin-top:22px;border-top:1px solid rgba(103,75,40,.27)}.article-page:first-of-type{padding-top:0;margin-top:0;border-top:0}.article-page-label{font:700 9px/1 Inter,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#86652f;margin-bottom:13px}.article-transcript p{margin:0 0 14px;text-indent:1.25em}.article-transcript p:first-of-type{text-indent:0}.article-caption{margin:18px 0;padding:12px 15px;border-left:3px solid #9d763f;background:rgba(157,118,63,.08);color:#68523a;font-style:italic;font-size:15px;line-height:1.5}.article-note{margin-top:28px;padding-top:17px;border-top:1px solid rgba(103,75,40,.27);color:#765f42;font:italic 13px/1.5 Inter,sans-serif}
+@media(max-width:520px){.article-card{grid-template-columns:72px 1fr;gap:11px}.article-card-cover{width:72px}.article-card-summary{display:none}.article-reader{padding-left:8px;padding-right:8px}.article-transcript{font-size:16px;padding:25px 19px}.article-reader-hero{padding:15px}.article-reader-title{font-size:27px}}
+
+
 /* ---------- journal ---------- */
 .j-entry{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px}
 .j-entry .date{font-size:11px;color:var(--brass);font-weight:700;letter-spacing:.08em}
@@ -502,7 +509,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.11.0</div>
+    <div class="landing-version">Version 2.12.0</div>
   </div>
 </div>
 
@@ -595,7 +602,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
   <section class="screen" id="s-photo-record"><div class="pr-toolbar"><button class="bio-back" id="photoRecordBackBtn">‹ Biography</button><div class="pr-tools"><button class="action-btn" id="photoRecordEditBtn">Edit Record</button><button class="action-btn primary" id="photoRecordAddBtn">＋ Add Photos</button></div></div><div id="photoRecordContent"></div></section>
   <section class="screen" id="s-parts-maintenance"><div class="pr-toolbar"><button class="bio-back" id="partsMaintenanceBackBtn">‹ Biography</button><div class="pr-tools"><button class="action-btn" id="addPartBtn">＋ Add Part</button><button class="action-btn primary" id="addMaintenanceBtn">＋ Log Maintenance</button></div></div><div id="partsMaintenanceContent"></div></section>
 
-  <!-- ============ LIBRARY ============ -->
+    <!-- ============ LIBRARY ============ -->
   <section class="screen" id="s-lib">
     <div class="lib-masthead">
       <div class="lib-kick">The</div>
@@ -606,6 +613,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     <div class="lib-nav">
       <button class="lib-nav-btn on" data-libview="notes">Notes</button>
       <button class="lib-nav-btn" data-libview="tables">Tables</button>
+      <button class="lib-nav-btn" data-libview="articles">Articles</button>
     </div>
     <div class="lib-calfilter" id="libCalFilter"></div>
     <div id="libNotesView">
@@ -618,9 +626,27 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
       <div class="lib-count" id="tblShowing"></div>
       <div id="tableList"></div>
     </div>
+    <div id="libArticlesView" style="display:none">
+      <div class="article-tools"><input class="article-search" id="articleSearch" type="search" placeholder="Search full articles…" aria-label="Search full articles"></div>
+      <div class="lib-count" id="articleShowing"></div>
+      <div id="articleList"></div>
+    </div>
     <div class="lib-foot">A working library, built from the shelf. Entries marked <b>verify</b> are drafts to check against the source before trusting.</div>
   </section>
 </main>
+
+<section class="article-reader" id="articleReader" hidden aria-label="Full article reader">
+  <div class="article-reader-shell">
+    <div class="article-reader-bar">
+      <button class="article-reader-close" id="articleReaderClose">‹ Library</button>
+      <div class="article-reader-modes" role="tablist" aria-label="Article view">
+        <button class="article-mode on" data-article-mode="scans" role="tab">Original scans</button>
+        <button class="article-mode" data-article-mode="text" role="tab">Searchable text</button>
+      </div>
+    </div>
+    <div id="articleReaderContent"></div>
+  </div>
+</section>
 
 <nav>
   <button data-s="loads" class="on"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Loads</button>
@@ -1636,7 +1662,7 @@ function renderBiography(){
   const photoHtml=photos.map(({p,m})=>`<figure class="bio-photo-preview"><img src="${esc(photoSrc(p))}" alt="${esc(m.title)}"><figcaption>${esc(m.title)}</figcaption></figure>`).join("")||`<div class="empty">No photographs have been added to this firearm's record.</div>`;
   const maintenanceHtml=maintenance.slice(0,5).map(m=>`<div class="bio-maint-row"><div class="bio-maint-date">${m.date?esc(fmtDate(m.date)):"Undated"}</div><div class="bio-maint-type">${esc(m.category||"Maintenance")}</div><div class="bio-maint-rounds">${m.round_count!=null?`${esc(m.round_count)} rds`:""}</div></div>`).join("")||`<div class="empty" style="padding:12px">No maintenance has been logged.</div>`;
   const partsHtml=parts.slice(0,4).map(p=>`<div class="bio-part-row"><span>${esc(p.title)}</span><span>${esc(p.vendor||(p.date?fmtDate(p.date):"Recorded"))}</span></div>`).join("")||`<div class="empty" style="padding:10px">No parts or modifications recorded.</div>`;
-  el.innerHTML=`<article class="bio-record-sheet"><header class="bio-record-head"><div class="bio-record-kicker">The Sixgun Retriever · Firearm Record</div><h1 class="bio-record-title">${esc(gunDisplay(g))}</h1><div class="bio-record-subtitle">${esc(subtitle)}</div><div class="bio-record-status">${esc(g.rotation_status||"in rotation")}</div>${facts.length?`<div class="bio-record-facts">${facts.map(([k,v])=>`<div class="bio-record-fact"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join("")}</div>`:""}</header><div class="bio-record-body"><div class="bio-record-overview"><section class="bio-record-section"><div class="bio-record-section-head"><h2>From the Loading Bench</h2><span class="bio-archive-icon">◆</span></div><div class="bio-narrative">${narrative.map(x=>`<p>${esc(x)}</p>`).join("")}</div></section><section class="bio-record-section"><div class="bio-record-section-head"><h2>Life Record</h2><button class="action-btn primary" id="bioAddEntry">＋ Add entry</button></div><div style="padding-top:14px">${lifeHtml}</div></section></div><div class="bio-archive-grid"><section class="bio-archive-panel"><div class="bio-panel-mast">${archiveMasthead("Archive Letter",`Private Collection · ${gunDisplay(g)}`,"assets/archive-letter-masthead.webp","Engraved western landscape with Henry the retriever and a historic sixgun")}</div><div class="bio-letter-preview"><div class="bio-letter-preview-mark">◈</div><div class="bio-letter-preview-title">Certificate of Record</div>${g.purchase_date?`<div class="bio-letter-preview-date">${esc(fmtDate(g.purchase_date))}</div>`:""}<p>${esc(letterCopy)}</p></div><button class="action-btn primary bio-panel-action" id="bioOpenLetter">Open letter</button></section><section class="bio-archive-panel"><div class="bio-panel-mast">${archiveMasthead("Photographic Record",`Private Collection · ${gunDisplay(g)}`,"assets/photographic-record-masthead.webp","Archival engraving of a boundary waters lake, vintage camera, canoe, birds, and Henry the retriever")}</div><div class="bio-photo-preview-grid">${photoHtml}</div><button class="action-btn primary bio-panel-action" id="bioOpenPhotos">${photoEntries.length?`Open record · ${photoEntries.length}`:"Add first photograph"}</button></section><section class="bio-archive-panel"><div class="bio-panel-mast">${archiveMasthead("Parts & Maintenance",`Private Collection · ${gunDisplay(g)}`,"assets/parts-maintenance-masthead-v2.jpg","Engraved cabin workbench overlooking the Grand Tetons")}</div><div class="bio-maint-list">${maintenanceHtml}</div><div class="bio-parts-preview"><div class="bio-parts-title">Parts &amp; Modifications</div>${partsHtml}</div><button class="action-btn primary bio-panel-action" id="bioOpenMaintenance">${serviceCount?`Open record · ${serviceCount}`:"Add first entry"}</button></section></div><div class="bio-record-foot">Preserve history · Honor the work</div></div></article>`;
+  el.innerHTML=`<article class="bio-record-sheet"><header class="bio-record-head"><div class="bio-record-kicker">The Sixgun Retriever · Firearm Record</div><h1 class="bio-record-title">${esc(gunDisplay(g))}</h1><div class="bio-record-subtitle">${esc(subtitle)}</div><div class="bio-record-status">${esc(g.rotation_status||"in rotation")}</div>${facts.length?`<div class="bio-record-facts">${facts.map(([k,v])=>`<div class="bio-record-fact"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join("")}</div>`:""}</header><div class="bio-record-body"><div class="bio-record-overview"><section class="bio-record-section"><div class="bio-record-section-head"><h2>From the Loading Bench</h2><span class="bio-archive-icon">◆</span></div><div class="bio-narrative">${narrative.map(x=>`<p>${esc(x)}</p>`).join("")}</div></section><section class="bio-record-section"><div class="bio-record-section-head"><h2>Life Record</h2><button class="action-btn primary" id="bioAddEntry">＋ Add entry</button></div><div style="padding-top:14px">${lifeHtml}</div></section></div><div class="bio-archive-grid"><section class="bio-archive-panel"><div class="bio-panel-mast">${archiveMasthead("Archive Letter",`Private Collection · ${gunDisplay(g)}`,"assets/archive-letter-masthead.webp","Engraved western landscape with Henry the retriever and a historic sixgun")}</div><div class="bio-letter-preview"><div class="bio-letter-preview-mark">◈</div><div class="bio-letter-preview-title">Certificate of Record</div>${g.purchase_date?`<div class="bio-letter-preview-date">${esc(fmtDate(g.purchase_date))}</div>`:""}<p>${esc(letterCopy)}</p></div><button class="action-btn primary bio-panel-action" id="bioOpenLetter">Open letter</button></section><section class="bio-archive-panel"><div class="bio-panel-mast">${archiveMasthead("Photographic Record",`Private Collection · ${gunDisplay(g)}`,"assets/photographic-record-masthead.webp","Archival engraving of a boundary waters lake, vintage camera, canoe, birds, and Henry the retriever")}</div><div class="bio-photo-preview-grid">${photoHtml}</div><button class="action-btn primary bio-panel-action" id="bioOpenPhotos">${photoEntries.length?`Open record · ${photoEntries.length}`:"Add first photograph"}</button></section><section class="bio-archive-panel"><div class="bio-panel-mast">${archiveMasthead("Parts & Maintenance",`Private Collection · ${gunDisplay(g)}`,"assets/parts-maintenance-masthead-v2.jpg","Engraved cabin workbench overlooking the Grand Tetons")}</div><div class="bio-maint-list">${maintenanceHtml}</div><div class="bio-parts-preview"><div class="bio-parts-title">Parts &amp; Modifications</div>${partsHtml}</div><button class="action-btn primary bio-panel-action" id="bioOpenMaintenance">${serviceCount?`Open record · ${serviceCount}`:"Add first entry"}</button></section></div><div class="bio-record-foot">Every Sixgun Has a Story</div></div></article>`;
   el.querySelector(".bio-record-body")?.insertAdjacentHTML("afterbegin",`<section class="bio-letter-feature"><div class="bio-letter-feature-head"><div class="bio-letter-feature-copy"><h2>Archive Letter</h2><p>The complete provenance letter is the first page of this firearm's binder.</p></div><div class="bio-letter-actions"><button class="action-btn" id="bioInlineEditLetter">Edit letter</button><button class="action-btn primary" id="bioInlineOpenLetter">Full page</button></div></div><div class="bio-letter-viewport" id="bioLetterPreview" role="button" tabindex="0" aria-label="Open the complete archive letter">${archiveLetterMarkup(g,{stageId:"bioLetterStage",pageId:"bioArchiveLetter"})}</div></section>`);
   document.getElementById("bioOpenLetter").onclick=openLetter;
   document.getElementById("bioInlineOpenLetter").onclick=openLetter;
@@ -1961,6 +1987,60 @@ let LIB_TABLES=[
    note:"FRAMEWORK ONLY — no charge weights seeded. Pearce's Category IV / Redhawk data (the famous ~50,000 psi Redhawk-only loads, Handloader #217, June 2002) is the highest-pressure tier and is exactly the data that must be read VERBATIM from the printed article and cross-checked before loading — never from memory or a forum. This entry exists to hold the slot in your Tier 4 shelf. Transcribe the actual bullet/charge/velocity/pressure rows from your copy of #217 (or the loaddata.com tables) when you build this out. These loads run at .454 Casull pressure levels; the margin for error is zero."}
 ];
 
+const LIB_ARTICLES=[{
+  id:"scovill-p-plus-45-colt-44-special",
+  title:"+P and +P+ Loads for the .45 Colt and .44 Special",
+  author:"Dave Scovill",
+  publication:"Handloader No. 285",
+  date:"August–September 2013",
+  department:"Reloader’s Press",
+  cartridges:[".45 Colt",".44 Special"],
+  summary:"Scovill examines the meaning of +P and +P+ in the .45 Colt and .44 Special, then connects pressure, velocity, gun variation, loading-die changes and long-term revolver wear.",
+  pages:[
+    {page:"8",src:"assets/articles/scovill-p-plus-45-colt-44-special/page-08.jpeg"},
+    {page:"9",src:"assets/articles/scovill-p-plus-45-colt-44-special/page-09.jpeg"},
+    {page:"10",src:"assets/articles/scovill-p-plus-45-colt-44-special/page-10.jpeg"},
+    {page:"11",src:"assets/articles/scovill-p-plus-45-colt-44-special/page-11.jpeg"},
+    {page:"70",src:"assets/articles/scovill-p-plus-45-colt-44-special/page-70.jpeg"}
+  ],
+  transcript:[
+    {page:"8",html:`
+      <p>When I started handloading for the .45 Colt and .44 S&amp;W Special back in the early 1970s, it would have seemed preposterous to assume these two cartridges would dominate correspondence at <em>Handloader</em> magazine 40-plus years later. I suppose their popularity also relies on the fact that both cartridges were being souped-up by handloaders long before comparable magnums came along, and folks experimented with them extensively in an effort to obtain optimum performance in handguns available at the time.</p>
+      <p>Of course, the experimenter-in-chief was Elmer Keith who, along with Phil Sharpe and others, popularized semiwadcutter cast bullet designs in .45-, .44- and .38-caliber handguns, but also pushed those bullets to heretofore unheard of performance levels, and the experimental mindset does not appear to have mellowed much since.</p>
+      <p>Hardly a week has gone by at the Prescott, Arizona, office in the last 20 years that we don’t hear from folks wanting to know about top loads for the .45 Colt, in the Colt Single Action, Ruger Blackhawk or whatever handgun that has come along over the years, including the S&amp;W Model 25. In spite of the fact that Elmer Keith’s load using 17.5 grains of 2400 with his Lyman 429421 SWC cast bullet design in the .44 S&amp;W Special has been around since the powder was introduced in 1932, folks still question whether it really is the “maximum” load, wondering, speculating or hoping, apparently, there is some newly invented magic powder or combination of components that might even supersede Keith’s recipe. No doubt, some of this is exacerbated by the advent of Ruger’s New Model .44 Special and .45 Colt that mimic the original old model, circa 1956, Flat-top. The reintroduction of the Colt New Frontier in 2011 served to add additional spice to the matter.</p>
+      <aside class="article-caption">Peening on the cylinder pin is normal, but heavy recoil with hopped-up loads, mostly with heavy-for-caliber bullets, causes considerable wear (left). The Belt Mountain cylinder pin (right) has a setscrew to keep it from slamming against the cross latch on single actions.</aside>
+      <p>While it would not have occurred to me to question whether the new Colt New Frontier was any stronger (or weaker) than guns built in the 1960s or 1970s, one reader did. The Colt representative answered affirmatively. The recent edition is suitable for standard loads, and +P and +P+. I have no idea what +P+ might be, but 40 years of shooting .45 Colt and .44 Special revolvers from Colt and Smith &amp; Wesson may offer a few hints.</p>
+      <p>Extrapolating from the use of the term “+P” for the .38 S&amp;W Special may be a good place to start. Standard pressure for the .38 Special is 17,000 psi. Factory +P loads are listed at 20,000 psi, for an increase of 3,000 psi, or 17.6 percent. Standard pressure for the .45 Colt is 14,000 psi, and 17.6 percent increase is 2,380 psi, adding up to 16,380 psi for .45 Colt +P. Repeat again for +P+ and the result is</p>`},
+    {page:"9",html:`
+      <p>18,460 psi, or something less than 20,000 psi. The same procedure for the .44 Special with a standard pressure of 15,500 psi yields +P at 18,228 psi and +P+ at 20,956 psi. No doubt, some folks would argue with the above extrapolation until the last goose is cooked, but we can examine the numbers a bit further to see if they work in the real world.</p>
+      <p>If we follow the general principle that suggests pressure rises twice as fast as velocity, a 17.6 percent rise in pressure would yield an 8.8 percent in velocity. Assuming 8.5 grains of Unique in the .45 Colt with a 250-grain lead-alloy bullet yields 850 fps from a 5.5-inch barrel, then we could expect a velocity increase of 74.8 fps, or 924.8 fps with 9.2 grains of Unique, and nearly 150 fps increase with +P+, or 1,000 fps with 10.0 grains of Unique. I don’t have a pressure barrel to prove this, but it follows fairly closely to results in a real sixgun with a 5.5-inch barrel that were posted in various loading manuals prior to the advent of SAAMI in 1974.</p>
+      <aside class="article-caption">Extended use of heavy loads causes the star ratchet at the rear of the cylinder to slam into the breech face, creating a mirror image of the lugs.</aside>
+      <p>By applying the same procedure with the .44 Special, we can jump to +P+ with Elmer Keith’s load and assume it generates something close to 20,000 psi, because that result mirrors pressure tests run by Speer and the NRA back in the 1950s and 1940s, respectively.</p>
+      <p>Velocity in those tests hovered around 1,100 fps from a 6.5-inch revolver, a bit short of Keith’s claim of 1,200 fps, but that’s to be expected from different guns with various barrel lengths and minor differences in chamber and barrel dimensions.</p>
+      <p>These results are also substantiated by the fact that Colt chambered the .45 ACP with a standard pressure of 21,000 psi and 23,000 for +P, both of which are suitable for the Single Action Army and fall into upper hypothetical +P and +P+ ranges for the .44 Special and exceed .45 Colt +P+. Either way, the substantial difference between the .44 and .45 calibers is that the chamber walls for the latter are thinner than the former, and the thickness of the chamber wall under the cylinder bolt stop notch varies accordingly.</p>
+      <p>None of the above amounts to a recommendation for +P or +P+ in the .44 Special or .45 Colt, but the numbers at least allow some</p>`},
+    {page:"10",html:`
+      <p>measure of accountability, as opposed to adding powder willy-nilly until the sixgun begins to protest.</p>
+      <p>I also know a respectable “shootist” from southern Arizona who has recommended 18.5 grains of 2400 with a 260-grain cast bullet in the .45 Colt, and Ken Waters listed 18.0 grains of the same powder with a Hornady 250-grain jacketed bullet in a “Pet Loads” article printed in 1975, about the time folks began to consider beefed-up loads in the Ruger Blackhawk and Thompson/Center. Both loads exceed my personal maximums with both bullets, but Ken lists 17.0 grains of 2400 with the older Ohaus 45-255-SWC, which from all appearances is a close copy of the RCBS 45-255-SWC I used for several years. For general purpose loads, I quit at 16.5 grains of 2400 with the RCBS cast bullet and the Hornady 250-grain JHP in a rebuilt 1908-era single action, both of which approached 1,000 fps from the 4.75-inch barrel.</p>
+      <p>It would be appropriate to mention that reloading dies went through minor changes over the years that, according to my experience, can have a direct effect on velocity and pressure. The most noteworthy event was the change from .451-inch neck expanders (designed for .454+ inch lead bullets) to .449 inch for more modern jacketed bullets that measure .451 to .452 inch. I also asked RCBS to change the full-length sizing die to lengthen the case neck to extend down to the heel of its 255-grain cast bullets. The net effect of changing the RCBS dies was to add roughly 100 fps to my then-standard load using 16.5 grains of 2400 (1,000 fps), which is about what Ken Waters achieved with .5 grain more powder and our Arizona enthusiast got with an additional 2.0 grains.</p>
+      <p>Of course, variations in individual guns can have a significant effect on performance with handloads or factory ammunition. If nothing else, it also serves to illustrate how important it can be when working around maximum or +P loads in</p>`},
+    {page:"11",html:`
+      <p>any given revolver. Barrel leading, a buildup of lead deposits in the forcing cone and chamber throats and variations in barrel diameters can add up to a whopping variation in pressure and subsequent velocities that might be achieved in any given gun.</p>
+      <aside class="article-caption">Gas cutting on the forcing cone is the result of high-pressure loads, which is exacerbated by extended use of light-for-caliber jacketed and hard-cast bullets.</aside>
+      <p>Of the five barrels, measuring from 4.75 to 7.5 inches, that have been mounted in one Colt SAA, one 5.5-inch barrel produced the same velocities as the 7.5-inch barrel, and one 4.75-inch barrel matched the fastest 5.5-inch barrel—all with the same loads, of course. All that means is that velocity does not necessarily increase with longer barrels.</p>
+      <p>Then there is the difference between what a revolver will tolerate in terms of pressure on a limited basis or over the long haul. The distinction is important; abusing the gun with maximum loads, if used extensively over the years, will lead to excessive wear and tear and, sooner or later, will prevent the removal of the cylinder pin and/or require replacement of critical parts.</p>
+      <p>After 40 years of load development for the .45 Colt, the same SAA was rebuilt twice. The first episode required a barrel replacement and a new cylinder. The second rebuild also included another cylinder (The star ratchet was battered from slamming against the breech face during recoil.), cylinder pin and cross latch, both of which were peened excessively.</p>
+      <p>In 1975, when Ken Waters wrote his introspective and most informative piece on the .45 Colt, loads were broken down for early Colt SAAs, modern-era Colts and Ruger Blackhawks, and he was remarkably close to results published 32 years later in the <em>Speer Reloading Manual #14</em>. This, if nothing else, lacking a pressure barrel to verify pressures, shows Ken’s informed opinion, prudent judgement and practical insight with revolvers in general made a great deal of sense in an era when a number of folks were attempting to make a .45 Colt into a magnum.</p>
+      <p>Ken Waters’ “Pet Loads” on the .44 S&amp;W Special in 1981 also offered some insight to practical performance evaluation in lieu of</p>`},
+    {page:"70",html:`
+      <p>the arrival of the .44 Remington Magnum in 1955, which thereafter effectively eliminated the need to stoke the Special to the gunnels, and even ardent admirers generally conceded any need to mimic pre-1955 horsepower in .44 S&amp;W Special. Nowadays, you have to go back to loading manuals published in the 1960s to find any of those +P+ loads for the .44 Special and/or .45 Colt, and Speer even offered a few humdingers for the .45 AR, which pretty much duplicated hot-rod .45 Colt loads. Interestingly, Speer used 2400 in the AR but found it was not suitable for the .45 Colt—most likely because the reloading dies of the period did not produce sufficient neck tension on .451- to .452-inch bullets.</p>
+      <p>As a practical matter nowadays, Ken’s top load using 14.5 grains of 2400 with a Sierra 240-grain JHC is about optimum in the .44 Special for general use. It shoots quite well in Colt and Smith &amp; Wesson revolvers, and where appropriate, can be toned down to between 13.0 and 13.5 grains with the Lyman or RCBS 240- to 250-grain SWC cast bullet designs. Depending on barrel length, velocity approaches 950 to 1,000 fps, as does 6.9 grains of Unique. Beyond that, a .44 Magnum may be more accommodating.</p>
+      <p>During a casual meeting a few weeks prior to Bill Ruger’s passing, I remarked that a lot of .44 Special fans were disappointed that the arrival of the .44 Magnum in 1955 essentially put an end to his plan to chamber the early Flat-top Blackhawk for the .44 S&amp;W Special. The full-sized Blackhawk and later the Super Blackhawk (1959) were unnecessarily heavy for the .44 Special, and handgun enthusiasts would rather have the Colt-sized flat-top than lug the big .44 Magnums around. Mr. Ruger scoffed at the notion, suggesting the magnum would also chamber the .44 Special, and it was probably on the way out anyway. From a marketing standpoint, the .44 Magnum was the gun to have, and in lieu of that, he knew some folks would be inclined to load the Special up to magnum pressures; and tests proved beyond any doubt that Elmer Keith was right, the early model (Flat-top) Blackhawk couldn’t take the pressures.</p>
+      <p>As fate would have it, it took Sturm, Ruger &amp; Co. Inc. nearly 60 years to come out with a .44 S&amp;W Special to fill an order by Lipsey’s that sold well enough to justify inclusion in the standard Ruger catalog. It was followed by another order from Lipsey’s for a New Model Blackhawk .45 Colt. Ruger literature, and notes in loading manuals, caution the handloader to confine loads to standard pressures for both calibers. Common sense suggests these modern-era revolvers could stand pre-World War II handloads advocated by Keith and others, but there are other powder options—H- or IMR-4227, for example—that can encroach on 1,000 fps in 5.5- to 7.5-inch barrels without exceeding +P pressures. The practical issues regarding both cartridges in whatever sixgun rest more in what it takes to subject them to needless abuse with extensive use of +P+ loads than how much pressure it would take to blow them up. In between, extensive use (i.e., 5,000+ rounds of heavy loads during the late 1970s and early 1980s) caused my Colt SAAs to develop a few rattles.</p>`}
+  ]
+}];
+
+
 let libView="notes", libShape="all", libCart="all";
 let tblCart="all", tblPowder="all", tblWriter="all";
 
@@ -2080,14 +2160,45 @@ function renderLibTables(){
       ${t.link?`<a class="ltable-link" href="${t.link}" target="_blank" rel="noopener">Read the full article at the source →</a>`:''}
     </div>`).join("");
 }
-function renderLibrary(){renderLibCalFilter();renderLibShapes();renderLibEntries();renderTblFilters();renderLibTables();}
+function articleSearchText(a){return [a.title,a.author,a.publication,a.date,a.department,a.summary,...a.cartridges,...a.transcript.map(s=>s.html.replace(/<[^>]+>/g," "))].join(" ").toLowerCase();}
+function renderLibArticles(){
+  const q=(document.getElementById("articleSearch")?.value||"").trim().toLowerCase();
+  let list=libCart==="all"?LIB_ARTICLES:LIB_ARTICLES.filter(a=>a.cartridges.includes(libCart));
+  if(q)list=list.filter(a=>articleSearchText(a).includes(q));
+  document.getElementById("articleShowing").innerHTML=`Showing <b>${list.length}</b> of ${LIB_ARTICLES.length} full articles`;
+  const el=document.getElementById("articleList");
+  el.innerHTML=list.map(a=>`<button type="button" class="article-card" data-article="${esc(a.id)}">
+    <img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}">
+    <span><span class="article-card-kicker">${esc(a.department)} · ${a.pages.length} scanned pages</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span><span class="article-card-tags">${a.cartridges.map(c=>`<span>${esc(c)}</span>`).join("")}</span></span>
+  </button>`).join("")||`<div class="lib-foot">No full articles match that search.</div>`;
+  el.querySelectorAll("[data-article]").forEach(b=>b.onclick=()=>openArticle(b.dataset.article));
+}
+let openArticleId=null,articleMode="scans";
+function openArticle(id){openArticleId=id;articleMode="scans";document.getElementById("articleReader").hidden=false;document.body.style.overflow="hidden";renderArticleReader();document.getElementById("articleReaderClose").focus();}
+function closeArticle(){document.getElementById("articleReader").hidden=true;document.body.style.overflow="";openArticleId=null;}
+function renderArticleReader(){
+  const a=LIB_ARTICLES.find(x=>x.id===openArticleId);if(!a)return closeArticle();
+  document.querySelectorAll("[data-article-mode]").forEach(b=>{const on=b.dataset.articleMode===articleMode;b.classList.toggle("on",on);b.setAttribute("aria-selected",String(on));});
+  const hero=`<header class="article-reader-hero"><div class="article-reader-kicker">${esc(a.department)} · Full article</div><h1 class="article-reader-title">${esc(a.title)}</h1><div class="article-reader-meta">by ${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}<br>${a.cartridges.map(esc).join(" · ")}</div></header>`;
+  const body=articleMode==="scans"?`<div class="article-scans">${a.pages.map(p=>`<figure class="article-scan"><a href="${esc(p.src)}" target="_blank" rel="noopener"><img src="${esc(p.src)}" alt="${esc(a.title)}, original scan page ${esc(p.page)}" loading="lazy"></a><figcaption>Original page ${esc(p.page)} · tap to open full size</figcaption></figure>`).join("")}</div>`:`<article class="article-transcript"><h2>${esc(a.title)}</h2><div class="article-transcript-byline">by ${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</div>${a.transcript.map(s=>`<section class="article-page"><div class="article-page-label">Original page ${esc(s.page)}</div>${s.html}</section>`).join("")}<div class="article-note">Transcribed from the five original page photographs preserved with this entry. Page breaks and image captions are retained for comparison with the source.</div></article>`;
+  document.getElementById("articleReaderContent").innerHTML=hero+body;
+  document.getElementById("articleReader").scrollTop=0;
+}
+function renderLibrary(){renderLibCalFilter();renderLibShapes();renderLibEntries();renderTblFilters();renderLibTables();renderLibArticles();}
+document.getElementById("articleSearch").addEventListener("input",renderLibArticles);
+document.getElementById("articleReaderClose").onclick=closeArticle;
+document.querySelectorAll("[data-article-mode]").forEach(b=>b.onclick=()=>{articleMode=b.dataset.articleMode;renderArticleReader();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&openArticleId)closeArticle();});
 document.querySelectorAll(".lib-nav-btn").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".lib-nav-btn").forEach(x=>x.classList.toggle("on",x===b));
   libView=b.dataset.libview;
   document.getElementById("libNotesView").style.display=libView==="notes"?"block":"none";
   document.getElementById("libTablesView").style.display=libView==="tables"?"block":"none";
+  document.getElementById("libArticlesView").style.display=libView==="articles"?"block":"none";
+  if(libView==="articles")renderLibArticles();
 });
 
+/* ============================================================
 /* ============================================================
    TARGET ANALYZER — rectification, grid calibration, and hit detection
    Raw markers + scale + distance are stored; group/MOA are always
