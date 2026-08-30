@@ -14,6 +14,12 @@ const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)
 const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
 assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
+assert(html.includes('id:"pearce-understanding-45-colt"'), "Library must include Pearce's complete Understanding the .45 Colt article");
+assert.equal((html.match(/assets\/articles\/pearce-understanding-45-colt\/page-/g)||[]).length, 7, "Pearce article must preserve all seven scanned pages");
+for(const tier of ["14,000-psi Loads","16,000- to 19,000-psi Loads","23,000-psi Loads","32,000-CUP Loads","50,000-psi Loads"]){
+  assert(html.includes(`Pearce .45 Colt — ${tier}`), `Tables must include Pearce's ${tier} data`);
+}
+for(const page of [36,37,38,39,40,41,42])assert(fs.existsSync(`assets/articles/pearce-understanding-45-colt/page-${page}.jpeg`),`Pearce scan page ${page} must exist`);
 assert(html.includes('id="createNavBtn"'), "bottom navigation must expose the centered add control");
 assert(html.includes('id="createLoadAction"'), "the add menu must preserve New Load access");
 assert(html.includes('id="createImportAction"'), "the add menu must preserve Garmin import access");
