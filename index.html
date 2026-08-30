@@ -514,7 +514,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.13.3</div>
+    <div class="landing-version">Version 2.13.4</div>
   </div>
 </div>
 
@@ -945,8 +945,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.13.3";
-const CACHE_VERSION="sixgun-retriever-v2.13.3";
+const RELEASE_VERSION="2.13.4";
+const CACHE_VERSION="sixgun-retriever-v2.13.4";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -2031,11 +2031,57 @@ let LIB_TABLES=[
    head:["Factory load","Advertised velocity","Actual velocity"],
    rows:[["125 Federal Classic Hi-Shok JSP +P","950 fps","958 fps"],["125 Hornady Custom HP-XTP","900 fps","932 fps"],["125 PMC Starfire +P","950 fps","1,008 fps"],["125 Remington Golden Saber Brass JHP +P","975 fps","1,087 fps"],["158 Remington lead HP +P","890 fps","969 fps"],["158 Winchester lead SWC-HP +P","890 fps","966 fps"]],
    maxRow:-1,
-   note:"Verbatim transcription of Table III on page 64. This is factory-ammunition chronograph data, not handload data. Actual velocities were recorded from a Smith & Wesson Model 14 with a 6-inch barrel at 28°F."}
+   note:"Verbatim transcription of Table III on page 64. This is factory-ammunition chronograph data, not handload data. Actual velocities were recorded from a Smith & Wesson Model 14 with a 6-inch barrel at 28°F."},
+  {verify:false,title:"Pearce Traditional .45 Colt — 250gr RNFP at 860 fps",who:"Brian Pearce",source:"Traditional .45 Colt Loads · Handloader No. 291 (owned scan)",
+   cartridge:".45 Colt",powders:["Red Dot","Promo","Hi-Skor 700X","Bullseye","Titegroup","American Select","AutoComp","A-2","True Blue","HS-6","W-231","HP-38","A-5","Universal","Competition","Unique","Power Pistol","SR-4756","CFE Pistol","SR-7625","PB","Nitro 100","Zip"],writer:"Pearce",
+   conditions:[["Bullet","250gr Oregon Trail Laser-Cast RNFP"],["Test gun","USFA Pre-War SAA, 4¾-inch barrel"],["Primer","CCI 300 Large Pistol"],["Case","Starline"],["Overall length","1.575 inches"],["Bullet diameter",".452 inch (.454 suggested for throats .454 or larger)"],["Velocity range","850–870 fps; table lists 860 fps"],["Pressure","Traditional .45 Colt / 14,000-psi class"]],
+   head:["Bullet","Powder","Charge","Velocity"],
+   rows:[["250 Oregon Trail Laser-Cast RNFP","Red Dot","6.2 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Promo","6.4 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Hi-Skor 700X","6.4 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Bullseye","6.6 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Titegroup","6.2 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","American Select","6.8 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","AutoComp","9.0 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","A-2","6.8 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","True Blue","8.8 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","HS-6","11.5 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","W-231","7.3 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","HP-38","7.3 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","A-5","10.3 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Universal","8.2 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Competition","6.2 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Unique","8.0 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Power Pistol","8.1 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","SR-4756","9.5 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","CFE Pistol","8.4 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","SR-7625","8.6 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","PB","7.8 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Nitro 100","6.2 gr","860 fps"],["250 Oregon Trail Laser-Cast RNFP","Zip","7.2 gr","860 fps"]],
+   maxRow:-1,
+   note:"Complete transcription of the table on page 19. Pearce developed every load to average between 850 and 870 fps and lists them at 860 fps to duplicate traditional .45 Colt ballistics. Starline cases and CCI 300 Large Pistol primers were used throughout. Overall loaded length was 1.575 inches; maximum case length 1.285 inches and trim-to length 1.275 inches. The .452-inch bullet is suggested for modern throats; the source recommends .454-inch bullets for throats .454 inch or larger. Powder-lot changes can alter velocity: Pearce notes that an older lot reached about 860 fps with 6.0 grains of Bullseye, while the tested lot required 6.6 grains. Verify all published load data before use."}
 ];
 const BUILTIN_LIB_TABLES=JSON.parse(JSON.stringify(LIB_TABLES));
 
 const LIB_ARTICLES=[{
+  id:"pearce-traditional-45-colt-loads",
+  title:"Traditional .45 Colt Loads",
+  author:"Brian Pearce",
+  publication:"Handloader No. 291",
+  date:"August–September 2014",
+  department:"From the Hip",
+  tags:[".45 Colt","Brian Pearce","traditional loads","250gr RNFP","860 fps","Colt SAA","USFA","Oregon Trail","Laser-Cast","smokeless powder","black powder"],
+  cartridges:[".45 Colt"],
+  summary:"Pearce traces the traditional 250- to 255-grain .45 Colt load, explains why its moderate 860-fps ballistics remain effective, evaluates Oregon Trail's 250-grain RNFP, and supplies 23 powder choices that duplicate the classic factory load.",
+  pages:[
+    {page:"18",src:"assets/articles/pearce-traditional-45-colt-loads/page-18.jpeg"},
+    {page:"19",src:"assets/articles/pearce-traditional-45-colt-loads/page-19.jpeg"},
+    {page:"20",src:"assets/articles/pearce-traditional-45-colt-loads/page-20.jpeg"},
+    {page:"21",src:"assets/articles/pearce-traditional-45-colt-loads/page-21.jpeg"}
+  ],
+  transcript:[
+    {page:"18",html:`
+      <p>Not long after the U.S. military adopted the .45 Colt and the Colt Single Action Army revolver around 1873, ammunition companies began offering loads for the civilian market. Soon a 250- or 255-grain lead bullet, depending on manufacturer, with a flat point and hollow base loaded on top of 40 grains of black powder became a standard, powerful and respected load. Many years ago I fired some vintage ammunition through a Colt SAA with a 7½-inch barrel that produced almost 1,000 fps.</p>
+      <p>As the turn of the twentieth century approached, ammunition companies began offering loads with both black and smokeless powders. Although Colt warned against using smokeless ammunition in SAA revolvers produced prior to 1900—something I do not recommend—or below serial number 192,000, everyone knew this new ammunition would eventually find its way into guns produced prior to 1900. As a result, the same 250/255-grain bullets were loaded to around 870 fps, which was dropped to an advertised velocity of 860 fps during the 1960s and is still loaded by Remington (250 grain) and Winchester (255 grain) to date. Current industry maximum average pressure guidelines are established at 14,000 psi.</p>
+      <p>The above smokeless load is what helped the cartridge establish a superb reputation among lawmen, cowboys and anyone needing a powerful sixgun. It did not offer impressive bells and whistles, such as high-velocity and rapidly expanding bullets, but it does not need either to perform well. Rather, its large caliber and heavy slug produce reliable shock, large wound channels and deep penetration. Its large caliber, combined with comparatively low pressures, produces very little muzzle concussion, which is important for a “working” sixgun that will probably get occasional use without hearing protection. Recoil was also comparatively slow, making it pleasant to shoot.</p>`},
+    {page:"19",html:`
+      <p>Deer and black bear have been taken with traditional factory loads with good results. Although “improved” handloads featuring a flatpoint cast bullet, usually in Keith pattern, pushed to a bit more velocity are certainly better, we cannot ignore just how well the traditional load works.</p>
+      <p>Elmer Keith is generally considered the father of modern sixgunning and is widely recognized for his experience and many contributions to handgunning. In addition to being the primary influence in getting Remington and Smith &amp; Wesson to introduce the .44 Magnum, he also pioneered, with Lyman, cast bullet designs during the 1920s. He had practical sixgun cartridge and load experience, mixed with common sense. In his classic 1955 book <em>Sixguns by Keith</em>, Keith states, “The standard .45 Colt, like the 45-70 in rifles, simply will not die out. The demand is still strong for it, and will be for many years to come. It is a good, accurate, and lethal cartridge, and one that has well served the American sixgun man for eighty years.” Keith continues, “As one grows older and his hair starts to turn gray, his respect for this grand old load increases. If I had to shoot only factory ammunition the rest of my life, I would take the .45 Colt as my game and defense cartridge.”</p>
+      <p>The .45 Colt was the standard among lawmen of the Old West, with an almost endless list of characters on both sides of the law who gave it great endorsements. A legendary lawman who saw plenty of gun fighting during his 50-year career, Bill Tilghman states, “The heavy slug of the forty-five, too, would either kill instantly or produce a shock to put the enemy out of commission. You shoot a man with a small bullet and he may kill you before he dies. But with a forty-five, he's done with.” Many similar comments can be found by modern shooters who have extensive experience with big-bore sixguns.</p>
+      <aside class="article-caption">The complete “Traditional .45 Colt Handload Data” table is indexed separately in the app's Tables section.</aside>`},
+    {page:"20",html:`
+      <p>Winchester and Remington have historically offered the above hollowbase bullets as a component to handloaders, but Winchester silently dropped its version some time back, and the Remington version has been very difficult, if not impossible, to obtain in recent years.</p>
+      <p>An excellent cast bullet that shares a very similar profile to the above factory loads is Lyman 452190. It is a plain-base design, rather than the hollow base found on the above bullets that are designed to slug up at low pressure to fill large throats and create a gas seal but also prevent bullets from tipping in the throat. When a 452190 bullet is sized to correspond with throat size and fired from a good sixgun, accuracy can be outstanding.</p>
+      <p>For those who don't cast bullets, a logical option is to use Oregon Trail Bullet Company's 250-grain RNFP Magma design that has become popular among cowboy action competitors and is readily available. These bullets are cast with a 20-plus Brinell hardness number, are unusually consistent in weight and are high quality. This design features a beveled crimp groove and has a portion of the full-caliber shank forward of the case. As a result, when the case is crimped properly, bullets will not “deep seat” when used in a lever-action rifle with a tubular magazine. In traditional fashion, the nose is flat and measures around .275 inch wide, which is slightly larger than current factory-load versions. It has a single grease groove filled with Magma green lube.</p>
+      <p>Being a slight bevel-base design, it delivers best overall results—minimal leading and best accuracy—when used in revolvers with throats that are very close to, or just under, bullet diameter. Since a bevel-base bullet will not slug up or obturate, especially when cast hard, bullet fit is important to prevent fusion and obtain a proper seal to prevent gas cutting and leading. Most modern gun manufacturers, including Smith &amp; Wesson, Ruger, USFA and others, have tightened throats to measure between .451 and .452 inch. When using the Oregon Trail RNFP bullet sized .452 inch, bullet tilting is minimal and accuracy is surprising, with many guns grouping inside 1.5 inches at 25 yards. This bullet is also offered in .454-inch diameter for revolvers that have a larger throat size. In spite of being cast hard, velocities should be kept below 1,000 fps in revolvers—or better yet, 900 fps—or leading can occur.</p>
+      <p>The popularity of the bullet is extreme, but due to a widespread powder shortage, many handloaders are unable to assemble favorite handloads. Recently I was in a gun store where a customer was purchasing a couple of boxes of the Oregon Trail 250-grain RNFP bullets, but was frustrated because he had been unable to obtain his “normal” powder for more than two years. In looking at the dealer's on-hand stock, I suggested another powder along with load data as a substitute, which he wrote down and promptly purchased two pounds of “new” powder and went cheerfully on his way.</p>
+      <p>With everyone, myself included, struggling to obtain powder, I thought readers might appreciate load data with optional powders to duplicate traditional .45 Colt loads, but with the above Oregon Trail 250-grain RNFP bullets.</p>`},
+    {page:"21",html:`
+      <aside class="article-caption">Brian's .45 Colt handloads duplicate ballistics of traditional factory loads.</aside>
+      <p>In recent years I have tested traditional .45 Colt ammunition, and velocities have occasionally been low, too low, with select lot numbers from Winchester dropping down to around 750 fps. Remington, however, has kept velocities close to advertised speeds. Having some 1950s-vintage Remington and Winchester ammunition on hand, originally advertised at 870 fps, they were chronographed in a USFA Pre-War SAA-pattern revolver with a 4¾-inch barrel. In each instance, the loads averaged close to 860 fps, which would become the target velocity for the loads listed herein.</p>
+      <p>All the accompanying handload data was developed to average between 850 and 870 fps. With that thought in mind, there was sometimes a significant velocity change from one powder lot number to the next. For example, in going back through my notes, 6.0 grains of Alliant Bullseye powder reached around 860 fps, but with the lot number of powder used in the accompanying load data, the charge had to be increased to 6.6 grains to reach the same velocity in the same gun and with the same bullet. Similar variances were observed with other powders. Nonetheless, these loads should get a handloader close to the targeted 860 fps.</p>
+      <p>Incidentally, with primers designed to serve as “magnum” and “standard,” such as the Remington 2½ and Winchester WLP, velocities will likely be increased when compared to the CCI 300 used here.</p>`}
+  ]
+},{
   id:"scovill-bears",
   title:"Bears",
   author:"Dave Scovill",

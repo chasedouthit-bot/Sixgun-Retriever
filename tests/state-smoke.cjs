@@ -29,6 +29,10 @@ for(const page of [58,59,60,61,62,63,64,65])assert(fs.existsSync(`assets/article
 assert(html.includes('id:"scovill-bears"'), "Library must include Scovill's complete Bears article");
 assert.equal((html.match(/assets\/articles\/scovill-bears\/page-/g)||[]).length, 6, "Bears article must preserve all six scanned pages");
 for(const page of ["08","09","10","11","70","71"])assert(fs.existsSync(`assets/articles/scovill-bears/page-${page}.jpeg`),`Bears scan page ${page} must exist`);
+assert(html.includes('id:"pearce-traditional-45-colt-loads"'), "Library must include Pearce's complete Traditional .45 Colt Loads article");
+assert.equal((html.match(/assets\/articles\/pearce-traditional-45-colt-loads\/page-/g)||[]).length, 4, "Traditional .45 Colt article must preserve all four scanned pages");
+assert(html.includes("Pearce Traditional .45 Colt — 250gr RNFP at 860 fps"), "Tables must include all traditional .45 Colt load data");
+for(const page of [18,19,20,21])assert(fs.existsSync(`assets/articles/pearce-traditional-45-colt-loads/page-${page}.jpeg`),`Traditional .45 Colt scan page ${page} must exist`);
 assert(html.includes('id="createNavBtn"'), "bottom navigation must expose the centered add control");
 assert(html.includes('id="createLoadAction"'), "the add menu must preserve New Load access");
 assert(html.includes('id="createImportAction"'), "the add menu must preserve Garmin import access");
