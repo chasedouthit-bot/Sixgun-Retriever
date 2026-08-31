@@ -16,8 +16,10 @@ const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
 assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
 assert(html.includes(`<link rel="manifest" href="/manifest.webmanifest?v=${releaseVersion}">`), "app must expose a versioned web manifest");
-assert(html.includes('<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.13.9">'), "iOS must use the cache-busted dog-logo touch icon");
-assert(html.includes('<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.13.9">'), "older iOS versions must use the cache-busted dog-logo icon");
+assert(html.includes(`<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=${releaseVersion}">`), "iOS must use the cache-busted dog-logo touch icon");
+assert(html.includes(`<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=${releaseVersion}">`), "older iOS versions must use the cache-busted dog-logo icon");
+assert(html.includes('<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/'), "PDF tooling must not block initial app parsing");
+assert.equal((html.match(/class="article-card-cover"[^>]+loading="lazy"[^>]+decoding="async"/g)||[]).length,2,"both Library article renderers must lazy-load scan covers");
 for(const icon of ["apple-touch-icon.png","favicon-32.png","icon-192.png","icon-512.png","icon-maskable-512.png"])assert(fs.existsSync(`assets/icons/${icon}`),`app icon ${icon} must exist`);
 for(const icon of ["apple-touch-icon.png","apple-touch-icon-180x180.png","apple-touch-icon-precomposed.png","sixgun-retriever-ios-icon.png"])assert(fs.existsSync(icon),`root iOS icon ${icon} must exist`);
 const manifest=JSON.parse(fs.readFileSync("manifest.webmanifest","utf8"));
@@ -193,11 +195,14 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,sameCloudQueueJob,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
 const api = context.__test;
+assert(api.sameCloudQueueJob({token:"current",updatedAt:1},{token:"current",updatedAt:1}),"a sync may clear the exact queue job it processed");
+assert(!api.sameCloudQueueJob({token:"newer",updatedAt:2},{token:"older",updatedAt:1}),"an older sync must preserve a newer queued save");
+assert(api.sameCloudQueueJob({updatedAt:1},{updatedAt:1}),"legacy queue jobs without tokens must remain compatible");
 const groupedSessions=api.loadSessionPages(
   [{date:"2026-08-26",avg:1068.4},{date:"2026-08-10",avg:1020}],
   [{date:"2026-08-27",moa:5.95},{date:"2026-08-10",moa:7.2}]

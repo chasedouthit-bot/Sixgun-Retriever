@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.13.9">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.13.9">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.13.9">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.13.9">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.13.9">
+<link rel="manifest" href="/manifest.webmanifest?v=2.14.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.14.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.14.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.14.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.14.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -520,7 +520,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.13.9</div>
+    <div class="landing-version">Version 2.14.0</div>
   </div>
 </div>
 
@@ -727,7 +727,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
 <script>/* placeholder split so analyzer script mounts after DATA */</script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
 /* ============================================================
@@ -951,8 +951,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.13.9";
-const CACHE_VERSION="sixgun-retriever-v2.13.9";
+const RELEASE_VERSION="2.14.0";
+const CACHE_VERSION="sixgun-retriever-v2.14.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -2510,7 +2510,7 @@ function renderLibArticles(){
   document.getElementById("articleShowing").innerHTML=`Showing <b>${list.length}</b> of ${LIB_ARTICLES.length} full articles`;
   const el=document.getElementById("articleList");
   el.innerHTML=list.map(a=>`<button type="button" class="article-card" data-article="${esc(a.id)}">
-    <img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}">
+    <img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}" loading="lazy" decoding="async">
     <span><span class="article-card-kicker">${esc(a.department)} · ${a.pages.length} scanned pages</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span><span class="article-card-tags">${a.cartridges.map(c=>`<span>${esc(c)}</span>`).join("")}</span></span>
   </button>`).join("")||`<div class="lib-foot">No full articles match that search.</div>`;
   el.querySelectorAll("[data-article]").forEach(b=>b.onclick=()=>openArticle(b.dataset.article));
@@ -2565,7 +2565,7 @@ function renderLibraryTags(){
   el.querySelectorAll("[data-library-tag]").forEach(b=>b.onclick=()=>{libraryTag=b.dataset.libraryTag;renderLibraryShelf();});
 }
 function libraryTagMarkup(tags){return `<span class="library-item-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</span>`;}
-function libraryArticleCard(item){const a=item.data;return `<button type="button" class="article-card" data-article="${esc(a.id)}"><img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}"><span><span class="library-kind">Article · ${a.pages.length} original pages</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span>${libraryTagMarkup(item.tags)}</span></button>`;}
+function libraryArticleCard(item){const a=item.data;return `<button type="button" class="article-card" data-article="${esc(a.id)}"><img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}" loading="lazy" decoding="async"><span><span class="library-kind">Article · ${a.pages.length} original pages</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span>${libraryTagMarkup(item.tags)}</span></button>`;}
 function libraryNoteCard(item){const e=item.data;return `<article class="fragment-card"><div class="fragment-head"><div><div class="library-kind">Fragment</div><div class="fragment-source">${esc(e.who)} · ${esc(e.source)}</div></div>${e.verify?'<span class="vbadge">Verify</span>':''}</div><div class="fragment-body">${e.body}</div>${e.link?`<a class="fragment-link" href="${esc(e.link)}" target="_blank" rel="noopener">Open source →</a>`:""}${libraryTagMarkup(item.tags)}</article>`;}
 function libraryTableCard(item){const t=item.data,ch=Math.max(0,t.head.indexOf("Charge"));return `<details class="fragment-card fragment-table"><summary class="fragment-table-summary"><span class="library-kind">Fragment · Reference table</span><span class="fragment-table-title">${esc(t.title)}</span><span class="fragment-table-meta">${esc(t.who)} · ${esc(t.source)}</span><span class="fragment-table-open">View table</span></summary><div class="fragment-table-content"><div class="ltable-body"><table class="ldata"><thead><tr>${t.head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${t.rows.map((r,i)=>`<tr>${r.map((c,ci)=>`<td class="${i===t.maxRow&&ci===ch?"max":""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>${t.note?`<div class="ltable-note">${esc(t.note)}</div>`:""}${t.link?`<a class="ltable-link" href="${esc(t.link)}" target="_blank" rel="noopener">Open source →</a>`:""}${libraryTagMarkup(item.tags)}</div></details>`;}
 function renderLibraryShelf(){
@@ -3525,18 +3525,21 @@ function prepareState(state){
   ensureCatalog(state);Object.entries(state.cartridges||{}).forEach(([cart,c])=>{(c.loads||[]).forEach(load=>{(load.targets||[]).forEach((target,i)=>{target._syncKey=targetKey(cart,load,i,target);});(load.sessions||[]).forEach((session,i)=>{session._syncKey=session._syncKey||`${cart}::${load.id}::session::${i}`;});});(c.journal||[]).forEach((j,i)=>{j._syncKey=j._syncKey||`${cart}::journal::${j.date||"undated"}::${i}`;});});return state;
 }
 function cloudSafeState(state){const out=clone(prepareState(state));(out.catalog?.gun_entries||[]).forEach(e=>{delete e.photo;delete e.photo_url;});(out.catalog?.moment_photos||[]).forEach(p=>{delete p.display_data;delete p.print_data;delete p.display_url;delete p.print_url;});Object.values(out.cartridges||{}).forEach(c=>{(c.loads||[]).forEach(l=>(l.targets||[]).forEach(t=>{delete t.photo;}));(c.journal||[]).forEach(j=>{delete j.photo;delete j.photos;j.photoPaths=(j.photoPaths||j.photo_urls||[]).filter(p=>typeof p==="string"&&!p.startsWith("data:"));delete j.photo_urls;});});return out;}
+function cloudQueueJob(state){return{id:"snapshot",token:crypto.randomUUID(),state:cloudSafeState(state),updatedAt:Date.now()};}
+function sameCloudQueueJob(a,b){if(!a||!b)return false;if(a.token||b.token)return!!a.token&&a.token===b.token;return a.updatedAt===b.updatedAt;}
+async function clearCloudQueueJob(job){const current=await idbGet("queue","snapshot");if(!sameCloudQueueJob(current,job))return false;await idbDelete("queue","snapshot");return true;}
 async function saveCloudState(){
   prepareState(DB);
   await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});
-  await idbPut("queue",{id:"snapshot",state:cloudSafeState(DB),updatedAt:Date.now()});
+  await idbPut("queue",cloudQueueJob(DB));
   cloudStatus(navigator.onLine?"Saving…":"Offline · changes queued","warn");
   clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(()=>flushCloudQueue(),250);
 }
 async function saveCloudStateNow(){
-  prepareState(DB);await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});await idbPut("queue",{id:"snapshot",state:cloudSafeState(DB),updatedAt:Date.now()});
+  prepareState(DB);await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});const job=cloudQueueJob(DB);await idbPut("queue",job);
   if(!cloudUser)throw new Error("Sign in before saving an imported session");if(!navigator.onLine)throw new Error("You are offline. Reconnect, then retry this row.");
   while(cloudFlushing)await new Promise(resolve=>setTimeout(resolve,50));cloudFlushing=true;cloudStatus("Saving session…","warn");
-  try{await syncNormalized(cloudSafeState(DB));await idbDelete("queue","snapshot");localStorage.removeItem(KEY);cloudStatus("Synced","ok");}catch(e){cloudStatus(/relation|schema cache/i.test(e.message||"")?"Setup needed · run Garmin SQL":"Session save failed","error");throw e;}finally{cloudFlushing=false;}
+  let continueSync=false;try{await syncNormalized(cloudSafeState(DB));const cleared=await clearCloudQueueJob(job);if(cleared)localStorage.removeItem(KEY);continueSync=!cleared;cloudStatus(cleared?"Synced":"Saving…",cleared?"ok":"warn");}catch(e){cloudStatus(/relation|schema cache/i.test(e.message||"")?"Setup needed · run Garmin SQL":"Session save failed","error");throw e;}finally{cloudFlushing=false;if(continueSync)setTimeout(()=>flushCloudQueue(),0);}
 }
 window.SixgunCloud={saveState:saveCloudState,saveNow:saveCloudStateNow,uploadPhoto:async(blob,folder="journal")=>{
   if(!cloudUser)throw new Error("Sign in before uploading photos");
@@ -3613,7 +3616,7 @@ async function syncNormalized(state){
 }
 async function flushCloudQueue(){
   if(cloudFlushing||!cloudUser||!navigator.onLine)return;const job=await idbGet("queue","snapshot");if(!job){cloudStatus("Synced","ok");return;}
-  cloudFlushing=true;cloudStatus("Syncing…","warn");try{const synced=await syncNormalized(job.state);await idbDelete("queue","snapshot");localStorage.removeItem(KEY);cloudStatus("Synced","ok");const local=(await idbGet("state","current"))?.value;if(local){DB=local;await signTargetPhotos();renderAll();}}catch(e){console.error("Sixgun sync",e);cloudStatus(/relation|schema cache|bucket/i.test(e.message||"")?"Setup needed · see SUPABASE_SETUP.md":"Sync paused · will retry","error");}finally{cloudFlushing=false;}
+  let continueSync=false;cloudFlushing=true;cloudStatus("Syncing…","warn");try{await syncNormalized(job.state);const cleared=await clearCloudQueueJob(job);if(cleared)localStorage.removeItem(KEY);continueSync=!cleared;cloudStatus(cleared?"Synced":"Saving…",cleared?"ok":"warn");const local=(await idbGet("state","current"))?.value;if(local){DB=local;await signTargetPhotos();renderAll();}}catch(e){console.error("Sixgun sync",e);cloudStatus(/relation|schema cache|bucket/i.test(e.message||"")?"Setup needed · see SUPABASE_SETUP.md":"Sync paused · will retry","error");}finally{cloudFlushing=false;if(continueSync)setTimeout(()=>flushCloudQueue(),0);}
 }
 async function signTargetPhotos(){
   const paths=[];(DB.catalog?.gun_entries||[]).forEach(e=>{if(e.photo_path)paths.push(e.photo_path);});(DB.catalog?.moment_photos||[]).forEach(p=>{if(p.display_path)paths.push(p.display_path);if(p.print_path)paths.push(p.print_path);});Object.values(DB.cartridges||{}).forEach(c=>{(c.loads||[]).forEach(l=>(l.targets||[]).forEach(t=>{if(t.photoPath)paths.push(t.photoPath);}));(c.journal||[]).forEach(j=>(j.photoPaths||[]).forEach(p=>paths.push(p)));});if(!paths.length)return;
