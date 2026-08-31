@@ -5,7 +5,8 @@ const { webcrypto } = require("crypto");
 
 const html = fs.readFileSync("index.html", "utf8");
 const performanceIntelligence = fs.readFileSync("performance-intelligence.js", "utf8");
-const filterControls = fs.readFileSync("filter-controls.js", "utf8");\nconst libraryReaderHotfix = fs.readFileSync("library-reader-hotfix.js", "utf8");
+const filterControls = fs.readFileSync("filter-controls.js", "utf8");
+const libraryReaderHotfix = fs.readFileSync("library-reader-hotfix.js", "utf8");
 const worker = fs.readFileSync("worker.js", "utf8");
 const serviceMigration = fs.readFileSync("supabase/migrations/20260826_parts_maintenance.sql", "utf8");
 const garminMigration = fs.readFileSync("supabase/migrations/20260827_garmin_chronograph_import.sql", "utf8");
