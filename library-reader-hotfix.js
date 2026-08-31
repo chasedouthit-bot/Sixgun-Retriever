@@ -1,7 +1,7 @@
-/* Sixgun Retriever 2.13.7 — Library / Tables split */
+/* Sixgun Retriever 2.13.8 — Library reader safe-area fix */
 (function(){
   'use strict';
-  const VERSION='2.13.7';
+  const VERSION='2.13.8';
   let srMode='library';
   let tableQuery='';
   let tablePowder='all';
@@ -18,7 +18,11 @@
     style.id='srLibraryReaderHotfixStyles';
     style.textContent=`
       .article-reader-modes{display:none!important}
-      .article-reader-bar{justify-content:flex-start!important}
+      .article-reader{padding-top:0!important;isolation:isolate!important}
+      .article-reader-shell{position:relative!important}
+      .article-reader-bar{top:0!important;z-index:20!important;justify-content:flex-start!important;align-items:flex-end!important;min-height:calc(54px + var(--safe-t))!important;padding:calc(8px + var(--safe-t)) 0 6px!important;background:var(--bg)!important;border-bottom:1px solid var(--line)!important;box-shadow:0 5px 12px rgba(0,0,0,.28)!important}
+      .article-reader-close{position:relative!important;z-index:2!important;display:inline-flex!important;align-items:center!important;min-height:44px!important;padding:0 8px!important;touch-action:manipulation}
+      #articleReaderContent{position:relative!important;z-index:1!important;padding-top:12px!important}
       .article-page-label,.article-note{display:none!important}
       .article-page{margin-top:0!important}
       .article-card{grid-template-columns:1fr!important}

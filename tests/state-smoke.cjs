@@ -14,7 +14,7 @@ const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)
 const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
 assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
-assert(html.includes('<link rel="manifest" href="/manifest.webmanifest?v=2.13.7">'), "app must expose a versioned web manifest");
+assert(html.includes(`<link rel="manifest" href="/manifest.webmanifest?v=${releaseVersion}">`), "app must expose a versioned web manifest");
 assert(html.includes('<link rel="apple-touch-icon" href="/apple-touch-icon.png">'), "iOS must use the conventional root dog-logo touch icon");
 assert(html.includes('<link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png">'), "older iOS versions must use the root precomposed dog-logo icon");
 for(const icon of ["apple-touch-icon.png","favicon-32.png","icon-192.png","icon-512.png","icon-maskable-512.png"])assert(fs.existsSync(`assets/icons/${icon}`),`app icon ${icon} must exist`);
@@ -74,6 +74,8 @@ assert(compared.every(x=>x.result.settings.zeroYd===25),"compared trajectories m
 assert.deepEqual(compared.map(x=>x.result.settings.velocity),[800,1000],"trajectory comparison must use each load's recorded velocity");
 assert(html.includes("body>header{"), "top-bar styles must be scoped away from page-level header elements");
 assert(!html.includes("\nheader{\n"), "page-level headers must not inherit the sticky top-bar layout");
+assert(html.includes(".article-reader-bar{position:sticky;top:0;z-index:20"), "article reader header must stay above scrolling text");
+assert(html.includes("min-height:44px"), "article reader back control must keep a reliable mobile tap target");
 assert(html.includes(".field{display:flex;min-width:0"), "editor fields must be allowed to shrink within their grid column");
 assert(html.includes(".editor-card .form-grid{grid-template-columns:minmax(0,1fr)}"), "editor forms must stack on narrow mobile screens");
 assert(html.includes("assets/photographic-record-masthead.webp"), "photographic record must use the archival engraving masthead");
