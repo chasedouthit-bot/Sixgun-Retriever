@@ -1,13 +1,19 @@
-/* Sixgun Retriever 2.13.8 — Library reader safe-area fix */
+/* Sixgun Retriever 2.13.9 — Library reader safe-area fix */
 (function(){
   'use strict';
-  const VERSION='2.13.8';
+  const VERSION='2.13.9';
   let srMode='library';
   let tableQuery='';
   let tablePowder='all';
   let tableCartridge='all';
   let tableWriter='all';
   let tableSort='title';
+  const READER_FONT_SIZES=[14,16,18,20,22];
+  let readerFontIndex=1;
+  try{
+    const saved=Number(localStorage.getItem('srArticleFontIndex'));
+    if(Number.isInteger(saved))readerFontIndex=Math.max(0,Math.min(READER_FONT_SIZES.length-1,saved));
+  }catch(_){}
 
   function escText(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function plain(v){return String(v??'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();}
@@ -22,6 +28,12 @@
       .article-reader-shell{position:relative!important}
       .article-reader-bar{top:0!important;z-index:20!important;justify-content:flex-start!important;align-items:flex-end!important;min-height:calc(54px + var(--safe-t))!important;padding:calc(8px + var(--safe-t)) 0 6px!important;background:var(--bg)!important;border-bottom:1px solid var(--line)!important;box-shadow:0 5px 12px rgba(0,0,0,.28)!important}
       .article-reader-close{position:relative!important;z-index:2!important;display:inline-flex!important;align-items:center!important;min-height:44px!important;padding:0 8px!important;touch-action:manipulation}
+      .sr-article-font-controls{display:flex;align-items:center;flex:none;margin-left:auto;margin-right:4px;height:40px;border:1px solid var(--line);border-radius:11px;background:var(--bg2);overflow:hidden}
+      .sr-article-font-btn{display:grid;place-items:center;width:43px;height:40px;border:0;background:none;color:var(--brass);font:700 15px/1 Inter,sans-serif;cursor:pointer;touch-action:manipulation}
+      .sr-article-font-btn:disabled{color:var(--ink-faint);opacity:.35}
+      .sr-article-font-value{display:grid;place-items:center;min-width:32px;height:24px;border-left:1px solid var(--line);border-right:1px solid var(--line);color:var(--ink-dim);font:700 10px/1 Inter,sans-serif;font-variant-numeric:tabular-nums}
+      #articleReaderContent .article-transcript{font-size:var(--sr-article-font-size,16px)!important}
+      #articleReaderContent .article-caption{font-size:.94em!important}
       #articleReaderContent{position:relative!important;z-index:1!important;padding-top:12px!important}
       .article-page-label,.article-note{display:none!important}
       .article-page{margin-top:0!important}
@@ -156,12 +168,45 @@
     if(!showLibrary)renderTables();
   }
 
+  function applyReaderFont(){
+    const reader=document.getElementById('articleReader');if(!reader)return;
+    const size=READER_FONT_SIZES[readerFontIndex];
+    reader.style.setProperty('--sr-article-font-size',size+'px');
+    const value=document.getElementById('srArticleFontValue');if(value)value.textContent=size;
+    const smaller=document.getElementById('srArticleFontSmaller');if(smaller)smaller.disabled=readerFontIndex===0;
+    const larger=document.getElementById('srArticleFontLarger');if(larger)larger.disabled=readerFontIndex===READER_FONT_SIZES.length-1;
+  }
+
+  function changeReaderFont(delta){
+    readerFontIndex=Math.max(0,Math.min(READER_FONT_SIZES.length-1,readerFontIndex+delta));
+    try{localStorage.setItem('srArticleFontIndex',String(readerFontIndex));}catch(_){}
+    applyReaderFont();
+  }
+
+  function installReaderFontControls(){
+    const bar=document.querySelector('.article-reader-bar');if(!bar)return;
+    let controls=document.getElementById('srArticleFontControls');
+    if(!controls){
+      controls=document.createElement('div');
+      controls.id='srArticleFontControls';
+      controls.className='sr-article-font-controls';
+      controls.setAttribute('role','group');
+      controls.setAttribute('aria-label','Article font size');
+      controls.innerHTML='<button type="button" class="sr-article-font-btn" id="srArticleFontSmaller" aria-label="Decrease article font size">A−</button><output class="sr-article-font-value" id="srArticleFontValue" aria-live="polite">16</output><button type="button" class="sr-article-font-btn" id="srArticleFontLarger" aria-label="Increase article font size">A+</button>';
+      bar.appendChild(controls);
+      document.getElementById('srArticleFontSmaller').addEventListener('click',()=>changeReaderFont(-1));
+      document.getElementById('srArticleFontLarger').addEventListener('click',()=>changeReaderFont(1));
+    }
+    applyReaderFont();
+  }
+
   function patchReader(){
     try{
       if(typeof renderArticleReader==='function'&&!renderArticleReader.__srTextOnly){const base=renderArticleReader;const patched=function(){articleMode='text';return base.apply(this,arguments);};patched.__srTextOnly=true;renderArticleReader=patched;}
       if(typeof openArticle==='function'&&!openArticle.__srTextOnly){const patched=function(id){openArticleId=id;articleMode='text';const reader=document.getElementById('articleReader');if(!reader)return;reader.hidden=false;document.body.style.overflow='hidden';renderArticleReader();const close=document.getElementById('articleReaderClose');if(close)close.focus();};patched.__srTextOnly=true;openArticle=patched;}
     }catch(e){console.warn('Library text-only patch',e);}
     document.querySelectorAll('.article-reader-modes').forEach(el=>el.remove());
+    installReaderFontControls();
   }
 
   function stampVersion(){document.querySelectorAll('.landing-version').forEach(el=>{if(/v?\d+\.\d+\.\d+/i.test(el.textContent))el.textContent=el.textContent.replace(/v?\d+\.\d+\.\d+/i,'Version '+VERSION);});}
