@@ -77,7 +77,7 @@ assert(html.includes("body>header{"), "top-bar styles must be scoped away from p
 assert(!html.includes("\nheader{\n"), "page-level headers must not inherit the sticky top-bar layout");
 assert(html.includes(".article-reader-bar{position:sticky;top:0;z-index:20"), "article reader header must stay above scrolling text");
 assert(html.includes("min-height:44px"), "article reader back control must keep a reliable mobile tap target");
-assert(libraryReaderHotfix.includes("id=\"srArticleFontControls\""), "full-page article reader must expose font-size controls");
+assert(libraryReaderHotfix.includes("controls.id='srArticleFontControls'"), "full-page article reader must expose font-size controls");
 assert(libraryReaderHotfix.includes("READER_FONT_SIZES=[14,16,18,20,22]"), "article font control must provide a useful mobile size range");
 assert(libraryReaderHotfix.includes("localStorage.setItem('srArticleFontIndex'"), "article font preference must persist across articles");
 assert(html.includes(".field{display:flex;min-width:0"), "editor fields must be allowed to shrink within their grid column");
