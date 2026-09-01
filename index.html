@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.16.0">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.16.0">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.16.0">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.16.0">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.16.0">
+<link rel="manifest" href="/manifest.webmanifest?v=2.17.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.17.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.17.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.17.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.17.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -520,7 +520,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.16.0</div>
+    <div class="landing-version">Version 2.17.0</div>
   </div>
 </div>
 
@@ -951,8 +951,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.16.0";
-const CACHE_VERSION="sixgun-retriever-v2.16.0";
+const RELEASE_VERSION="2.17.0";
+const CACHE_VERSION="sixgun-retriever-v2.17.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -2124,6 +2124,43 @@ LIB_TABLES=LIB_TABLES.filter(t=>!RETIRED_LIBRARY_TABLE_TITLES.has(t.title));
 const BUILTIN_LIB_TABLES=JSON.parse(JSON.stringify(LIB_TABLES));
 
 const LIB_ARTICLES=[{
+  id:"venturino-factors-revolver-precision",
+  title:"Factors in Revolver Precision",
+  author:"Mike Venturino",
+  publication:"Handloader No. 320",
+  date:"June–July 2019",
+  department:"Mike’s Shootin’ Shack",
+  tags:["revolver precision","barrel groove diameter","cylinder chamber mouths","bullet sizing","Mike Venturino","Colt SAA","Ruger Vaquero",".45 Colt",".44-40",".44 Special",".38-40",".38 Special",".357 Magnum"],
+  cartridges:[".45 Colt",".44-40",".44 Special",".38-40",".38 Special",".357 Mag"],
+  summary:"Venturino explains how mismatches between revolver barrel-groove and cylinder-throat dimensions affect accuracy, documenting measurements from Colt Single Action Army revolvers and a Ruger Vaquero across six classic cartridges.",
+  pages:[
+    {page:"26",src:"assets/articles/venturino-factors-revolver-precision/page-26.jpeg"},
+    {page:"27",src:"assets/articles/venturino-factors-revolver-precision/page-27.jpeg"},
+    {page:"67",src:"assets/articles/venturino-factors-revolver-precision/page-67.jpeg"}
+  ],
+  transcript:[
+    {page:"26",html:`
+      <p>If a revolver is in good mechanical shape, meaning no pitting in the barrel and timing is correct with the cylinder locking up correctly, how can it be inaccurate? Especially if the ammunition used in it is good, clean factory loads or handloads. That’s simple: Perhaps the ammunition—factory or handloads—does not mate with the revolver’s dimensions. These would include barrel groove diameters and cylinder chamber mouth diameters. Guns and loads that have been around for a century or more often have mismatched dimensions, with the .45 Colt being the worst offender.</p>
+      <p>Let’s consider that cartridge first. It has been written many times that .45 Colt Single Action Army revolvers in the first generation of production from 1873 to 1941 had barrel groove diameters of .454 inch. As the legends go, when the SAA was resurrected in 1956, the barrel groove diameter was .451 inch and remains so to this day. Only part of that statement is true, and maybe not even then.</p>
+      <p>Here’s some proof: An avid Colt collector at a large antique gun show passed on to me an original Colt factory specification sheet dated July 29, 1922. It shows all the company’s .45-caliber barrels measuring .451 inch for minimum and .452 inch for maximum. I only have one pre-1941 SAA in my collection currently. It was made in 1926, and its barrel slugs .451 inch. There are another 11 .45 Colt revolvers in my vault, and all but one have .451-inch barrel groove diameters. The exception is .450 inch in that respect.</p>
+      <p>Those .45 Colt barrel groove diameters would not be a problem except that every one of those dozen revolvers’ (save one) cylinders’ chamber mouths are .455 to .457 inch. The exception is the mentioned 1926 version with .454-inch chamber mouths. Even with large chamber mouths, revolvers shoot more than adequately for most purposes if bullets are <em>hollowbase or cast of soft alloy</em>. Remington’s factory-made .45 Colt conical bullets have a deep hollowbase. They usually shoot very nicely. And I’ve had good experiences using a relatively soft alloy of one part tin to 20 parts lead (1:20). However, the common wisdom is that with revolver bullets “harder is better.” With mismatched barrel and cylinder dimensions, I say that is a fallacy.</p>
+      <p>Staying with the Colt SAA revolver, let’s look at .44s like the .44 WCF (.44-40) and .44 Special. Here I have 10 examples to measure. (I’m staying with the SAA because I have more samples from a wider timeframe to measure than with any other brand of revolver.)</p>
+      <p>Properly loading the .44-40 can be especially troublesome depending on the exact revolver being used. Naturally, this was learned the hard way. Back in the 1970s I came to own a beautiful Colt <em>Frontier Six-Shooter</em>, which of course was Colt’s early manner of labeling the .44-40. Its factory letter said it was made in 1892. I found a set of dies for $5 and ordered a .427-inch cast bullet lube/sizing die along with Lyman mould No. 42798 (now 427098). So, I was ready to shoot!</p>
+      <p>Actually I was not, because none of my handloads would fit in that revolver’s chambers. So I pushed a soft lead slug through one chamber. It measured .425 inch. Another lube/sizing die was ordered for that dimension, and handloads then chambered fine. That story should have had a happy ending, but it did not. I wasn’t a black-powder shooter yet,</p>
+      <aside class="article-caption">A .451-inch slug was pushed through the barrel of one of Mike’s many Colt SAA .45 barrels.</aside>`},
+    {page:"27",html:`
+      <p>and my smokeless loads’ groups were dismal. That led me to slug the Colt’s barrel. It was .427 inch across the grooves, and shooting hard cast .425-inch bullets down it provided groups that wouldn’t have stayed on Elmer Keith’s hat at 25 yards. (I should not have been firing smokeless loads in that old Colt anyway.)</p>
+      <p>If you think this mismatched revolver existed because Colt’s engineers in the 1890s just didn’t know better, you might be correct. However, get this: One hundred years later when Ruger introduced the Vaquero, I eagerly got one in .44-40. Elmer’s hats would have been completely safe from bullets shot out of it. Why? Because it had .425-inch chamber mouths, but the barrel’s grooves were .429-inch across, which is the same groove diameter as used for the .44 Magnum.</p>
+      <p>Since those days, I obtained a copy of <em>Ideal Reloading Handbook No. 28</em> printed in 1927. In it I found the information that early .44-40 bullet diameter was recommended at .424 inch, but for later guns it was .427 inch. Then came the mentioned specification sheet so generously given to me showing that in 1922, all of Colt’s .44 Russian and Special and .44-40 barrels were .426/.427 inch.</p>
+      <aside class="article-caption">For slugging barrels, Mike starts with an oversized pure-lead roundball and taps it into a revolver barrel with a rubber mallet. It is then pushed all the way through with a piece of hardwood dowel. Two .45 Colt SAA cylinders illustrate the oversize chamber mouths common in this caliber.</aside>`},
+    {page:"67",html:`
+      <p>Of my 10 .44-caliber Colt SAAs, ranging in age from 1902 until 2005, they are evenly split in barrel groove diameters. Half are .426 inch and half are .427 inch. I wish that sort of uniformity could be attributed to the chamber mouths of those revolvers, plus two auxiliary .44 Special cylinders I had fitted to the .44-40s. The 1902 .44-40 has six chamber mouths measuring .431 inch. More modern .44-40s run from that size down to .428 inch. It’s the .44 Specials that actually worry me a bit. One made in 1961 uniformly has .430-inch chamber mouths. Others from 1980 on run from .431 inch to .433 inch; sometimes in only one cylinder.</p>
+      <p>So far, most of this column has indicated a lack of uniformity. However, when we get to .38 WCF (.38-40) the story changes. I have one so chambered made in 1904 and four made in the late 1990s and early 2000s. Every barrel and all 30 chambers measure .400 inch for the former, and .401 inch for the latter. It’s no wonder I’ve grown so fond of .38-40s in the 44 years since buying my first.</p>
+      <p>Many years ago I read somewhere that Colt made .38 Special and .357 Magnum barrels measuring .354 inch across their grooves. I remember rejecting the information thinking, <em>Everyone knows the proper size is .357 inch. That’s why the .357 Magnum got its name.</em> I owe an apology to whoever wrote that article many decades ago. My specification sheet states Colt’s dimension for .38s were .353 to .354 inch. On hand is only one Colt SAA .357 Magnum (1970), one .38 Special SAA (1956) and a Colt Detective Special .38 (1961). All have .354-inch barrel groove diameters and .357-inch chamber mouths.</p>
+      <p>After all this studying and research and hands on experimenting, I’ve simplified my revolver handloading in this manner: The bullets are sized close to the chamber mouths regardless of the barrel groove diameter.</p>
+      <aside class="article-caption">A .354-inch slug was pushed through the barrel of Mike’s 1970-vintage Colt SAA .357 Magnum.</aside>`}
+  ]
+},{
   id:"wieland-unique-utility",
   title:"Unique Utility",
   author:"Terry Wieland",
