@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.15.0">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.15.0">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.15.0">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.15.0">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.15.0">
+<link rel="manifest" href="/manifest.webmanifest?v=2.16.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.16.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.16.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.16.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.16.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -520,7 +520,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.15.0</div>
+    <div class="landing-version">Version 2.16.0</div>
   </div>
 </div>
 
@@ -951,8 +951,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.15.0";
-const CACHE_VERSION="sixgun-retriever-v2.15.0";
+const RELEASE_VERSION="2.16.0";
+const CACHE_VERSION="sixgun-retriever-v2.16.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -2093,7 +2093,29 @@ let LIB_TABLES=[
   {verify:false,title:"Pearce — Representative .45 Colt Revolver Throat Sizes",who:"Brian Pearce",source:".45 Colt Standard-Pressure Handloads · Handloader No. 320 (owned scan)",
    cartridge:".45 Colt",powders:[],writer:"Pearce",conditions:[["Type","Measured revolver throat reference"],["Author's preferred throat","Generally .452 inch"]],head:["Model","Year","Throat"],
    rows:[["Colt Single Action Army","1874",".450 in"],["Colt Single Action Army","1875",".4495 in"],["Colt Single Action Army","1887",".451 in"],["Colt Single Action Army","1890",".452 in"],["Colt Single Action Army","1907",".455 in"],["Colt Single Action Army","1912",".4555 in"],["Colt Single Action Army","1921",".455 in"],["Colt Single Action Army","1924",".456 in"],["Colt New Service","1937",".455 in"],["Colt Single Action Army","1957",".4555 in"],["Colt New Frontier SAA","1970",".456 in"],["Colt Single Action Army","1974",".456 in"],["Colt New Frontier SAA","1981",".457 in"],["Colt Single Action Army","1992",".460 in"],["Colt New Frontier SAA","2012",".456 in"],["Great Western Frontier","1954",".456 in"],["Great Western Frontier Fast Draw","1963",".452 in"],["Pietta SAA Model","2018",".452 in"],["Ruger Old Model Blackhawk","1971",".449 in"],["Ruger New Model Blackhawk","1975",".456 in"],["Ruger Vaquero","1994",".450 in"],["Ruger Redhawk","1999",".449 in"],["Ruger New Model Blackhawk Flattop","2011",".452 in"],["Ruger New Vaquero","2005",".452 in"],["Smith & Wesson Model 25-5","1979",".458 in"],["Smith & Wesson Model 25-5","1982",".451 in"],["Smith & Wesson Model 625-6","1996",".4515 in"],["Standard Manufacturing SA","2018",".452 in"],["Uberti SAA","1993",".458 in"],["USFA SAA Pre-War","2000",".452 in"],["USFA SAA Rodeo","2005",".4515 in"]],maxRow:-1,
-   note:"Complete transcription of Table III on page 52. Pearce emphasizes that throat diameter has varied widely even within a maker and model, and that measuring the individual revolver is critical to bullet selection and accuracy."}
+   note:"Complete transcription of Table III on page 52. Pearce emphasizes that throat diameter has varied widely even within a maker and model, and that measuring the individual revolver is critical to bullet selection and accuracy."},
+  {verify:false,title:"Wieland — Select Unique Handloads",who:"Terry Wieland",source:"Unique Utility · Handloader No. 320 (owned scan)",
+   cartridge:"Multiple",powders:["Unique"],writer:"Wieland",conditions:[["Powder","Alliant Unique"],["Scope","Rifle and handgun cartridges"],["Source warning","Loads are valid only in the test firearms used"],["Work-up","Reduce initial powder charge by 5 percent and work up while watching for pressure signs"]],
+   head:["Cartridge","Bullet","Charge","Primer","Case","Velocity","ES","Barrel","Firearm"],rows:[
+    [".22 High Power","60 lead FN","6.5 gr","GM210M","Norma","1,610 fps","n/a","20 in","Savage 1899"],[".22 High Power","64 lead w/gc","7.0 gr","GM210M","Norma","1,646 fps","69 fps","20 in","Savage 1899"],
+    [".25-20 SS","85 Lyman-Ideal 257283","5.0 gr","GM205M","Bertram","1,531 fps","34 fps","28 in","Stevens Model 47"],
+    [".256 Winchester Magnum","72 Lyman-Ideal 257420","6.0 gr","GM205M","Jamison","1,774 fps","n/a","24 in","Marlin Model 62"],[".256 Winchester Magnum","86 Lyman-Ideal 257464","6.0 gr","GM205M","Jamison","1,588 fps","n/a","24 in","Marlin Model 62"],
+    [".303 British","215 lead","13.0 gr","GM210M","HXP","1,440 fps","n/a","25 in","Lee-Enfield No. 4 Mk I"],
+    [".32-20","100 lead FN","5.0 gr","GM205M","Starline","1,288 fps","109 fps","26 in","Winchester Low Wall"],
+    [".32-40","165 Lightning lead","8.0 gr","GM210M","Winchester (.38-55 reformed)","1,310 fps","26 fps","26 in","Savage 1899"],[".32-40","115 Hayley lead","8.0 gr","GM205M","Winchester (.38-55 reformed)","1,514 fps","n/a","24 in","Martini Cadet Conversion"],[".32-40","115 Hayley lead","9.0 gr","GM210M","Winchester (.38-55 reformed)","1,650 fps","124 fps","24 in","Martini Cadet Conversion"],[".32-40","115 Hayley lead","10.0 gr","F210","Winchester","1,500 fps","n/a","26 in","Winchester Model 94"],
+    [".32 Winchester Special","164 HDS","8.5 gr","F210","Winchester","1,290 fps","n/a","26 in","Winchester Model 94"],[".32 Winchester Special","182 HDS","8.0 gr","GM150M","Winchester","1,278 fps","18 fps","24 in","Winchester Model 92"],
+    [".38-40","180 lead","8.0 gr","GM210M","Winchester","1,351 fps","40 fps","24 in","Winchester Model 92"],[".38-40","180 lead","8.0 gr","GM150M","Winchester","1,299 fps","35 fps","24 in","Winchester Model 92"],[".38-40","170 HDS","8.2 gr","GM150M","Winchester","1,505 fps","n/a","22 in","Dakota Custom"],
+    [".458 Lott","332 lead w/gc","23.0 gr","F215M","Superior","","","",""],
+    [".32 S&W Long","98 lead wadcutter","1.8 gr","GM100M","Sellier & Bellot","820 fps","48 fps","6 in","Britarm Olympic"],[".32 S&W Long","90 Hornady SWC","4.0 gr","CCI 500","Winchester","1,157 fps","n/a","6 in","S&W Model 16-4"],
+    [".32 H&R Magnum","100 lead RNFP","3.8 gr","GM100M","Federal","1,047 fps","118 fps","6 in","S&W Model 16-4"],
+    [".38 Special","158 SWC","3.7 gr","GM100M","Winchester","720 fps","89 fps","3 in","S&W Model 27-2"],[".38 Special","158 SWC","3.7 gr","GM100M","Winchester","764 fps","169 fps","6.5 in","Ruger Blackhawk"],
+    [".44 Special","240 Hornady lead SWC","6.3 gr","CCI 300","Winchester","732 fps","42 fps","4 in","S&W Mountain Gun"],[".44 Special","245 Lyman-Ideal 429421","6.3 gr","GM150M","Winchester","862 fps","n/a","7.5 in","Ruger Super Blackhawk"],
+    [".45 Colt","240 Cramer lead RN","8.0 gr","GM205M","CBC","854 fps","56 fps","5.5 in","Colt New Frontier"]
+   ],maxRow:-1,note:"Complete transcription of the page-57 table. HDS means Huntington Die Specialties. An asterisk on the .32-40 Winchester case denotes brass reformed from .38-55. The source leaves chronograph and firearm fields blank for the .458 Lott row. Publisher warning: verify all published load data; listed loads are valid only in the test firearms used."},
+  {verify:false,title:"Wieland — What Can Be Loaded with Unique?",who:"Terry Wieland",source:"Unique Utility · Handloader No. 320 (owned scan)",
+   cartridge:"Multiple",powders:["Unique"],writer:"Wieland",conditions:[["Type","Approximate output from the stated powder quantity"],["Powder","Alliant Unique"]],head:["Application","Approximate rounds","Unique required"],rows:[
+    ["12-gauge trap loads","1,500","5 lb"],[".32 S&W Long target rounds","3,889","1 lb"],[".45 Colt loads","875","1 lb"],[".38-40 for revolver and rifle","1,750","2 lb"],[".32-40 Schützen loads","875","1 lb"],[".458 Lott practice loads","300","1 lb"],["28-gauge skeet loads","1,000","2 lb"],[".22 Hornet squirrel loads","2,000","1 lb"],["9mm Parabellum","1,165","1 lb"],[".380 ACP for a carry gun","1,550","1 lb"],[".460 Weatherby Magnum practice loads","250","1 lb"],[".41 Magnum","700","1 lb"],[".270 Winchester practice loads","465","1 lb"],[".30-30 practice loads for a deer rifle","660","1 lb"]
+   ],maxRow:-1,note:"Complete transcription of the boxed reference on page 58. These figures illustrate Unique's breadth and are approximate yields, not stand-alone load recipes; consult the detailed load data for components and charge weights."}
 ];
 const RETIRED_LIBRARY_TABLE_TITLES=new Set([
   "Pearce .45 Colt STANDARD — FULL #320 survey (SAA-safe, all bullets/powders)"
@@ -2102,6 +2124,59 @@ LIB_TABLES=LIB_TABLES.filter(t=>!RETIRED_LIBRARY_TABLE_TITLES.has(t.title));
 const BUILTIN_LIB_TABLES=JSON.parse(JSON.stringify(LIB_TABLES));
 
 const LIB_ARTICLES=[{
+  id:"wieland-unique-utility",
+  title:"Unique Utility",
+  author:"Terry Wieland",
+  publication:"Handloader No. 320",
+  date:"June–July 2019",
+  department:"Feature",
+  tags:["Unique","Alliant","Terry Wieland","versatile powder","cast bullets","rifle loads","handgun loads","shotshells",".45 Colt",".44 Special",".32 S&W Long",".38-40",".32-40"],
+  cartridges:["Multiple",".45 Colt",".44 Special",".38 Special",".32 S&W Long",".32 H&R Mag",".22 High Power",".25-20 SS",".256 Win Mag",".303 British",".32-20",".32-40",".32 Win Spl",".38-40",".458 Lott"],
+  summary:"Wieland surveys Unique's 120-year history and extraordinary versatility across handgun, rifle and shotshell applications, then supplies 26 tested rifle and handgun loads and a practical comparison of how far a pound of Unique can go.",
+  pages:[
+    {page:"54",src:"assets/articles/wieland-unique-utility/page-54.jpeg"},{page:"55",src:"assets/articles/wieland-unique-utility/page-55.jpeg"},{page:"56",src:"assets/articles/wieland-unique-utility/page-56.jpeg"},{page:"57",src:"assets/articles/wieland-unique-utility/page-57.jpeg"},{page:"58",src:"assets/articles/wieland-unique-utility/page-58.jpeg"},{page:"59",src:"assets/articles/wieland-unique-utility/page-59.jpeg"}
+  ],
+  transcript:[
+    {page:"54",html:`
+      <aside class="article-caption"><strong>Unique Utility: A powder that lives up to its name.</strong> A Colt New Frontier and .45 Colt ammunition loaded with Unique and 240-grain Cramer roundnose cast bullets illustrate one of the article's classic “eight grains of Unique” applications.</aside>`},
+    {page:"55",html:`
+      <p>A guy can do an awful lot with 20 pounds of Unique. He can load up a raft of .44 Specials and shoot Cowboy Action; he can prepare some .32-40 target loads for a <em>Schützen</em> match or put together shotshells and either shoot Skeet or go hunting. Unique has been a stalwart for self-defense loads for more than a century, and “eight grains of Unique” is probably the most widely applicable loading formula, in a variety of cartridges, since the end of the black-powder era.</p>`},
+    {page:"56",html:`
+      <p>The astonishing thing about Unique—which is now made by Alliant but has had a number of corporate parents since its inception in 1899—is that it's the second-oldest powder we have, yet it's still in widespread, regular use. The only powder that is older is Bullseye, another Alliant product created a couple of years earlier. For the last 120 years, both have been standard components for handloaders.</p>
+      <p>When a handloader thinks of all the advances that have been made in the area of smokeless powder technology since 1900, it is truly astonishing that nothing has come along that will do everything Unique will do—and do it as well. If there was a prize given for “All-Time Greatest Gunpowder,” Unique would be a prime candidate; for “All-Time Most Useful,” it would be a shoe-in.</p>
+      <p>Unique is a double-based flake powder developed by Laflin &amp; Rand, which (along with DuPont) was one of the two largest powder manufacturers in the United States. In 1902, it was taken over by DuPont, which was intent on forming a monopoly. This was broken up under antitrust laws a decade later. The company's double-based powders then went to a new company, Hercules, which manufactured them until taken over in the 1990s by Alliant.</p>
+      <p>This is a thumbnail sketch of a history which is incredibly convoluted. To quote Philip B. Sharpe, “The powder industry of the United States is so thoroughly interwoven that it is difficult for a historian to state definitely ‘which firm was which and when.’” Through it all, however, as other notable Hercules powders such as Sharpshooter fell by the wayside, Unique and its running mate, Bullseye, sailed through. Not only that, it has been periodically updated and given new packaging so many times that a collector could devote his time just to Unique containers and have an impressive display.</p>
+      <p>The latest iteration of Unique was announced by Vista Outdoor, civilian heir to Alliant Powders, in 2018. It is proclaimed to be cleaner burning. If so, I haven't noticed a difference—but then, I never found Unique to be particularly dirty in the first place.</p>
+      <p>Introduced right at the end of the black-powder era (or the beginning of smokeless, take your choice), Unique occupies a secure position not only as an all-around powder, but one that can be used in many old black-powder cartridges to duplicate original ballistics. It ignites very easily, so fillers are usually unnecessary.</p>
+      <p>Alliant calls Unique the “most versatile powder made,” and good in “all popular pistol calibers” as well as in 12-, 16-, 20- and 28-gauge shotshells. They don't mention rifles, but there are many rifle cartridges, too, where a charge of Unique with cast bullets is an efficient, low-cost way to shoot a lot and, generally, shoot pretty well.</p>
+      <p>As might be expected, a powder with so many applications is not usually the very best powder for any one use. There is a price for versatility and, generally speaking, for any of the cartridges mentioned above another more specialized powder can be found that does the job better. However, there are exceptions.</p>
+      <aside class="article-caption">Unique is a somewhat fluffy, dark-gray double-based flake powder. It works across applications ranging from the .22 Hornet and .32 S&amp;W Long to the .45 Colt, .460 Weatherby Magnum and 12- and 28-gauge shotshells.</aside>`},
+    {page:"57",html:`
+      <p>In the accompanying table is a listing for the .44 Special with a 240-grain lead bullet. In the early 1990s, when I was shooting International Practical Shooting Confederation (IPSC) quite a lot, this was the load I used in my Smith &amp; Wesson Mountain Gun. With the Smith's 4-inch barrel, this load delivered just enough velocity to make Major power factor. This was in the days before special divisions were devised for high- and low-power guns, and for revolvers separate from semiautomatics. It was important to make Major power factor, and by a good enough margin that a random check of your ammunition would not come up short. My notes indicate that the extreme velocity spread (ES), at 42 fps, was well within the margin.</p>
+      <p>I have no idea how many thousand rounds of that load I assembled and put through the Mountain Gun over a couple of years. To this day, it's my favorite all-around, let's-go-plinking load for any .44. It's accurate, very comfortable to shoot, and a pound of powder goes a long way.</p>
+      <p>Another exception where Unique may be the best powder around is in the .32 S&amp;W Long, using 1.8 grains of Unique behind a wadcutter bullet. Like the .44 load mentioned above, it is very consistent (ES of 48 fps) and accurate in any pistol I've tried. As well, a charge of 1.8 grains means you can load, theoretically, 3,888 rounds from a pound of powder.</p>
+      <p>If loading for power, Unique can do that, too. The load shown for the .45 Colt with a 240-grain roundnose pure-lead Cramer bullet would sure get the attention of anything you cared to shoot. It is also about all the power I care to handle in the Colt New Frontier that I sometimes carry as a car gun. This is one of the famous “eight grains of Unique” loads that have helped make this powder's reputation for 120 years.</p>
+      <p>Two other 8-grain loads I've included are the 165-grain bullet in the .32-40 for use in target rifles, and the 115-grain bullet in the same cartridge for a short-barrel Cadet Martini, rechambered from .310 Cadet. In my experience, neither one is likely to bring home any silverware—I have found more accurate loads for both—but for everyday practice with everyday bullets, Unique does a good and economical job.</p>
+      <p>Then there is the .38-40, another cartridge that is actually older than Unique and began its career in black powder. Unique substitutes for black very comfortably, delivering better ballistic performance than black powder ever did, with no adverse effects like high pressure to damage older actions.</p>
+      <aside class="article-caption">The complete 26-row “Select Unique Handloads” table is indexed separately in Tables with bullet, charge, primer, case, velocity, extreme spread, barrel and firearm fields.</aside>`},
+    {page:"58",html:`
+      <p>Notice that several of these cartridges, including the .32-20 and .38-40, were chambered in both rifles and revolvers in the old days, and such combinations are still popular. Here is one of the very, very few instances where a handloader can use the same powder in a rifle and handgun.</p>
+      <p>The load for the .458 Lott, using a 332-grain cast bullet for practice, is typical of Unique in that application. Although a 23-grain charge comes nowhere close to filling the case, it ignites so readily that no filler is required. Again, if I had my choice for practice ammunition in such cartridges, I would reach for Accurate 5744, especially if I wanted a little more velocity, but in a pinch Unique works just fine. I mention that because at one point it became very hard to get 5744, but Unique always seems to be in stock.</p>
+      <p>Of course, Unique is a natural for such cartridges as the .32-20, .25-20, .256 Winchester Magnum and the old .25-20 Single Shot, all using cast bullets. Rarely would a handloader ever seek maximum velocity in these guns, and probably never with cast bullets. When you get into really ancient cartridges like the .25-21, where you are likely using brass formed from some other case and capacities are variable, start with a light load of Unique to get the feel of it.</p>
+      <p>This is where Unique becomes a real asset: You can almost always find data for old cartridges in old manuals using Unique—generally in company with recommendations for Sharpshooter, Lightning, SR 80, and any number of other powders that went to the big powder reservoir in the sky along about the time Franklin D. Roosevelt first got elected. As long as handloaders can find old manuals on eBay and buy canisters of Unique, we can keep vast numbers of obsolescent but delightful old rifles shooting.</p>
+      <p>Shotgunners probably think of Unique as primarily a shotshell propellant, which is understandable. To take just one manual as an example, <em>Lyman Shotshell Reloading Handbook, 4th Edition</em> (1995) lists Unique in a wide range of applications. Speaking generally, these are neither the heaviest nor the lightest, the biggest nor the smallest, in any of the four gauges for which it is recommended. But, it can be used for everything from light target loads to heavy field loads, and it pops up as the “most ballistically consistent” load with monotonous regularity in all four.</p>
+      <p>Unique has been reviewed in the pages of <em>Handloader</em> at least three times: John Wootters in 1970, Bob Hagel in <em>Handloader</em> No. 95 (Jan/Feb 1982), and R.H. VanDenburg, Jr. in <em>Handloader</em> No. 275 (Dec 2011).</p>
+      <aside class="article-caption">The complete 14-item “What Can Be Loaded with Unique?” powder-yield reference is indexed separately in Tables.</aside>`},
+    {page:"59",html:`
+      <p>It is interesting to compare what they wrote. All agreed on Unique's great versatility, but Wootters listed a half-dozen rifle calibers as being among his “pet loads,” including the .25-20, .257 Roberts, 7x57, .308 Winchester and .30-06. Not only did it have application in every handgun cartridge from the .25 ACP to the .44 Magnum, he wrote, but it was “the” powder for hot hardball loads in the 9mm Parabellum.</p>
+      <p>Bob Hagel used Unique for light loads in everything from the .22 Hornet to the .460 Weatherby, while VanDenburg noted that it has applications in an extraordinary range of pressure levels from 8,000 to 35,000 psi.</p>
+      <p>Both Hagel and VanDenburg mentioned Unique's one slight difficulty, and that is metering. Being a light, rather fluffy flake, it tends to be a little inconsistent when metering through a standard powder measure, with the drum occasionally hanging up or the flakes not packing into the cavity. This leads to some variation in powder charges. This is of no real consequence when working with midrange loads, where an extra .2 grains (the range noted in metering tests of Unique) will never show.</p>
+      <p>In the accompanying table where I list extreme velocity spread, some are genuinely extreme, such as 169 fps with the .38 Special in a Ruger Blackhawk, or 118 fps in the .32 H&amp;R/S&amp;W Model 16-4 combination. That might be due partly to variations in powder charge, but those who have worked with revolvers will recognize this as a common occurrence when dealing with six different chambers.</p>
+      <p>From the foregoing, it should not be assumed that Unique is suitable only for cast bullets. Good small-game and plinking loads can be assembled using lighter jacketed bullets as well.</p>
+      <p>Between the loading and the shooting, several pounds of Unique can keep a handloader busy for a good long time.</p>
+      <aside class="article-caption">Wieland notes that although Unique can meter with slight inconsistency through conventional powder measures, it works well with an electronic scale and dispenser.</aside>`}
+  ]
+},{
   id:"pearce-45-colt-standard-pressure-handloads",
   title:".45 Colt Standard-Pressure Handloads",
   author:"Brian Pearce",
