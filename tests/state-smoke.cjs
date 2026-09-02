@@ -15,6 +15,10 @@ const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)
 const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
 assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
+assert(html.includes('libraryTag=next!=="all"&&libraryTag.toLowerCase()===next.toLowerCase()?"all":next'), "tapping the active Library tag must clear the filter");
+assert(html.includes('"colt saa":"Colt Single Action Army"'), "Library taxonomy must merge Colt SAA into Colt Single Action Army");
+assert(html.includes('".357 mag":".357 Magnum"'), "Library taxonomy must merge abbreviated .357 Magnum tags");
+assert(html.includes(".map(libraryCanonicalTag)"), "Library tags must be canonicalized before duplicate removal");
 assert(html.includes(`<link rel="manifest" href="/manifest.webmanifest?v=${releaseVersion}">`), "app must expose a versioned web manifest");
 assert(html.includes(`<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=${releaseVersion}">`), "iOS must use the cache-busted dog-logo touch icon");
 assert(html.includes(`<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=${releaseVersion}">`), "older iOS versions must use the cache-busted dog-logo icon");

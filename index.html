@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.30.0">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.30.0">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.30.0">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.30.0">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.30.0">
+<link rel="manifest" href="/manifest.webmanifest?v=2.31.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.31.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.31.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.31.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.31.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -527,7 +527,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.30.0</div>
+    <div class="landing-version">Version 2.31.0</div>
   </div>
 </div>
 
@@ -958,8 +958,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.30.0";
-const CACHE_VERSION="sixgun-retriever-v2.30.0";
+const RELEASE_VERSION="2.31.0";
+const CACHE_VERSION="sixgun-retriever-v2.31.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -3948,8 +3948,43 @@ document.querySelectorAll(".lib-nav-btn").forEach(b=>b.onclick=()=>{
 /* ============================================================
 /* Unified Library: All / Articles / Fragments with shared search and tags. */
 let libraryView="all",libraryTag="all",libraryQuery="";
+const LIBRARY_TAG_ALIASES=new Map(Object.entries({
+  ".32 h&r mag":".32 H&R Magnum",
+  ".357 mag":".357 Magnum",
+  ".357 s&w magnum":".357 Magnum",
+  ".38 s&w special":".38 Special",
+  ".38 spl":".38 Special",
+  ".38/44":".38-44 S&W Special",
+  ".44 mag":".44 Magnum",
+  "a-9":"Accurate No. 9",
+  "colt saa":"Colt Single Action Army",
+  "colt peacemaker":"Colt Single Action Army",
+  "single action army":"Colt Single Action Army",
+  "saa":"Colt Single Action Army",
+  "model p":"Colt Single Action Army",
+  "peacemaker":"Colt Single Action Army",
+  "new frontier":"Colt New Frontier",
+  "custom revolver":"custom revolvers",
+  "crimp":"crimping",
+  "cast bullets":"cast bullets",
+  "groove diameter":"barrel groove diameter",
+  "cylinder chamber mouths":"cylinder throats",
+  "throat diameter":"cylinder throats",
+  "gun strength":"firearm strength",
+  "handguns":"handguns",
+  "handloading basics":"handloading basics",
+  "h-110":"H110",
+  "pet loads":"pet loads",
+  "revolver":"revolvers",
+  "revolver gunsmithing":"revolver gunsmithing",
+  "single actions":"single-action revolvers",
+  "single-action revolver":"single-action revolvers",
+  "target load":"target loads",
+  "timing":"revolver timing"
+}));
 function libraryPlainText(v){return String(v??"").replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();}
-function libraryUniqueTags(values){const seen=new Set();return values.flat().filter(Boolean).map(x=>String(x).trim()).filter(x=>{const k=x.toLowerCase();if(!k||seen.has(k))return false;seen.add(k);return true;});}
+function libraryCanonicalTag(value){const tag=String(value??"").trim();return LIBRARY_TAG_ALIASES.get(tag.toLowerCase())||tag;}
+function libraryUniqueTags(values){const seen=new Set();return values.flat().filter(Boolean).map(libraryCanonicalTag).filter(x=>{const k=x.toLowerCase();if(!k||seen.has(k))return false;seen.add(k);return true;});}
 function libraryArticleTags(a){return libraryUniqueTags([a.tags||[],a.cartridges||[],a.author]);}
 function libraryNoteTags(e){return libraryUniqueTags([e.tags||[],e.cartridge,e.who]);}
 function libraryTableTags(t){return libraryUniqueTags([t.tags||[],t.cartridge,t.writer||t.who,t.powders||[]]);}
@@ -3966,8 +4001,8 @@ function renderLibraryTags(){
   items.forEach(x=>x.tags.forEach(t=>{const k=t.toLowerCase(),prior=counts.get(k);counts.set(k,{label:prior?.label||t,count:(prior?.count||0)+1});}));
   const tags=[...counts.values()].sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label));
   if(libraryTag!=="all"&&!tags.some(t=>t.label.toLowerCase()===libraryTag.toLowerCase()))libraryTag="all";
-  el.innerHTML=`<button type="button" class="library-tag ${libraryTag==="all"?"on":""}" data-library-tag="all">All tags</button>`+tags.map(t=>`<button type="button" class="library-tag ${libraryTag.toLowerCase()===t.label.toLowerCase()?"on":""}" data-library-tag="${esc(t.label)}">${esc(t.label)}</button>`).join("");
-  el.querySelectorAll("[data-library-tag]").forEach(b=>b.onclick=()=>{libraryTag=b.dataset.libraryTag;renderLibraryShelf();});
+  el.innerHTML=`<button type="button" class="library-tag ${libraryTag==="all"?"on":""}" data-library-tag="all" aria-pressed="${libraryTag==="all"}">All tags</button>`+tags.map(t=>`<button type="button" class="library-tag ${libraryTag.toLowerCase()===t.label.toLowerCase()?"on":""}" data-library-tag="${esc(t.label)}" aria-pressed="${libraryTag.toLowerCase()===t.label.toLowerCase()}">${esc(t.label)}</button>`).join("");
+  el.querySelectorAll("[data-library-tag]").forEach(b=>b.onclick=()=>{const next=b.dataset.libraryTag;libraryTag=next!=="all"&&libraryTag.toLowerCase()===next.toLowerCase()?"all":next;renderLibraryShelf();});
 }
 function libraryTagMarkup(tags){return `<span class="library-item-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</span>`;}
 function libraryArticleCard(item){const a=item.data;if(a.externalUrl)return `<a class="article-card article-card-external" href="${esc(a.externalUrl)}" target="_blank" rel="noopener noreferrer"><span><span class="library-kind">Linked article · Opens publisher site</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span><span class="article-card-source-link">Read at source →</span>${libraryTagMarkup(item.tags)}</span></a>`;return `<button type="button" class="article-card" data-article="${esc(a.id)}"><img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}" loading="lazy" decoding="async"><span><span class="library-kind">Article · ${a.pages.length} original pages</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span>${libraryTagMarkup(item.tags)}</span></button>`;}
