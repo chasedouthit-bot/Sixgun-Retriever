@@ -1,7 +1,7 @@
-/* Sixgun Retriever 2.17.0 — Library reader safe-area fix */
+/* Sixgun Retriever 2.19.0 — Library reader safe-area fix */
 (function(){
   'use strict';
-  const VERSION='2.17.0';
+  const VERSION='2.19.0';
   let srMode='library';
   let tableQuery='';
   let tablePowder='all';
