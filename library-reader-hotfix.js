@@ -1,7 +1,7 @@
-/* Sixgun Retriever 2.35.0 — Library reader safe-area fix */
+/* Sixgun Retriever 2.35.2 — Library reader safe-area fix */
 (function(){
   'use strict';
-  const VERSION='2.35.0';
+  const VERSION='2.35.2';
   let srMode='library';
   let tableQuery='';
   let tablePowder='all';
@@ -209,7 +209,7 @@
     installReaderFontControls();
   }
 
-  function stampVersion(){document.querySelectorAll('.landing-version').forEach(el=>{if(/v?\d+\.\d+\.\d+/i.test(el.textContent))el.textContent=el.textContent.replace(/v?\d+\.\d+\.\d+/i,'Version '+VERSION);});}
+  function stampVersion(){document.querySelectorAll('.landing-version').forEach(el=>{el.textContent='Version '+VERSION;});}
   function init(){addStyles();patchTagline();patchLibraryItems();patchReader();buildTablesPanel();setMode('library');stampVersion();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(init,0));else setTimeout(init,0);
 })();
