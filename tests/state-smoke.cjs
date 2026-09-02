@@ -26,6 +26,33 @@ const manifest=JSON.parse(fs.readFileSync("manifest.webmanifest","utf8"));
 assert.equal(manifest.short_name,"Sixgun Retriever","manifest must use the app name");
 assert.equal(manifest.icons.length,3,"manifest must expose regular and maskable dog-logo icons");
 assert(html.includes('id:"pearce-understanding-45-colt"'), "Library must include Pearce's complete Understanding the .45 Colt article");
+for(const article of [
+  "taffin-venerable-versatile-45-colt",
+  "taffin-levergun-loads-45-colt-part-3",
+  "taffin-sixguns-and-45-acp",
+  "taffin-thrivin-thumbusters",
+  "taffin-half-century-sixguns-casull",
+  "taffin-38-special-in-357-sixguns",
+  "taffin-38-special-and-44-special",
+  "taffin-hail-41-magnum",
+  "taffin-sixgunner-archive",
+  "taffin-campfire-tales-archive",
+  "taffin-muck-rack-article-index"
+])assert(html.includes(`id:"${article}"`),`Library must include linked Taffin entry ${article}`);
+assert.equal((html.match(/externalUrl:"https:\/\/gunsmagazine\.com\/ammo\/handloading-the-38-special\/"/g)||[]).length,1,"Library must not duplicate Taffin's pocket-pistol .38 Special article");
+assert.equal((html.match(/externalUrl:"https:\/\/gunsmagazine\.com\/ammo\/handloading-for-medium-and-large-frame-38-specials\/"/g)||[]).length,1,"Library must not duplicate Taffin's medium/large-frame .38 Special article");
+const skeeterArticleIds=[
+  "skelton-44-special-reappraisal","skelton-sixguns-and-varmints","skelton-letter","skelton-ask-skeeter","skelton-bill-jordan-top-gun",
+  "skelton-handle-44-magnum","skelton-buying-used-handguns","skelton-converting-357-to-44-special","skelton-gunmen-el-paso",
+  "skelton-handgun-hunting-how-to","skelton-handgun-loads","skelton-hide-for-your-handgun","skelton-home-gunsmithing-sixgun",
+  "skelton-jeff-davis-milton","skelton-charley-askins","skelton-life-times-colt-saa","skelton-long-short-sixgun-barrels",
+  "skelton-long-range-handgunning","skelton-mama-mia-mishap","skelton-mauser-9mm-parabellum","skelton-my-friend-357",
+  "skelton-pancho-villa","skelton-point-shooting-for-pot","skelton-sw-new-combat-maggie","skelton-sixgun-magic-flying-targets",
+  "skelton-rifleman","skelton-sixgun-clinic","skelton-they-were-good-but","skelton-tom-threepersons","skelton-best-trail-gun"
+];
+assert.equal(skeeterArticleIds.length,30,"Dark Canyon batch must contain all 30 individual Skeeter pieces");
+for(const article of skeeterArticleIds)assert(html.includes(`id:"${article}"`),`Library must include linked Skeeter entry ${article}`);
+for(const archive of ["skelton-handguns-hipshots-archive","skelton-dark-canyon-index"])assert(html.includes(`id:"${archive}"`),`Library must include Skeeter archive ${archive}`);
 assert.equal((html.match(/assets\/articles\/pearce-understanding-45-colt\/page-/g)||[]).length, 7, "Pearce article must preserve all seven scanned pages");
 for(const tier of ["14,000-psi Loads","16,000- to 19,000-psi Loads","23,000-psi Loads","32,000-CUP Loads","50,000-psi Loads"]){
   assert(html.includes(`Pearce .45 Colt — ${tier}`), `Tables must include Pearce's ${tier} data`);

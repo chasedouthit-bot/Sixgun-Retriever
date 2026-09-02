@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.25.0">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.25.0">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.25.0">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.25.0">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.25.0">
+<link rel="manifest" href="/manifest.webmanifest?v=2.27.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.27.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.27.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.27.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.27.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -521,7 +521,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.25.0</div>
+    <div class="landing-version">Version 2.27.0</div>
   </div>
 </div>
 
@@ -952,8 +952,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.25.0";
-const CACHE_VERSION="sixgun-retriever-v2.25.0";
+const RELEASE_VERSION="2.27.0";
+const CACHE_VERSION="sixgun-retriever-v2.27.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -3084,6 +3084,405 @@ const LIB_ARTICLES=[{
   tags:[".38 Special","target load","wadcutters","economical handloads","cast bullets","obturation","crimp","velocity spread","John Haviland"],
   cartridges:[".38 Special"],
   summary:"An economical target-load feature explaining why flush-seated wadcutters use less propellant, how bullet hardness and obturation affect bore sealing, and how a light crimp can improve velocity consistency."
+},
+{
+  id:"taffin-venerable-versatile-45-colt",
+  title:"The Venerable, Versatile .45 Colt",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"2017",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/discover/the-venerable-versatile-45-colt/",
+  tags:[".45 Colt","firearm strength","standard loads","heavy loads","Colt Single Action Army","Ruger Blackhawk","Ruger Redhawk","Freedom Arms","cast bullets","John Taffin"],
+  cartridges:[".45 Colt"],
+  summary:"A broad .45 Colt primer covering case strength, bullet fit, standard and heavy handloads, and a useful ranking of factory sixguns by the load levels their actions can tolerate."
+},
+{
+  id:"taffin-levergun-loads-45-colt-part-3",
+  title:"Levergun Loads: .45 Colt Part III — Jacketed Bullets",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"2021",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/ammo/levergun-loads-45-colt-part-3-jacketed-bullets/",
+  tags:[".45 Colt","levergun loads","jacketed bullets","Marlin","Winchester","Hornady","Sierra","Speer","H110","IMR 4227","John Taffin"],
+  cartridges:[".45 Colt"],
+  summary:"Part III of Taffin's .45 Colt levergun series, concentrating on jacketed-bullet combinations, feeding, accuracy and performance in Marlin and Winchester rifles."
+},
+{
+  id:"taffin-sixguns-and-45-acp",
+  title:"Sixguns and the .45 ACP",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"Date not listed",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/discover/sixguns-and-the-45-acp/",
+  tags:[".45 ACP","convertible revolvers","Ruger Blackhawk","Freedom Arms Model 83","auxiliary cylinder","cast bullets","sixgun loads","John Taffin"],
+  cartridges:[".45 ACP",".45 Colt"],
+  summary:"A loading survey for .45 ACP auxiliary cylinders in single-action revolvers, including convertible Ruger Blackhawks and Freedom Arms sixguns."
+},
+{
+  id:"taffin-thrivin-thumbusters",
+  title:"Thrivin' Thumbusters",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"Date not listed",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/guns/handguns/thrivin-thumbusters/",
+  tags:["Colt Single Action Army",".45 Colt","single actions","black powder","original loads","first generation Colt","sixgun history","John Taffin"],
+  cartridges:[".45 Colt"],
+  summary:"Taffin's history of the Colt Single Action Army and its many chamberings, beginning with the original 255-grain .45 Colt black-powder load and its modern duplication."
+},
+{
+  id:"taffin-half-century-sixguns-casull",
+  title:"A Half Century With Sixguns: The .454 Casull",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"Date not listed",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/guns/handguns/a-half-century-with-sixguns-casull/",
+  tags:[".454 Casull",".45 Colt","Dick Casull","Elmer Keith","Freedom Arms Model 83","five-shot cylinders","cartridge history","John Taffin"],
+  cartridges:[".454 Casull",".45 Colt",".45 ACP"],
+  summary:"A history of Dick Casull's high-pressure .45 experiments and the path from heavily loaded .45 Colt brass to the .454 Casull and Freedom Arms revolvers."
+},
+{
+  id:"taffin-38-special-in-357-sixguns",
+  title:"The .38 Special in .357 Magnum Sixguns",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"2022",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/ammo/the-38-special-in-357-magnum-sixguns/",
+  tags:[".38 Special",".357 Magnum","Lyman 358429","Keith SWC","cast bullets","Smith & Wesson","Bullseye","Unique","2400","John Taffin"],
+  cartridges:[".38 Special",".357 Mag"],
+  summary:"Taffin traces decades of loading .38 Special brass for .357 Magnum revolvers, from hand-cast Keith bullets and nutcracker tools to later target and field combinations."
+},
+{
+  id:"taffin-38-special-and-44-special",
+  title:"The .38 Special and .44 Special",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"2020",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/our-experts/the-38-special-and-44-special/",
+  tags:[".38 Special",".44 Special","levergun loads","Uberti 1866","Marlin 1894","cast bullets","low recoil","Bullseye","Unique","John Taffin"],
+  cartridges:[".38 Special",".44 Special"],
+  summary:"A levergun-focused collection of easy-shooting .38 Special and .44 Special combinations, with attention to overall length, feeding and low-recoil cast-bullet performance."
+},
+{
+  id:"taffin-hail-41-magnum",
+  title:"Hail the .41 Magnum",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"Date not listed",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/guns/handguns/hail-the-41-magnum/",
+  tags:[".41 Magnum","cartridge history","Smith & Wesson","Freedom Arms",".38 Special",".357 Magnum",".44 Special",".44 Magnum","John Taffin"],
+  cartridges:[".41 Magnum",".38 Special",".357 Mag",".44 Special",".44 Magnum"],
+  summary:"A history and appraisal of the .41 Magnum that places it in the cartridge lineage connecting the .38/.357 and .44 Special/.44 Magnum families."
+},
+{
+  id:"taffin-sixgunner-archive",
+  title:"The Sixgunner — John Taffin Archive",
+  author:"John Taffin",
+  publication:"American Handgunner",
+  date:"Column archive",
+  department:"Linked archive",
+  sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/our-experts/the-sixgunner-2/",
+  tags:["John Taffin","The Sixgunner","column archive","American Handgunner","handgun reviews","sixguns","reference index"],
+  cartridges:[".45 Colt",".45 ACP",".38 Special",".357 Mag",".41 Magnum",".44 Special",".44 Magnum"],
+  summary:"American Handgunner's browsable index of Taffin's Sixgunner columns, handgun reviews, cartridge histories and loading features."
+},
+{
+  id:"taffin-campfire-tales-archive",
+  title:"Campfire Tales — John Taffin Archive Gateway",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"Column archive",
+  department:"Linked archive",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/our-experts/60-years-with-the-colt-single-action/",
+  tags:["John Taffin","Campfire Tales","GUNS Magazine","column archive","Colt Single Action Army","Perfect Packin' Pistol","reference index"],
+  cartridges:[".45 Colt",".38 Special",".357 Mag",".41 Magnum",".44 Special",".44 Magnum"],
+  summary:"A central GUNS Magazine Taffin feature whose related-story links provide a useful gateway into more of his Campfire Tales and sixgun writing."
+},
+{
+  id:"taffin-muck-rack-article-index",
+  title:"John Taffin Article Index",
+  author:"John Taffin",
+  publication:"Muck Rack",
+  date:"Author index",
+  department:"Linked index",
+  sourceType:"external",
+  externalUrl:"https://muckrack.com/john-taffin/articles",
+  tags:["John Taffin","article index","bibliography","GUNS Magazine","American Handgunner","chronological archive","reference index"],
+  cartridges:[".45 Colt",".45 ACP",".38 Special",".357 Mag",".41 Magnum",".44 Special",".44 Magnum"],
+  summary:"A chronological byline index for locating Taffin's articles across GUNS Magazine, American Handgunner and other publications."
+},
+{
+  id:"skelton-44-special-reappraisal",
+  title:"The .44 Special — A Reappraisal",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/The_44Special_A_Reappraisal.htm",
+  tags:["Skeeter Skelton",".44 Special","reappraisal","sixguns","load development"], cartridges:[".44 Special"],
+  summary:"Skelton reconsiders the enduring usefulness, accuracy and handloading potential of the .44 Special."
+},
+{
+  id:"skelton-sixguns-and-varmints",
+  title:"6-Guns & Varmints",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"June 1967", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Six_Guns_And_Varmints.htm",
+  tags:["Skeeter Skelton","varmint shooting","handgun hunting","field shooting","sixguns"], cartridges:[".357 Mag",".44 Magnum"],
+  summary:"A field piece on using revolvers for varmints and the practical shooting demands of handgun hunting."
+},
+{
+  id:"skelton-letter",
+  title:"A Letter From Skeeter Skelton",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"February 1970", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/A%20Letter%20From%20Skeeter%20Skelton.htm",
+  tags:["Skeeter Skelton",".38 Special",".357 Magnum","Unique","2400","field loads","Big Bend"], cartridges:[".38 Special",".357 Mag"],
+  summary:"A letter-form column from West Texas combining sixgun field life with Skelton's working .38 Special and .357 Magnum load choices."
+},
+{
+  id:"skelton-ask-skeeter",
+  title:"Ask Skeeter",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Ask_Skeeter.htm",
+  tags:["Skeeter Skelton","reader questions","handguns","sixguns","advice column"], cartridges:[".38 Special",".357 Mag",".44 Special",".44 Magnum",".45 Colt"],
+  summary:"A reader-question column collecting Skelton's practical answers on handguns, ammunition and sixgun use."
+},
+{
+  id:"skelton-bill-jordan-top-gun",
+  title:"Bill Jordan — Top Gun",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/BillJordan_TopGun.htm",
+  tags:["Skeeter Skelton","Bill Jordan","Border Patrol","lawman history","combat shooting"], cartridges:[".357 Mag",".38 Special"],
+  summary:"Skelton's portrait of Border Patrol legend, exhibition shooter and practical-handgun authority Bill Jordan."
+},
+{
+  id:"skelton-handle-44-magnum",
+  title:"Can You Handle the .44 Magnum?",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Can%20You%20Handle%20The%2044%20Magnum.htm",
+  tags:["Skeeter Skelton",".44 Magnum","recoil","shootability","magnum revolvers"], cartridges:[".44 Magnum"],
+  summary:"A practical examination of .44 Magnum recoil, shooter tolerance and the difference between owning power and using it well."
+},
+{
+  id:"skelton-buying-used-handguns",
+  title:"Complete Guide to Buying Used Handguns",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"September 1979", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Complete_HowToGuide_For_Buying_Used_Handguns.htm",
+  tags:["Skeeter Skelton","used handguns","inspection","revolver timing","buying guide"], cartridges:[".38 Special",".357 Mag",".44 Special",".44 Magnum",".45 Colt"],
+  summary:"Skelton's step-by-step guide to evaluating the mechanical condition, wear and value of a used handgun before buying."
+},
+{
+  id:"skelton-converting-357-to-44-special",
+  title:"Converting .357s to .44 Specials",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Converting_357s_to_44Special.htm",
+  tags:["Skeeter Skelton",".44 Special",".357 Magnum","custom revolvers","conversion","gunsmithing"], cartridges:[".44 Special",".357 Mag"],
+  summary:"A classic treatment of converting suitable .357 Magnum revolvers into custom .44 Special sixguns."
+},
+{
+  id:"skelton-gunmen-el-paso",
+  title:"The Gunmen of El Paso",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/gunmen_of_el_paso.htm",
+  tags:["Skeeter Skelton","El Paso","Southwest history","lawmen","gunfighters"], cartridges:[".45 Colt",".44 Special"],
+  summary:"One of Skelton's historical essays on the armed lawmen and gunfighters associated with El Paso and the old Southwest."
+},
+{
+  id:"skelton-handgun-hunting-how-to",
+  title:"Handgun Hunting How-To",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/handgun_hunting_how_to.htm",
+  tags:["Skeeter Skelton","handgun hunting","field technique","accuracy","sixguns"], cartridges:[".357 Mag",".44 Magnum",".45 Colt"],
+  summary:"A practical introduction to handgun hunting, including firearm choice, field accuracy and realistic shooting technique."
+},
+{
+  id:"skelton-handgun-loads",
+  title:"Handgun Loads",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Handgun%20Loads.htm",
+  tags:["Skeeter Skelton","handloads","load development","revolvers","sixgun cartridges"], cartridges:[".38 Special",".357 Mag",".44 Special",".44 Magnum",".45 Colt"],
+  summary:"A collection of Skelton's favored working handgun loads and the reasoning behind their field and practice roles."
+},
+{
+  id:"skelton-hide-for-your-handgun",
+  title:"Hide for Your Handgun",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/hide_for_your_handgun.htm",
+  tags:["Skeeter Skelton","holsters","leather","carry gear","handguns"], cartridges:[".38 Special",".357 Mag",".44 Special",".44 Magnum",".45 Colt"],
+  summary:"Skelton discusses selecting practical leather and holster designs suited to the handgun and the way it will be carried."
+},
+{
+  id:"skelton-home-gunsmithing-sixgun",
+  title:"Home Gunsmithing Your Six-Gun",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Home_Gunsmithing_Your_Six_Gun.htm",
+  tags:["Skeeter Skelton","home gunsmithing","revolver maintenance","sixguns","shop work"], cartridges:[".38 Special",".357 Mag",".44 Special",".44 Magnum",".45 Colt"],
+  summary:"A period guide to basic sixgun shop work, maintenance and careful owner-level improvement."
+},
+{
+  id:"skelton-jeff-davis-milton",
+  title:"Jeff Davis Milton",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/jeff_davis_milton.htm",
+  tags:["Skeeter Skelton","Jeff Davis Milton","Border Patrol","lawman history","Southwest history"], cartridges:[".45 Colt",".44 Special"],
+  summary:"Skelton's account of frontier lawman and Border Patrol officer Jeff Davis Milton."
+},
+{
+  id:"skelton-charley-askins",
+  title:"The Legend of Charley Askins",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"May 1972", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/The_Legend_Of_Charley_Askins.htm",
+  tags:["Skeeter Skelton","Charley Askins","Border Patrol","competitive shooting","lawman history"], cartridges:[".38 Special",".357 Mag",".45 Colt"],
+  summary:"A character portrait of champion pistol shot, Border Patrol officer and gun writer Charley Askins."
+},
+{
+  id:"skelton-life-times-colt-saa",
+  title:"The Life & Times of Colt's Single-Action .45",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/The_life_&_times_of_colts_single_action-45.htm",
+  tags:["Skeeter Skelton","Colt Single Action Army",".45 Colt","sixgun history","single actions"], cartridges:[".45 Colt"],
+  summary:"A history and appraisal of the Colt Single Action Army and the .45 Colt cartridge that made it famous."
+},
+{
+  id:"skelton-long-short-sixgun-barrels",
+  title:"The Long & Short of Sixgun Barrels",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"July 1982", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/The%20Long%20&%20Short%20Of%20Sixgun%20Barrels.htm",
+  tags:["Skeeter Skelton","barrel length","sight radius","velocity","revolver accuracy"], cartridges:[".357 Mag",".44 Magnum"],
+  summary:"Skelton weighs sight radius, balance, portability and measured velocity across common revolver barrel lengths."
+},
+{
+  id:"skelton-long-range-handgunning",
+  title:"Long Range Handgunning",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/long_range_handgunning.htm",
+  tags:["Skeeter Skelton","long-range shooting","trajectory","field positions","sixguns"], cartridges:[".357 Mag",".44 Magnum",".45 Colt"],
+  summary:"A practical discussion of stretching a handgun's range through trajectory knowledge, steady positions and disciplined practice."
+},
+{
+  id:"skelton-mama-mia-mishap",
+  title:"The Mama Mia Mishap",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/The_Mama_Mia_Mishap.htm",
+  tags:["Skeeter Skelton","handgun tale","memoir","Southwest","story"], cartridges:[".38 Special",".357 Mag"],
+  summary:"One of Skelton's humorous autobiographical handgun tales, blending mishap, character and Southwestern storytelling."
+},
+{
+  id:"skelton-mauser-9mm-parabellum",
+  title:"Mauser 9mm Parabellum",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Mauser%209mm%20Parabellum.htm",
+  tags:["Skeeter Skelton","9mm Parabellum","Mauser","semiautomatic pistols","military handguns"], cartridges:["9mm"],
+  summary:"Skelton examines a Mauser chambered for 9mm Parabellum and places it in practical and historical context."
+},
+{
+  id:"skelton-my-friend-357",
+  title:"My Friend, the .357",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"June 1988", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/MyFriend_The357.htm",
+  tags:["Skeeter Skelton",".357 Magnum","Smith & Wesson","Ruger Blackhawk","field use","cartridge history"], cartridges:[".357 Mag"],
+  summary:"Skelton's personal defense of the .357 Magnum as a versatile law-enforcement, hunting and all-around sixgun cartridge."
+},
+{
+  id:"skelton-pancho-villa",
+  title:"Pancho Villa",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/pancho_villa.htm",
+  tags:["Skeeter Skelton","Pancho Villa","Mexican Revolution","Southwest history","historical firearms"], cartridges:[".45 Colt"],
+  summary:"A Skelton history piece on Pancho Villa, borderland legend and the firearms associated with his era."
+},
+{
+  id:"skelton-point-shooting-for-pot",
+  title:"Point Shooting for the Pot",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"September 1968", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Point_Shooting_For_The_Pot.htm",
+  tags:["Skeeter Skelton","point shooting","field shooting","Bill Jordan","Charley Askins","handgun technique"], cartridges:[".38 Special",".357 Mag",".44 Magnum"],
+  summary:"A lively field-shooting piece comparing point-shooting methods among Skelton and several celebrated Southwestern handgunners."
+},
+{
+  id:"skelton-sw-new-combat-maggie",
+  title:"S&W New Combat Maggie",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/SmithAndWesson_new_combat_maggie.htm",
+  tags:["Skeeter Skelton","Smith & Wesson","Combat Magnum",".357 Magnum","revolver review"], cartridges:[".357 Mag"],
+  summary:"Skelton evaluates a Smith & Wesson Combat Magnum design through the lens of practical carry and shooting."
+},
+{
+  id:"skelton-sixgun-magic-flying-targets",
+  title:"Sixgun Magic on Flying Targets",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Sixgun%20Magic%20On%20Flying%20Targets.htm",
+  tags:["Skeeter Skelton","aerial targets","trick shooting","field shooting","sixguns"], cartridges:[".38 Special",".357 Mag",".44 Magnum"],
+  summary:"A feature on the skill, timing and practice behind hitting thrown or flying targets with a revolver."
+},
+{
+  id:"skelton-rifleman",
+  title:"Skeeter Skelton…Rifleman",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"July 1982", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Skeeter_Skelton_Rifleman.htm",
+  tags:["Skeeter Skelton","rifles","Border Patrol","hunting","metallic silhouette","memoir"], cartridges:[".357 Mag",".44 Magnum"],
+  summary:"Skelton steps beyond his handgunner label to recount a lifetime of service, hunting and competition with centerfire rifles."
+},
+{
+  id:"skelton-sixgun-clinic",
+  title:"Skeeter Skelton's Sixgun Clinic",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/Skeeter%20Skeltons%20Sixgun%20Clinic.htm",
+  tags:["Skeeter Skelton","sixgun clinic","revolver shooting","maintenance","accuracy"], cartridges:[".38 Special",".357 Mag",".44 Special",".44 Magnum",".45 Colt"],
+  summary:"A clinic-style collection of Skelton's practical guidance for choosing, tuning, loading and shooting revolvers."
+},
+{
+  id:"skelton-they-were-good-but",
+  title:"They Were Good But…",
+  author:"Skeeter Skelton", publication:"Dark Canyon archive", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/They_Were_Good_But.htm",
+  tags:["Skeeter Skelton","classic handguns","retrospective","design criticism","sixguns"], cartridges:[".38 Special",".357 Mag",".44 Special",".45 Colt"],
+  summary:"A retrospective on respected handguns whose strengths came with shortcomings, compromises or missed potential."
+},
+{
+  id:"skelton-tom-threepersons",
+  title:"Tom Threepersons",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"October 1980", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/tom_threepersons.htm",
+  tags:["Skeeter Skelton","Tom Threepersons","lawman history","Border Patrol","Threepersons holster","Southwest history"], cartridges:[".44 Special",".45 Colt"],
+  summary:"Skelton investigates the life, guns and enduring borderland reputation of Cherokee lawman Tom Threepersons."
+},
+{
+  id:"skelton-best-trail-gun",
+  title:"What's the Best Trail Gun for You?",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"January 1977", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/What's%20The%20Best%20Trail%20Gun%20For%20You.htm",
+  tags:["Skeeter Skelton","trail gun",".38 Special",".32-20",".32 S&W Long","field carry"], cartridges:[".38 Special",".32-20",".32 S&W Long"],
+  summary:"Skelton defines the trail gun and compares compact, useful field sidearms, with particular praise for the .38 Special."
+},
+{
+  id:"skelton-handguns-hipshots-archive",
+  title:"Handguns and Hipshots — Skeeter Skelton Collection",
+  author:"Skeeter Skelton", publication:"Shooting Times / Dark Canyon archive", date:"1967–1987", department:"Linked archive", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/handguns_by_skeeter_skelton.htm",
+  tags:["Skeeter Skelton","Handguns","Hipshots","Shooting Times","column archive","reference index"], cartridges:[".38 Special",".357 Mag",".44 Special",".44 Magnum",".45 Colt"],
+  summary:"A Dark Canyon collection page linking a dozen of Skelton's Handguns and Hipshots columns from 1967 through 1987."
+},
+{
+  id:"skelton-dark-canyon-index",
+  title:"Skeeter Skelton — Dark Canyon Index",
+  author:"Skeeter Skelton", publication:"Dark Canyon", date:"Archive index", department:"Linked archive", sourceType:"external",
+  externalUrl:"https://www.darkcanyon.net/skeeter_skelton.htm",
+  tags:["Skeeter Skelton","Dark Canyon","article index","bibliography","archive","reference index"], cartridges:[".38 Special",".357 Mag",".44 Special",".44 Magnum",".45 Colt"],
+  summary:"The central Dark Canyon biography and index for the preserved Skeeter Skelton articles in this collection."
 }];
 
 
