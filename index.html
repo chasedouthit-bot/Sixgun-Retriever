@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.24.0">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.24.0">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.24.0">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.24.0">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.24.0">
+<link rel="manifest" href="/manifest.webmanifest?v=2.25.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.25.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.25.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.25.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.25.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -350,6 +350,7 @@ main{padding:0 16px 24px;background:var(--bg)}
 /* full article shelf + reader */
 .article-tools{display:flex;align-items:center;gap:9px;margin:16px 0 12px}.article-search{width:100%;border:1px solid var(--line);border-radius:11px;background:var(--bg2);color:var(--ink);padding:11px 13px;font:500 13px Inter,sans-serif;outline:none}.article-search:focus{border-color:var(--brass)}
 .article-card{width:100%;display:grid;grid-template-columns:88px minmax(0,1fr);gap:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(158deg,var(--bg2),var(--bg3));color:var(--ink);text-align:left;cursor:pointer;margin-bottom:12px}.article-card:active{transform:scale(.995)}.article-card-cover{width:88px;aspect-ratio:3/4;object-fit:cover;object-position:50% 8%;border:1px solid var(--brass-dim);border-radius:7px;background:#16130f;box-shadow:0 5px 14px rgba(0,0,0,.28)}.article-card-kicker,.article-card-title,.article-card-byline,.article-card-summary{display:block}.article-card-kicker{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--brass);font-weight:700}.article-card-title{font:700 17px/1.2 Bitter,serif;margin-top:5px}.article-card-byline{font:italic 12px/1.4 Bitter,serif;color:var(--ink-dim);margin-top:5px}.article-card-summary{font-size:12px;line-height:1.45;color:var(--ink-faint);margin-top:8px}.article-card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.article-card-tags span{border:1px solid var(--line);border-radius:999px;padding:3px 7px;font-size:9px;color:var(--ink-faint)}
+.article-card.article-card-external{grid-template-columns:1fr;text-decoration:none}.article-card-source-link{display:inline-flex;align-items:center;gap:5px;margin-top:10px;color:var(--brass);font-size:11px;font-weight:700}
 .article-reader{position:fixed;inset:0;z-index:500;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;isolation:isolate;background:var(--bg);padding:0 12px calc(28px + var(--safe-b))}.article-reader[hidden]{display:none}.article-reader-shell{position:relative;width:min(920px,100%);margin:0 auto}.article-reader-bar{position:sticky;top:0;z-index:20;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;min-height:calc(54px + var(--safe-t));padding:calc(8px + var(--safe-t)) 0 6px;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 5px 12px rgba(0,0,0,.28)}.article-reader-close{position:relative;z-index:2;display:inline-flex;align-items:center;min-height:44px;border:0;background:none;color:var(--brass);font-weight:700;font-size:13px;padding:0 8px;cursor:pointer;touch-action:manipulation}.article-reader-modes{display:flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--bg2)}.article-mode{border:0;background:none;color:var(--ink-faint);border-radius:7px;padding:7px 10px;font:700 11px Inter,sans-serif;cursor:pointer}.article-mode.on{background:var(--brass);color:#241d0e}#articleReaderContent{position:relative;z-index:1;padding-top:12px}.article-reader-hero{padding:17px 17px 20px;border:1px solid var(--line);border-radius:14px;background:var(--walnut);margin-bottom:14px}.article-reader-kicker{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--brass);font-weight:700}.article-reader-title{font:700 clamp(25px,5vw,42px)/1.08 Bitter,serif;margin-top:7px}.article-reader-meta{font:italic 13px/1.5 Bitter,serif;color:var(--ink-dim);margin-top:9px}.article-scans{display:grid;gap:14px}.article-scan{margin:0 auto;width:min(100%,760px);padding:7px 7px 10px;background:#d9caa6;border:1px solid #95794b;border-radius:5px;box-shadow:0 12px 30px rgba(0,0,0,.35)}.article-scan img{display:block;width:100%;height:auto;background:#1b1712}.article-scan figcaption{font:italic 12px/1.3 Bitter,serif;color:#493922;text-align:center;padding-top:7px}.article-transcript{background:#eee4ca;color:#34281b;border:1px solid #bca77b;border-radius:5px;padding:clamp(22px,5vw,58px);font:17px/1.67 "EB Garamond",Georgia,serif;box-shadow:0 18px 55px rgba(0,0,0,.34)}.article-transcript h2{font:700 clamp(27px,5vw,44px)/1.08 "Playfair Display",Georgia,serif;text-align:center}.article-transcript-byline{text-align:center;color:#765f42;font-style:italic;margin:8px 0 28px}.article-page{padding-top:22px;margin-top:22px;border-top:1px solid rgba(103,75,40,.27)}.article-page:first-of-type{padding-top:0;margin-top:0;border-top:0}.article-page-label{font:700 9px/1 Inter,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#86652f;margin-bottom:13px}.article-transcript p{margin:0 0 14px;text-indent:1.25em}.article-transcript p:first-of-type{text-indent:0}.article-caption{margin:18px 0;padding:12px 15px;border-left:3px solid #9d763f;background:rgba(157,118,63,.08);color:#68523a;font-style:italic;font-size:15px;line-height:1.5}.article-note{margin-top:28px;padding-top:17px;border-top:1px solid rgba(103,75,40,.27);color:#765f42;font:italic 13px/1.5 Inter,sans-serif}
 @media(max-width:520px){.article-card{grid-template-columns:72px 1fr;gap:11px}.article-card-cover{width:72px}.article-card-summary{display:none}.article-reader{padding-left:8px;padding-right:8px}.article-transcript{font-size:16px;padding:25px 19px}.article-reader-hero{padding:15px}.article-reader-title{font-size:27px}}
 
@@ -520,7 +521,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.24.0</div>
+    <div class="landing-version">Version 2.25.0</div>
   </div>
 </div>
 
@@ -951,8 +952,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.24.0";
-const CACHE_VERSION="sixgun-retriever-v2.24.0";
+const RELEASE_VERSION="2.25.0";
+const CACHE_VERSION="sixgun-retriever-v2.25.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -2940,6 +2941,149 @@ const LIB_ARTICLES=[{
       <p>Cast bullets also performed well. The 255-grain Lyman 454190 over 6.0 grains of Red Dot produced 833 fps and groups around one to 1¼ inches at 25 yards. The 338-grain gas-checked Lyman 452651 over 12.0 grains of HS-6 reached 968 fps, shot consistently on an informal 300-yard target and offered deep penetration for larger game.</p>
       <p>Pearce describes the compact revolver as unusually enjoyable with everyday 255-grain loads around 850 to 900 fps. The round butt and 3½-inch barrel could be ordered together on a new Model 1997, or some existing guns could be factory converted. He closes by praising the durability and lifetime quality of Freedom Arms single actions.</p>`}
   ]
+},
+{
+  id:"ultimate-reloader-45-colt-shooting-reloading",
+  title:"45 Colt: Shooting and Reloading",
+  author:"Guy Miner",
+  publication:"Ultimate Reloader",
+  date:"October 30, 2022",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://ultimatereloader.com/2022/10/30/45-colt-shooting-and-reloading/",
+  tags:[".45 Colt","standard pressure","Ruger-only loads","Colt New Service","Ruger Blackhawk","roll crimp","cast bullets","CFE Pistol","Accurate No. 9","Guy Miner"],
+  cartridges:[".45 Colt"],
+  summary:"A practical loading-session feature that separates standard-pressure .45 Colt ammunition from higher-pressure data reserved for strong Ruger and Thompson/Center firearms, with equipment, crimping and range-test context."
+},
+{
+  id:"american-handgunner-basic-45-colt-handloads",
+  title:"Basic .45 Colt Handloads",
+  author:"Jeff “Tank” Hoover",
+  publication:"American Handgunner",
+  date:"2020",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/discover/basic-turbo-charged-45-colt-handloads/",
+  tags:[".45 Colt","Ruger Blackhawk","Ruger Redhawk","heavy loads","cast bullets","powder coating","gas checks","Lee Loader","hunting loads","Jeff Hoover"],
+  cartridges:[".45 Colt"],
+  summary:"A step-by-step account of assembling heavy .45 Colt handloads for appropriately strong revolvers, covering bullet casting, powder coating, gas checks, case preparation and a low-cost hunting-load workflow."
+},
+{
+  id:"reload-ammo-reloading-45-colt",
+  title:"Reloading The .45 Colt",
+  author:"M.D. Smith",
+  publication:"Reload Ammo",
+  date:"Date not listed",
+  department:"Linked reference",
+  sourceType:"external",
+  externalUrl:"https://reloadammo.com/45-colt-load-data/",
+  tags:[".45 Colt","load reference","bullet diameter","standard pressure","Ruger Blackhawk","Thompson/Center","cowboy loads","M.D. Smith"],
+  cartridges:[".45 Colt"],
+  summary:"A broad .45 Colt load-data reference organized by bullet weight, with notes on bullet diameter, starting-charge reductions, standard-pressure limits and the separate treatment required for strong Ruger and Thompson/Center firearms."
+},
+{
+  id:"american-handgunner-the-357-magnum",
+  title:"The .357 Magnum",
+  author:"Mike “Duke” Venturino",
+  publication:"American Handgunner",
+  date:"2013",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/handguns/the-357-magnum/",
+  tags:[".357 Magnum","history","Smith & Wesson Model 27","Smith & Wesson Model 28","Smith & Wesson Model 19","Colt SAA","wadcutters","Bullseye","cast bullets","Mike Venturino"],
+  cartridges:[".357 Mag"],
+  summary:"Venturino combines the cartridge’s development and revolver history with a personal handloading account, including cast-bullet experience and full-length .357 Magnum wadcutter target loads."
+},
+{
+  id:"american-rifleman-loading-357-magnum",
+  title:"Loading the .357 Magnum",
+  author:"American Rifleman staff",
+  publication:"American Rifleman",
+  date:"December 31, 2020",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/content/loading-the-357-magnum/",
+  tags:[".357 Magnum","history","Elmer Keith","Phil Sharpe","target loads","medium loads","full-power loads","primer selection","roll crimp","cast bullets"],
+  cartridges:[".357 Mag"],
+  summary:"A cartridge-history and loading overview that distinguishes target, medium and full-power ammunition while discussing powder selection, primer choice, crimp, leading and the relationship between .38 Special and .357 Magnum brass."
+},
+{
+  id:"handloader-357-magnum-in-rifle",
+  title:"The .357 Magnum in a Rifle",
+  author:"John Haviland",
+  publication:"Handloader Magazine",
+  date:"October 2026",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://www.handloadermagazine.com/the-357-magnum-in-a-rifle",
+  tags:[".357 Magnum","rifle loads","Uberti Lightning","Marlin 1894","Winchester 94","overall length","bullet profile","feeding","cast bullets","John Haviland"],
+  cartridges:[".357 Mag"],
+  summary:"A rifle-specific loading feature centered on a .357 Magnum Uberti Lightning, explaining how cartridge overall length and bullet profile affect feeding and how longer barrels change velocity and trajectory."
+},
+{
+  id:"guns-handloading-38-special-pocket-pistols",
+  title:"Handloading The .38 Special: The Pocket Pistols",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"2021",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/ammo/handloading-the-38-special/",
+  tags:[".38 Special","pocket pistols","snubnose","Colt Detective Special","Smith & Wesson J-frame","Bullseye","Unique","wadcutters","standard pressure","John Taffin"],
+  cartridges:[".38 Special"],
+  summary:"Taffin surveys classic Colt and Smith & Wesson pocket revolvers and explains his standard-pressure .38 Special choices for short barrels, including cast roundnose, semi-wadcutter and wadcutter bullets."
+},
+{
+  id:"guns-38-wadcutters",
+  title:".38 Wadcutters",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"2018",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/gear/38-wadcutters/",
+  tags:[".38 Special","wadcutters","bullseye shooting","target loads","Smith & Wesson J-frame","Smith & Wesson K-frame","low recoil","cast bullets","John Taffin"],
+  cartridges:[".38 Special"],
+  summary:"A focused look at low-recoil .38 Special wadcutter ammunition for target work and small revolvers, with observations from J-frame, K-frame and single-action shooting."
+},
+{
+  id:"guns-medium-large-frame-38-specials",
+  title:"Handloading for Medium and Large Frame .38 Specials",
+  author:"John Taffin",
+  publication:"GUNS Magazine",
+  date:"2021",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/ammo/handloading-for-medium-and-large-frame-38-specials/",
+  tags:[".38 Special","medium frame","large frame","Smith & Wesson M&P","Smith & Wesson K-38","Smith & Wesson 38/44","Colt New Service","Unique","2400","cast bullets","John Taffin"],
+  cartridges:[".38 Special"],
+  summary:"Taffin separates medium- and large-frame .38 Special revolvers, reviews suitable cast-bullet combinations and places older heavy-frame handloads in their proper firearm-strength context."
+},
+{
+  id:"handloader-38-special-pet-loads",
+  title:".38 Special (Pet Loads)",
+  author:"Brian Pearce",
+  publication:"Handloader Magazine",
+  date:"November 2022",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://www.handloadermagazine.com/38-special-pet-loads",
+  tags:[".38 Special","Pet Loads","standard pressure","17,000 psi","Smith & Wesson Model of 1905","wadcutters","cast bullet moulds","case preparation","primer selection","Brian Pearce"],
+  cartridges:[".38 Special"],
+  summary:"Pearce’s technical standard-pressure survey covers cartridge history, firearm suitability, case and expander preparation, bullet construction, ignition, pressure limits and specific cast-bullet mould choices."
+},
+{
+  id:"american-rifleman-cheap-38-special-target-load",
+  title:"Handloads: A Cheap .38 Special Target Load",
+  author:"John Haviland",
+  publication:"American Rifleman",
+  date:"January 13, 2026",
+  department:"Linked article",
+  sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/content/handloads-a-cheap-38-special-target-load/",
+  tags:[".38 Special","target load","wadcutters","economical handloads","cast bullets","obturation","crimp","velocity spread","John Haviland"],
+  cartridges:[".38 Special"],
+  summary:"An economical target-load feature explaining why flush-seated wadcutters use less propellant, how bullet hardness and obturation affect bore sealing, and how a light crimp can improve velocity consistency."
 }];
 
 
@@ -3062,21 +3206,21 @@ function renderLibTables(){
       ${t.link?`<a class="ltable-link" href="${t.link}" target="_blank" rel="noopener">Read the full article at the source →</a>`:''}
     </div>`).join("");
 }
-function articleSearchText(a){return [a.title,a.author,a.publication,a.date,a.department,a.summary,...a.cartridges,...a.transcript.map(s=>s.html.replace(/<[^>]+>/g," "))].join(" ").toLowerCase();}
+function articleSearchText(a){return [a.title,a.author,a.publication,a.date,a.department,a.summary,...(a.tags||[]),...(a.cartridges||[]),...(a.transcript||[]).map(s=>s.html.replace(/<[^>]+>/g," "))].join(" ").toLowerCase();}
 function renderLibArticles(){
   const q=(document.getElementById("articleSearch")?.value||"").trim().toLowerCase();
   let list=libCart==="all"?LIB_ARTICLES:LIB_ARTICLES.filter(a=>a.cartridges.includes(libCart));
   if(q)list=list.filter(a=>articleSearchText(a).includes(q));
-  document.getElementById("articleShowing").innerHTML=`Showing <b>${list.length}</b> of ${LIB_ARTICLES.length} full articles`;
+  document.getElementById("articleShowing").innerHTML=`Showing <b>${list.length}</b> of ${LIB_ARTICLES.length} articles`;
   const el=document.getElementById("articleList");
-  el.innerHTML=list.map(a=>`<button type="button" class="article-card" data-article="${esc(a.id)}">
+  el.innerHTML=list.map(a=>a.externalUrl?`<a class="article-card article-card-external" href="${esc(a.externalUrl)}" target="_blank" rel="noopener noreferrer"><span><span class="article-card-kicker">${esc(a.department)} · Opens publisher site</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span><span class="article-card-source-link">Read at source →</span><span class="article-card-tags">${a.cartridges.map(c=>`<span>${esc(c)}</span>`).join("")}</span></span></a>`:`<button type="button" class="article-card" data-article="${esc(a.id)}">
     <img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}" loading="lazy" decoding="async">
     <span><span class="article-card-kicker">${esc(a.department)} · ${a.pages.length} scanned pages</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span><span class="article-card-tags">${a.cartridges.map(c=>`<span>${esc(c)}</span>`).join("")}</span></span>
-  </button>`).join("")||`<div class="lib-foot">No full articles match that search.</div>`;
+  </button>`).join("")||`<div class="lib-foot">No articles match that search.</div>`;
   el.querySelectorAll("[data-article]").forEach(b=>b.onclick=()=>openArticle(b.dataset.article));
 }
 let openArticleId=null,articleMode="scans";
-function openArticle(id){openArticleId=id;articleMode="scans";document.getElementById("articleReader").hidden=false;document.body.style.overflow="hidden";renderArticleReader();document.getElementById("articleReaderClose").focus();}
+function openArticle(id){const a=LIB_ARTICLES.find(x=>x.id===id);if(a?.externalUrl){window.open(a.externalUrl,"_blank","noopener,noreferrer");return;}openArticleId=id;articleMode="scans";document.getElementById("articleReader").hidden=false;document.body.style.overflow="hidden";renderArticleReader();document.getElementById("articleReaderClose").focus();}
 function closeArticle(){document.getElementById("articleReader").hidden=true;document.body.style.overflow="";openArticleId=null;}
 function renderArticleReader(){
   const a=LIB_ARTICLES.find(x=>x.id===openArticleId);if(!a)return closeArticle();
@@ -3125,7 +3269,7 @@ function renderLibraryTags(){
   el.querySelectorAll("[data-library-tag]").forEach(b=>b.onclick=()=>{libraryTag=b.dataset.libraryTag;renderLibraryShelf();});
 }
 function libraryTagMarkup(tags){return `<span class="library-item-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</span>`;}
-function libraryArticleCard(item){const a=item.data;return `<button type="button" class="article-card" data-article="${esc(a.id)}"><img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}" loading="lazy" decoding="async"><span><span class="library-kind">Article · ${a.pages.length} original pages</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span>${libraryTagMarkup(item.tags)}</span></button>`;}
+function libraryArticleCard(item){const a=item.data;if(a.externalUrl)return `<a class="article-card article-card-external" href="${esc(a.externalUrl)}" target="_blank" rel="noopener noreferrer"><span><span class="library-kind">Linked article · Opens publisher site</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span><span class="article-card-source-link">Read at source →</span>${libraryTagMarkup(item.tags)}</span></a>`;return `<button type="button" class="article-card" data-article="${esc(a.id)}"><img class="article-card-cover" src="${esc(a.pages[0].src)}" alt="First page of ${esc(a.title)}" loading="lazy" decoding="async"><span><span class="library-kind">Article · ${a.pages.length} original pages</span><span class="article-card-title">${esc(a.title)}</span><span class="article-card-byline">${esc(a.author)} · ${esc(a.publication)} · ${esc(a.date)}</span><span class="article-card-summary">${esc(a.summary)}</span>${libraryTagMarkup(item.tags)}</span></button>`;}
 function libraryNoteCard(item){const e=item.data;return `<article class="fragment-card"><div class="fragment-head"><div><div class="library-kind">Fragment</div><div class="fragment-source">${esc(e.who)} · ${esc(e.source)}</div></div>${e.verify?'<span class="vbadge">Verify</span>':''}</div><div class="fragment-body">${e.body}</div>${e.link?`<a class="fragment-link" href="${esc(e.link)}" target="_blank" rel="noopener">Open source →</a>`:""}${libraryTagMarkup(item.tags)}</article>`;}
 function libraryTableCard(item){const t=item.data,ch=Math.max(0,t.head.indexOf("Charge"));return `<details class="fragment-card fragment-table"><summary class="fragment-table-summary"><span class="library-kind">Fragment · Reference table</span><span class="fragment-table-title">${esc(t.title)}</span><span class="fragment-table-meta">${esc(t.who)} · ${esc(t.source)}</span><span class="fragment-table-open">View table</span></summary><div class="fragment-table-content"><div class="ltable-body"><table class="ldata"><thead><tr>${t.head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${t.rows.map((r,i)=>`<tr>${r.map((c,ci)=>`<td class="${i===t.maxRow&&ci===ch?"max":""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>${t.note?`<div class="ltable-note">${esc(t.note)}</div>`:""}${t.link?`<a class="ltable-link" href="${esc(t.link)}" target="_blank" rel="noopener">Open source →</a>`:""}${libraryTagMarkup(item.tags)}</div></details>`;}
 function renderLibraryShelf(){

@@ -1,7 +1,7 @@
-/* Sixgun Retriever 2.24.0 — Library reader safe-area fix */
+/* Sixgun Retriever 2.25.0 — Library reader safe-area fix */
 (function(){
   'use strict';
-  const VERSION='2.24.0';
+  const VERSION='2.25.0';
   let srMode='library';
   let tableQuery='';
   let tablePowder='all';
@@ -203,7 +203,7 @@
   function patchReader(){
     try{
       if(typeof renderArticleReader==='function'&&!renderArticleReader.__srTextOnly){const base=renderArticleReader;const patched=function(){articleMode='text';return base.apply(this,arguments);};patched.__srTextOnly=true;renderArticleReader=patched;}
-      if(typeof openArticle==='function'&&!openArticle.__srTextOnly){const patched=function(id){openArticleId=id;articleMode='text';const reader=document.getElementById('articleReader');if(!reader)return;reader.hidden=false;document.body.style.overflow='hidden';renderArticleReader();const close=document.getElementById('articleReaderClose');if(close)close.focus();};patched.__srTextOnly=true;openArticle=patched;}
+      if(typeof openArticle==='function'&&!openArticle.__srTextOnly){const patched=function(id){const article=Array.isArray(LIB_ARTICLES)?LIB_ARTICLES.find(a=>a.id===id):null;if(article?.externalUrl){window.open(article.externalUrl,'_blank','noopener,noreferrer');return;}openArticleId=id;articleMode='text';const reader=document.getElementById('articleReader');if(!reader)return;reader.hidden=false;document.body.style.overflow='hidden';renderArticleReader();const close=document.getElementById('articleReaderClose');if(close)close.focus();};patched.__srTextOnly=true;openArticle=patched;}
     }catch(e){console.warn('Library text-only patch',e);}
     document.querySelectorAll('.article-reader-modes').forEach(el=>el.remove());
     installReaderFontControls();
