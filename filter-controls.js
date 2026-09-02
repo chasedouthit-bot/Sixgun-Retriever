@@ -1,17 +1,18 @@
 (function(){
   const version=document.querySelector(".landing-version");
-  if(version)version.textContent="Version 2.34.0";
+  if(version)version.textContent="Version 2.35.0";
   if(document.getElementById("filterDrawer"))return;
 
   const screen=document.getElementById("s-loads");
   const gunChips=document.getElementById("gunChips");
   const powderChips=document.getElementById("powderChips");
   const tierChips=document.getElementById("tierChips");
-  if(!screen||!gunChips||!powderChips||!tierChips)return;
+  const statusChips=document.getElementById("statusChips");
+  if(!screen||!gunChips||!powderChips||!tierChips||!statusChips)return;
 
   const style=document.createElement("style");
   style.textContent=`
-    .filter-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:2px 0 0}
+    .filter-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:2px 0 0}
     .filter-toggle{min-width:0;display:flex;align-items:center;justify-content:space-between;gap:7px;padding:9px 10px;border:1px solid var(--line);border-radius:11px;background:var(--bg2);color:var(--ink);cursor:pointer;text-align:left;transition:border-color .16s,background .16s,transform .16s}
     .filter-toggle:active{transform:scale(.98)}
     .filter-toggle.open{border-color:var(--brass);background:var(--bg3)}
@@ -29,34 +30,37 @@
     .filter-panel.active{display:block}
     .filter-panel.active .chips{animation:filterSlide .24s cubic-bezier(.32,.72,0,1)}
     @keyframes filterSlide{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+    @media(max-width:620px){.filter-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
   `;
   document.head.appendChild(style);
 
   const controls=document.createElement("div");
   controls.className="filter-controls";
   controls.setAttribute("aria-label","Load filters");
-  controls.innerHTML=[["gun","Guns"],["powder","Powders"],["tier","Tiers"]].map(([key,label])=>
+  controls.innerHTML=[["gun","Guns"],["powder","Powders"],["tier","Tiers"],["status","Status"]].map(([key,label])=>
     `<button class="filter-toggle" id="${key}FilterBtn" type="button" aria-controls="${key}FilterPanel" aria-expanded="false"><span class="filter-toggle-copy"><span class="filter-toggle-label" id="${key}FilterLabel">${label}</span><span class="filter-toggle-value" id="${key}FilterValue">All</span></span><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>`
   ).join("");
 
   const drawer=document.createElement("div");
   drawer.className="filter-drawer";
   drawer.id="filterDrawer";
-  drawer.innerHTML=`<div class="filter-drawer-inner"><div class="filter-panel" id="gunFilterPanel"></div><div class="filter-panel" id="powderFilterPanel"></div><div class="filter-panel" id="tierFilterPanel"></div></div>`;
+  drawer.innerHTML=`<div class="filter-drawer-inner"><div class="filter-panel" id="gunFilterPanel"></div><div class="filter-panel" id="powderFilterPanel"></div><div class="filter-panel" id="tierFilterPanel"></div><div class="filter-panel" id="statusFilterPanel"></div></div>`;
   screen.insertBefore(controls,gunChips);
   screen.insertBefore(drawer,gunChips);
   document.getElementById("gunFilterPanel").appendChild(gunChips);
   document.getElementById("powderFilterPanel").appendChild(powderChips);
   document.getElementById("tierFilterPanel").appendChild(tierChips);
+  document.getElementById("statusFilterPanel").appendChild(statusChips);
 
   let openPanel=null;
-  const rows={gun:gunChips,powder:powderChips,tier:tierChips};
+  const rows={gun:gunChips,powder:powderChips,tier:tierChips,status:statusChips};
+  const dataKeys={gun:"g",powder:"p",tier:"t",status:"s"};
   function summary(key){
     const selected=rows[key].querySelector(".chip.on");
     if(key==="tier"&&rows[key].dataset.enabled==="false"&&(!selected||selected.dataset.t==="all"))return"Off";
     if(!selected)return"All";
     const text=selected.textContent.trim();
-    return text==="All guns"||text==="All powders"?"All":text;
+    return text.startsWith("All ")?"All":text;
   }
   function refresh(){
     if(openPanel==="powder"&&!powderChips.children.length)openPanel=null;
@@ -66,11 +70,10 @@
       const panel=document.getElementById(`${key}FilterPanel`);
       const selected=row.querySelector(".chip.on");
       const isOpen=openPanel===key;
-      if(key==="tier")document.getElementById("tierFilterLabel").textContent=row.dataset.enabled==="false"?"Status":"Tiers";
       document.getElementById(`${key}FilterValue`).textContent=summary(key);
       button.disabled=key==="powder"&&!row.children.length;
       button.classList.toggle("open",isOpen);
-      button.classList.toggle("has-filter",!!selected&&selected.dataset.g!=="all"&&selected.dataset.p!=="all"&&selected.dataset.t!=="all");
+      button.classList.toggle("has-filter",!!selected&&selected.dataset[dataKeys[key]]!=="all");
       button.setAttribute("aria-expanded",String(isOpen));
       panel.classList.toggle("active",isOpen);
     });

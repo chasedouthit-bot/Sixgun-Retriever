@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.34.0">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.34.0">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.34.0">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.34.0">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.34.0">
+<link rel="manifest" href="/manifest.webmanifest?v=2.35.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.35.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.35.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.35.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.35.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -530,7 +530,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.34.0</div>
+    <div class="landing-version">Version 2.35.0</div>
   </div>
 </div>
 
@@ -557,6 +557,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
   <section class="screen active" id="s-loads">
     <div class="chips" id="gunChips"></div>
     <div class="chips" id="tierChips"></div>
+    <div class="chips" id="statusChips"></div>
     <div class="chips" id="powderChips"></div>
     <div id="loadList"></div>
   </section>
@@ -979,8 +980,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.34.0";
-const CACHE_VERSION="sixgun-retriever-v2.34.0";
+const RELEASE_VERSION="2.35.0";
+const CACHE_VERSION="sixgun-retriever-v2.35.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -1268,7 +1269,7 @@ async function saveTierSettings(){
   if(tierDraft.enabled&&!tierDraft.order.some(key=>tierDraft.tiers[key]?.active!==false)){appAlert("Show at least one tier, or turn the tier system off.");return;}
   const c=C(),tiers={};tierDraft.order.forEach((key,index)=>{const item=tierDraft.tiers[key];tiers[key]={...item,name:names[index],color:item.color||TIER_COLOR_CHOICES[index%TIER_COLOR_CHOICES.length],active:item.active!==false};});
   c.tiers=tiers;c.groupNoun=String(tierDraft.noun||"").trim();c.tierSettings={enabled:!!tierDraft.enabled,noun:c.groupNoun,order:[...tierDraft.order]};
-  if(tierFilter!=="all"&&tierFilter!=="keep"&&(!c.tiers[tierFilter]||c.tiers[tierFilter].active===false))tierFilter="all";
+  if(tierFilter!=="all"&&(!c.tiers[tierFilter]||c.tiers[tierFilter].active===false))tierFilter="all";
   await save();tierDraft=null;goto("loads");renderAll();toast("Tier settings saved");
 }
 document.getElementById("tierSettingsBack").onclick=()=>{tierDraft=null;goto("loads");};
@@ -1278,6 +1279,7 @@ document.getElementById("tierSettingsSave").onclick=saveTierSettings;
 
 /* ---------- render: LOADS ---------- */
 let tierFilter="all";
+let statusFilter="all";
 let powderFilter="all";
 let expandedLoad=null; // id of currently expanded load card
 let activeGun=null; // gun-first scope; set to first gun of active cartridge
@@ -1289,7 +1291,7 @@ function renderGunChips(){
   if(activeGun!=="all"&&!guns.some(g=>g.name===activeGun)) activeGun=guns.length?guns[0].name:null;
   const chips=[["all","All guns"],...guns.map(g=>[g.name,g.name])];
   el.innerHTML=chips.map(([k,l])=>`<div class="chip ${activeGun===k?'on':''}" data-g="${k}">${l}</div>`).join("");
-  el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{activeGun=c.dataset.g;tierFilter="all";powderFilter="all";renderGunChips();renderChips();renderPowderChips();renderLoads();});
+  el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{activeGun=c.dataset.g;tierFilter="all";statusFilter="all";powderFilter="all";renderGunChips();renderChips();renderStatusChips();renderPowderChips();renderLoads();});
 }
 function renderChips(){
   const el=document.getElementById("tierChips");
@@ -1299,9 +1301,9 @@ function renderChips(){
   const overCap=k=>{const n=Number(k);return !isNaN(n)&&n>cap;};
   // if current tier filter is now over the ceiling, reset it
   const visible=tierKeys();
-  if(tierFilter!=="all"&&tierFilter!=="keep"&&(settings.enabled===false||!visible.includes(String(tierFilter))||overCap(tierFilter)))tierFilter="all";
+  if(tierFilter!=="all"&&(settings.enabled===false||!visible.includes(String(tierFilter))||overCap(tierFilter)))tierFilter="all";
   el.dataset.enabled=String(settings.enabled!==false);
-  const opts=[["all","All",false],["keep","Keepers",false],...(settings.enabled===false?[]:visible.map(k=>[k,tierLabel(k,C(),false),overCap(k)]))];
+  const opts=[["all","All tiers",false],...(settings.enabled===false?[]:visible.map(k=>[k,tierLabel(k,C(),false),overCap(k)]))];
   el.innerHTML=opts.map(([k,l,disabled])=>
     `<div class="chip ${tierFilter===k?'on':''} ${disabled?'disabled':''}" data-t="${k}" ${disabled?'data-disabled="1"':''}>${l}</div>`
   ).join("")+`<button type="button" class="tier-manage-btn" id="tierManageBtn">⚙ Customize</button>`;
@@ -1311,6 +1313,11 @@ function renderChips(){
   });
   document.getElementById("tierManageBtn").onclick=openTierSettings;
 }
+function renderStatusChips(){
+  const el=document.getElementById("statusChips"),opts=[["all","All statuses"],["yes","Keeper"],["work","Watch"],["reshoot","Reshoot"],["pending","Loaded"]];
+  el.innerHTML=opts.map(([key,label])=>`<div class="chip ${statusFilter===key?'on':''}" data-s="${key}">${label}</div>`).join("");
+  el.querySelectorAll(".chip").forEach(chip=>chip.onclick=()=>{statusFilter=chip.dataset.s;renderStatusChips();renderPowderChips();renderLoads();});
+}
 function renderPowderChips(){
   const el=document.getElementById("powderChips");
   // full powder list across the whole cartridge (all guns, all tiers)
@@ -1318,8 +1325,8 @@ function renderPowderChips(){
   // powders actually present in the current gun + tier scope
   let scope=C().loads.slice();
   if(activeGun&&activeGun!=="all") scope=scope.filter(l=>l.gun===activeGun);
-  if(tierFilter==="keep") scope=scope.filter(l=>l.keep==="yes");
-  else if(tierFilter!=="all") scope=scope.filter(l=>String(l.tier)===String(tierFilter));
+  if(tierFilter!=="all") scope=scope.filter(l=>String(l.tier)===String(tierFilter));
+  if(statusFilter!=="all") scope=scope.filter(l=>String(l.keep||"pending")===statusFilter);
   const present=new Set(scope.map(l=>l.powder));
   // reset powder filter if the selected powder isn't in the current scope
   if(powderFilter!=="all"&&!present.has(powderFilter))powderFilter="all";
@@ -1338,8 +1345,8 @@ function renderLoads(){
   const el=document.getElementById("loadList");
   let list=C().loads.slice();
   if(activeGun&&activeGun!=="all") list=list.filter(l=>l.gun===activeGun);
-  if(tierFilter==="keep") list=list.filter(l=>l.keep==="yes");
-  else if(tierFilter!=="all") list=list.filter(l=>String(l.tier)===String(tierFilter));
+  if(tierFilter!=="all") list=list.filter(l=>String(l.tier)===String(tierFilter));
+  if(statusFilter!=="all") list=list.filter(l=>String(l.keep||"pending")===statusFilter);
   if(powderFilter!=="all") list=list.filter(l=>l.powder===powderFilter);
   const tiersOn=ensureTierSettings().enabled!==false;
   if(activeGun==="all"){
@@ -1355,7 +1362,7 @@ function renderLoads(){
     if(activeGun&&activeGun!=="all"&&!hasAny){
       el.innerHTML=`<div class="empty"><div class="big">No loads worked up for the ${activeGun} yet</div><div>Log your first string from the Add tab and it lands here.</div></div>`;
     } else {
-      el.innerHTML=`<div class="empty"><div class="big">No loads match</div><div>Try a different tier.</div></div>`;
+      el.innerHTML=`<div class="empty"><div class="big">No loads match</div><div>Try a different filter.</div></div>`;
     }
     return;
   }
@@ -1872,7 +1879,7 @@ function enterCartridge(name){
   DB.activeCartridge=name;
   const c=DB.cartridges[name];
   activeGun=(c.defaultGun&&(c.guns||[]).some(g=>g.name===c.defaultGun))?c.defaultGun:((c.guns||[])[0]||{}).name||null;
-  tierFilter="all";powderFilter="all";
+  tierFilter="all";statusFilter="all";powderFilter="all";
   document.getElementById("landing").classList.add("hidden");
   goto("loads");
   renderAll();
@@ -1905,7 +1912,7 @@ function openSheet(){renderCartOptions();document.getElementById("cartScrim").cl
 function closeSheet(){document.getElementById("cartScrim").classList.remove("open");document.getElementById("cartSheet").classList.remove("open");}
 function switchCartridge(name){
   DB.activeCartridge=name;save();
-  activeGun=null;tierFilter="all";powderFilter="all"; // renderGunChips will pick the new cartridge's first gun
+  activeGun=null;tierFilter="all";statusFilter="all";powderFilter="all"; // renderGunChips will pick the new cartridge's first gun
   closeSheet();renderAll();
   toast(name);
 }
@@ -1916,7 +1923,7 @@ document.getElementById("cartScrim").onclick=closeSheet;
 function renderAll(){
   ensureCatalog();
   document.getElementById("hdr-sub").textContent=DB.activeCartridge;
-  renderGunChips();renderChips();renderPowderChips();renderLoads();renderBench();renderCatalog();
+  renderGunChips();renderChips();renderStatusChips();renderPowderChips();renderLoads();renderBench();renderCatalog();
 }
 
 /* ================= LIBRARY ================= */

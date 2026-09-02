@@ -117,10 +117,15 @@ assert(html.includes('nav button[data-s]'), "tab navigation must exclude the cen
 assert(filterControls.includes('["gun","Guns"]'), "Loads must expose a compact Guns filter control");
 assert(filterControls.includes('["powder","Powders"]'), "Loads must expose a compact Powders filter control");
 assert(filterControls.includes('["tier","Tiers"]'), "Loads must expose a compact Tiers filter control");
+assert(filterControls.includes('["status","Status"]'), "Loads must expose a separate compact Status filter control");
 assert(html.includes('id="s-tier-settings"'), "Loads must expose per-caliber tier settings");
 assert(html.includes("Existing assignments stay saved."), "tier controls must explain that disabling tiers preserves assignments");
 assert(html.includes('class="tier-manage-btn"'), "the tier filter must expose its customization entry point");
-assert(filterControls.includes('row.dataset.enabled==="false"?"Status":"Tiers"'), "a disabled tier system must leave a compact status filter and settings entry point");
+assert(html.includes('id="statusChips"'), "status choices must have their own filter row");
+assert(html.includes('["yes","Keeper"],["work","Watch"],["reshoot","Reshoot"],["pending","Loaded"]'), "status filtering must include every load status");
+assert(!html.includes('["keep","Keepers"'), "Keeper must never appear as a tier choice");
+assert(html.includes('if(statusFilter!=="all") list=list.filter'), "load results must filter independently by status");
+assert(filterControls.includes('@media(max-width:620px){.filter-controls{grid-template-columns:repeat(2'), "four mobile filters must use a readable two-column grid");
 assert(filterControls.includes('drawer.classList.toggle("open",!!openPanel)'), "load filter chips must open through the shared sliding drawer");
 assert(filterControls.includes('openPanel=null;refresh()'), "choosing a load filter must collapse the chip drawer");
 assert(html.includes('class="session-pager"'), "load detail must expose a swipeable session pager");
