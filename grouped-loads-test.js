@@ -30,11 +30,32 @@
     return `${String(load.powder||'').toLowerCase()}::${bullet}`;
   }
 
+  function bulletTitle(load){
+    const catalog=(DB.catalog?.bullets||[]).find(item=>item._legacyKey===load.bulletCatalogKey);
+    if(catalog){
+      const manufacturer=String(catalog.manufacturer||'').trim();
+      const product=String(catalog.product||'').trim();
+      const productNorm=product.toLowerCase().replace(/[^a-z0-9.]+/g,' ');
+      const parts=[];
+      if(manufacturer&&!productNorm.startsWith(manufacturer.toLowerCase().replace(/[^a-z0-9.]+/g,' ')))parts.push(manufacturer);
+      if(product)parts.push(product);
+      const weight=catalog.weight_gr==null?'':String(Number(catalog.weight_gr));
+      if(weight&&!new RegExp(`(^|[^0-9.])${weight.replace('.', '\\.')}(?:\\s*gr)?([^0-9.]|$)`,'i').test(product))parts.push(`${weight}gr`);
+      const style=String(catalog.style||'').trim();
+      if(style&&!parts.join(' ').toLowerCase().includes(style.toLowerCase()))parts.push(style);
+      if(parts.length)return parts.join(' ').replace(/\s+/g,' ').trim();
+    }
+    const raw=String(load.bullet||'').replace(' (PC)','').replace(/\s+/g,' ').trim();
+    const weights=[...raw.matchAll(/\b(\d+(?:\.\d+)?)\s*gr\b/ig)];
+    for(let i=1;i<weights.length;i++)if(weights.slice(0,i).some(match=>match[1]===weights[i][1]))return raw.slice(0,weights[i].index).trim();
+    return raw;
+  }
+
   function grouped(list){
     const map=new Map();
     list.forEach(load=>{
       const key=groupKey(load);
-      if(!map.has(key))map.set(key,{key,powder:load.powder,bullet:String(load.bullet||'').replace(' (PC)',''),loads:[]});
+      if(!map.has(key))map.set(key,{key,powder:load.powder,bullet:bulletTitle(load),loads:[]});
       map.get(key).loads.push(load);
     });
     return [...map.values()].map(group=>{
