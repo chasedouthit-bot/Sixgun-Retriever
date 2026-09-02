@@ -6,9 +6,16 @@
   function statusFor(load){
     const raw=String(load.keep||'pending').toLowerCase();
     if(raw==='yes')return['yes','Keeper'];
-    if(raw==='work'||raw==='reshoot')return['work','Watch'];
+    if(raw==='reshoot')return['reshoot','Reshoot'];
+    if(raw==='work')return['work','Watch'];
     if(raw==='loaded'||raw==='pending')return['loaded','Loaded'];
     return['',''];
+  }
+
+  function statusControl(load,statusClass,statusLabel){
+    const current=String(load.keep||'pending').toLowerCase()==='loaded'?'pending':String(load.keep||'pending').toLowerCase();
+    const options=[['pending','Loaded'],['work','Watch'],['yes','Keeper'],['reshoot','Reshoot']];
+    return `<label class="keeper gl-status ${statusClass}" title="Change status"><span>${statusLabel||'Loaded'}</span><select data-group-status="${esc(load.id)}" aria-label="Change status for ${Number(load.charge).toFixed(1)} grain load">${options.map(([value,label])=>`<option value="${value}" ${current===value?'selected':''}>${label}</option>`).join('')}</select></label>`;
   }
 
   function metric(value,label,kind=''){
@@ -76,10 +83,11 @@
     const moaClass=load.moa==null?'dim':load.moa<2?'good':load.moa>4?'bad':'';
     const meta=[load.gun,tier,load.oal?`${load.oal} OAL`:null].filter(Boolean).map(esc).join(' · ');
     return `<article class="gl-load-row card ${open?'open':''}" data-load="${esc(load.id)}">
+      ${statusControl(load,statusClass,statusLabel)}
       <button class="gl-load-open" type="button" data-group-load="${esc(load.id)}" aria-expanded="${open}">
         <span class="gl-row-head">
           <span class="gl-charge">${Number(load.charge).toFixed(1)} <small>gr</small></span>
-          <span class="gl-row-tags">${statusLabel?`<span class="keeper ${statusClass}">${statusLabel}</span>`:''}<span class="gl-chevron ${open?'up':''}">⌄</span></span>
+          <span class="gl-chevron ${open?'up':''}">⌄</span>
         </span>
         <span class="gl-row-meta">${meta}</span>
         <span class="gl-metrics">
@@ -131,6 +139,18 @@
       renderLoads();
       if(expandedLoad===id)setTimeout(()=>document.querySelector(`[data-load="${CSS.escape(id)}"]`)?.scrollIntoView({behavior:'smooth',block:'nearest'}),40);
     });
+    el.querySelectorAll('[data-group-status]').forEach(select=>{
+      select.onclick=event=>event.stopPropagation();
+      select.onchange=async event=>{
+        event.stopPropagation();
+        const load=C().loads.find(item=>String(item.id)===String(select.dataset.groupStatus));
+        if(!load)return;
+        const previous=load.keep||'pending';
+        load.keep=select.value;
+        renderStatusChips();renderPowderChips();renderLoads();
+        try{await save();toast(`Status changed to ${statusFor(load)[1]}`);}catch(error){load.keep=previous;renderStatusChips();renderPowderChips();renderLoads();toast('Could not change status');}
+      };
+    });
     el.querySelectorAll('[data-group-target]').forEach(button=>button.onclick=event=>{
       event.preventDefault();event.stopPropagation();taOpen(button.dataset.groupTarget);
     });
@@ -146,7 +166,7 @@
       .gl-group-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 13px 17px;border:0;border-bottom:1px solid var(--line);background:linear-gradient(145deg,var(--bg3),var(--bg2));color:var(--ink);text-align:left;cursor:pointer}
       .gl-group.collapsed .gl-group-head{border-bottom:0}.gl-group-copy{min-width:0}.gl-powder{display:block;margin-bottom:3px;color:var(--brass);font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.gl-group-copy strong{display:block;font:700 17px/1.2 Bitter,serif}.gl-group-copy small{display:block;margin-top:5px;color:var(--ink-faint);font-size:10px;font-weight:600}.gl-group-chevron{flex:none;color:var(--brass);font-size:20px;transition:transform .2s}.gl-group.collapsed .gl-group-chevron{transform:rotate(180deg)}
       .gl-children{padding:7px 8px 8px 11px}.gl-load-row.card{margin:0;padding:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;overflow:visible}.gl-load-row.card:last-child{border-bottom:0}.gl-load-row.card.open{border-color:var(--brass-dim)}
-      .gl-load-open{width:100%;display:block;padding:13px 44px 8px 8px;border:0;background:transparent;color:var(--ink);text-align:left;cursor:pointer}.gl-row-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.gl-charge{font:700 20px/1 Bitter,serif}.gl-charge small{font:700 11px Inter,sans-serif;color:var(--ink-faint);text-transform:uppercase}.gl-row-tags{display:flex;align-items:center;gap:7px}.gl-chevron{color:var(--ink-faint);font-size:17px;transition:transform .18s}.gl-chevron.up{transform:rotate(180deg)}.gl-row-meta{display:block;margin-top:5px;color:var(--ink-faint);font-size:10.5px;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .gl-load-open{width:100%;display:block;padding:13px 158px 8px 8px;border:0;background:transparent;color:var(--ink);text-align:left;cursor:pointer}.gl-row-head{display:flex;align-items:center;gap:8px}.gl-charge{font:700 20px/1 Bitter,serif}.gl-charge small{font:700 11px Inter,sans-serif;color:var(--ink-faint);text-transform:uppercase}.gl-chevron{position:absolute;top:17px;right:137px;color:var(--ink-faint);font-size:17px;transition:transform .18s}.gl-chevron.up{transform:rotate(180deg)}.gl-row-meta{display:block;margin-top:5px;color:var(--ink-faint);font-size:10.5px;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gl-status{position:absolute;z-index:4;top:11px;right:48px;min-width:78px;text-align:center;cursor:pointer}.gl-status select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.gl-status:focus-within{outline:2px solid var(--brass);outline-offset:2px}
       .gl-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;margin-top:10px;padding-top:9px;border-top:1px solid var(--line)}.gl-metric{text-align:center}.gl-metric b{display:block;font:700 14px 'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}.gl-metric b.good{color:var(--green)}.gl-metric b.bad{color:var(--red)}.gl-metric b.dim{color:var(--ink-faint)}.gl-metric small{display:block;margin-top:3px;color:var(--ink-faint);font-size:7.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
       .gl-quickline{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:0 8px 10px;color:var(--ink-faint);font-size:9.5px}.gl-target{flex:none;padding:6px 9px;border:1px solid var(--brass-dim);border-radius:8px;background:rgba(199,154,75,.08);color:var(--brass);font-size:10px;font-weight:800;cursor:pointer}.gl-note{margin:0 8px 11px;padding:8px 9px;border-left:2px solid var(--line);color:var(--ink-dim);font-size:10.5px;line-height:1.35}.gl-load-row>.detail{margin:0 8px 13px;padding-top:13px}.gl-load-row>.sr-pick{top:12px;right:8px;width:30px;height:30px}
       @media(min-width:760px){.gl-children{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}.gl-load-row.card:nth-last-child(2):nth-child(odd){border-bottom:0}}
