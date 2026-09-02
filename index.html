@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.19.0">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.19.0">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.19.0">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.19.0">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.19.0">
+<link rel="manifest" href="/manifest.webmanifest?v=2.24.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.24.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.24.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.24.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.24.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -520,7 +520,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.19.0</div>
+    <div class="landing-version">Version 2.24.0</div>
   </div>
 </div>
 
@@ -951,8 +951,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.19.0";
-const CACHE_VERSION="sixgun-retriever-v2.19.0";
+const RELEASE_VERSION="2.24.0";
+const CACHE_VERSION="sixgun-retriever-v2.24.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -2121,7 +2121,10 @@ let LIB_TABLES=[
   {verify:false,title:"Pearce — Colt SAA .357 Magnum Handloads",who:"Brian Pearce",source:"Colt Single Action Army · Handloader No. 347 (owned scan)",cartridge:".357 Magnum",powders:["A-2","Power Pistol","Titegroup","Unique","A-9","2400","A-7","H-110","Power Pro 300-MP"],writer:"Pearce",conditions:[["Test gun","Colt SAA, 5½-inch barrel"],["Cases","New Starline"],["Primers","CCI 500"],["Pressure limit","35,000 psi"],["Bullet diameter","Jacketed .357 inch; cast .3575 inch"]],head:["Bullet","Powder","Charge","OAL","Velocity"],rows:[["155 RCBS 38-150-SWC","A-2","5.5 gr","1.597 in","1,018 fps*"],["155 RCBS 38-150-SWC","Power Pistol","6.0 gr","1.597 in","982 fps"],["155 RCBS 38-150-SWC","Power Pistol","6.5 gr","1.597 in","1,048 fps*"],["158 Hornady Lead SWC-HP","Titegroup","4.0 gr","1.590 in","861 fps"],["158 Oregon Trail SWC","Unique","5.0 gr","1.590 in","855 fps"],["158 Hornady XTP-HP","A-9","14.5 gr","1.590 in","1,304 fps"],["158 Hornady XTP-HP","2400","14.0 gr","1.590 in","1,233 fps"],["158 Hornady XTP-HP","2400","14.8 gr","1.590 in","1,289 fps"],["160 RCBS 38-158-SWC w/gc","A-7","10.5 gr","1.597 in","1,222 fps"],["160 RCBS 38-158-SWC w/gc","H-110","16.5 gr","1.597 in","1,324 fps"],["162 Lyman 358156 HP","2400","14.0 gr","1.580 in","1,338 fps"],["162 Lyman 358156 HP","2400","14.5 gr","1.580 in","1,407 fps"],["162 Lyman 358156 HP","A-9","14.0 gr","1.580 in","1,311 fps"],["162 Lyman 358156 HP","A-9","14.8 gr","1.580 in","1,402 fps"],["180 Cast Performance FN-GC","Power Pro 300-MP","16.0 gr","1.610 in","1,233 fps"],["180 Cast Performance FN-GC","Power Pro 300-MP","17.0 gr","1.610 in","1,354 fps"],["180 Cast Performance FN-GC","H-110","13.0 gr","1.610 in","1,121 fps"],["180 Cast Performance FN-GC","H-110","14.0 gr","1.610 in","1,188 fps"]],maxRow:-1,note:"Complete transcription of Table III on page 33. An asterisk denotes an excellent light target load. Maximum cartridge length is 1.590 inches; maximum case length is 1.290 inches with a suggested trim length of 1.280 inches."},
   {verify:false,title:"Pearce — Colt SAA .38-40 Winchester Handloads",who:"Brian Pearce",source:"Colt Single Action Army · Handloader No. 347 (owned scan)",cartridge:".38-40",powders:["A-2","Power Pistol","Unique","Titegroup","Red Dot"],writer:"Pearce",conditions:[["Test gun","Colt SAA, 5½-inch barrel"],["Cases","New Starline"],["Primers","CCI 300"],["Pressure limit","14,000 CUP"],["Cast bullet diameter",".401 inch"]],head:["Bullet","Powder","Charge","OAL","Velocity"],rows:[["180 Hornady XTP","A-2","6.5 gr","1.590 in","811 fps"],["180 Hornady XTP","A-2","7.0 gr","1.590 in","866 fps"],["180 Hornady XTP","Power Pistol","9.0 gr","1.590 in","871 fps"],["180 Hornady XTP","Power Pistol","9.5 gr","1.590 in","922 fps"],["180 Oregon Trail RNFP","Unique","8.0 gr","1.575 in","845 fps"],["180 Oregon Trail RNFP","Unique","8.5 gr","1.575 in","889 fps"],["180 Oregon Trail RNFP","Power Pistol","8.5 gr","1.575 in","874 fps"],["180 Oregon Trail RNFP","Power Pistol","9.0 gr","1.575 in","933 fps"],["180 Oregon Trail RNFP","Power Pistol","9.5 gr","1.575 in","970 fps"],["180 Oregon Trail RNFP","A-2","6.5 gr","1.575 in","855 fps"],["180 Oregon Trail RNFP","A-2","7.0 gr","1.575 in","901 fps"],["180 Oregon Trail RNFP","Titegroup","6.5 gr","1.575 in","844 fps"],["180 Oregon Trail RNFP","Titegroup","7.0 gr","1.575 in","879 fps"],["180 Oregon Trail RNFP","Red Dot","6.0 gr","1.575 in","839 fps"],["180 Oregon Trail RNFP","Red Dot","6.5 gr","1.575 in","882 fps"],["180 Oregon Trail RNFP","Red Dot","6.8 gr","1.575 in","901 fps"]],maxRow:-1,note:"Complete transcription of Table IV on page 33. Maximum cartridge length is 1.592 inches; maximum case length is 1.305 inches with a suggested trim length of 1.295 inches."},
   {verify:false,title:"Pearce — Colt SAA .44-40 Winchester Handloads",who:"Brian Pearce",source:"Colt Single Action Army · Handloader No. 347 (owned scan)",cartridge:".44-40",powders:["A-2","Red Dot","Power Pistol","BE-86","CFE Pistol","W-244","Titegroup","Silhouette"],writer:"Pearce",conditions:[["Test gun","Colt SAA, 7½-inch barrel"],["Cases","New Starline"],["Primers","CCI 300"],["Pressure limit","13,000 CUP"],["Cast bullet diameter",".427 to .428 inch"]],head:["Bullet","Powder","Charge","OAL","Velocity"],rows:[["200 Rim Rock Cowboy RNFP","A-2","6.0 gr","1.585 in","789 fps"],["200 Rim Rock Cowboy RNFP","A-2","7.0 gr","1.585 in","927 fps"],["200 Rim Rock Cowboy RNFP","Red Dot","6.0 gr","1.585 in","897 fps"],["200 Rim Rock Cowboy RNFP","Red Dot","6.5 gr","1.585 in","947 fps"],["200 Rim Rock Cowboy RNFP","A-2","6.0 gr","1.585 in","789 fps"],["200 Rim Rock Cowboy RNFP","A-2","7.0 gr","1.585 in","927 fps"],["200 Rim Rock Cowboy RNFP","Power Pistol","7.5 gr","1.585 in","891 fps"],["200 Rim Rock Cowboy RNFP","Power Pistol","8.1 gr","1.585 in","983 fps"],["200 Rim Rock Cowboy RNFP","BE-86","7.3 gr","1.585 in","900 fps"],["200 Rim Rock Cowboy RNFP","BE-86","7.8 gr","1.585 in","939 fps"],["200 Rim Rock Cowboy RNFP","BE-86","8.3 gr","1.585 in","987 fps"],["200 Rim Rock Cowboy RNFP","CFE Pistol","8.0 gr","1.585 in","936 fps"],["200 Rim Rock Cowboy RNFP","CFE Pistol","8.4 gr","1.585 in","988 fps"],["200 Rim Rock Cowboy RNFP","W-244","6.8 gr","1.585 in","928 fps"],["200 Rim Rock Cowboy RNFP","W-244","7.2 gr","1.585 in","989 fps"],["200 Rim Rock Cowboy RNFP","W-244","7.6 gr","1.585 in","1,030 fps"],["210 RCBS 44-200-FN","Power Pistol","8.0 gr","1.572 in","955 fps"],["210 RCBS 44-200-FN","Power Pistol","8.4 gr","1.572 in","1,009 fps"],["210 RCBS 44-200-FN","Power Pistol","8.8 gr","1.572 in","1,052 fps"],["210 RCBS 44-200-FN","A-2","6.5 gr","1.572 in","879 fps"],["210 RCBS 44-200-FN","A-2","7.0 gr","1.572 in","926 fps"],["210 RCBS 44-200-FN","A-2","7.3 gr","1.572 in","963 fps"],["210 RCBS 44-200-FN","Titegroup","5.2 gr","1.572 in","801 fps"],["210 RCBS 44-200-FN","Titegroup","5.7 gr","1.572 in","870 fps"],["210 RCBS 44-200-FN","Titegroup","6.2 gr","1.572 in","932 fps"],["210 RCBS 44-200-FN","Silhouette","8.5 gr","1.572 in","887 fps"],["210 RCBS 44-200-FN","Silhouette","9.0 gr","1.572 in","951 fps"],["210 RCBS 44-200-FN","Silhouette","9.5 gr","1.572 in","1,003 fps"]],maxRow:-1,note:"Complete transcription of Table V on page 34. Maximum cartridge length is 1.590 inches; maximum case length is 1.305 inches with a suggested trim length of 1.295 inches."},
-  {verify:false,title:"Pearce — Colt SAA .45 Colt Handloads",who:"Brian Pearce",source:"Colt Single Action Army · Handloader No. 347 (owned scan)",cartridge:".45 Colt",powders:["Power Pistol","Unique","A-2","Titegroup","Red Dot","Bullseye","AutoComp"],writer:"Pearce",conditions:[["Test gun","Colt New Frontier SAA, 5½-inch barrel"],["Cases","New Starline"],["Primers","CCI 300"],["Pressure limit","14,000 psi"],["Cast bullet diameter",".452 inch"]],head:["Bullet","Powder","Charge","OAL","Velocity"],rows:[["230 Hornady XTP","Power Pistol","9.0 gr","1.575 in","895 fps"],["230 Hornady XTP","Power Pistol","9.5 gr","1.575 in","934 fps"],["230 Hornady XTP","Power Pistol","10.0 gr","1.575 in","981 fps"],["230 Hornady XTP","Unique","9.0 gr","1.575 in","886 fps"],["230 Hornady XTP","Unique","9.5 gr","1.575 in","956 fps"],["250 Oregon Trail RNFP","A-2","6.5 gr","1.570 in","801 fps"],["250 Oregon Trail RNFP","A-2","7.2 gr","1.570 in","877 fps"],["250 Oregon Trail RNFP","Titegroup","5.0 gr","1.570 in","722 fps*"],["250 Oregon Trail RNFP","Titegroup","6.2 gr","1.570 in","870 fps"],["250 Oregon Trail RNFP","Red Dot","5.8 gr","1.570 in","786 fps"],["250 Oregon Trail RNFP","Red Dot","6.3 gr","1.570 in","843 fps"],["250 Oregon Trail RNFP","Bullseye","6.6 gr","1.570 in","864 fps"],["250 Oregon Trail RNFP","AutoComp","9.0 gr","1.570 in","871 fps"],["250 Oregon Trail RNFP","Unique","8.5 gr","1.570 in","900 fps"],["255 Lyman 454190","A-2","7.0 gr","1.575 in","876 fps"],["255 Lyman 454190","A-2","7.3 gr","1.575 in","904 fps"],["255 Lyman 454190","Titegroup","6.2 gr","1.575 in","889 fps"],["255 Lyman 454190","Bullseye","6.6 gr","1.575 in","878 fps"],["265 RCBS 45-250-FN","A-2","6.8 gr","1.640 in","813 fps"],["265 RCBS 45-250-FN","A-2","7.2 gr","1.640 in","856 fps**"]],maxRow:-1,note:"Complete transcription of Table VI on page 35. *Excellent cowboy competition load. **Potentially most accurate. Maximum cartridge length is 1.600 inches; maximum case length is 1.285 inches with a suggested trim length of 1.275 inches."}
+  {verify:false,title:"Pearce — Colt SAA .45 Colt Handloads",who:"Brian Pearce",source:"Colt Single Action Army · Handloader No. 347 (owned scan)",cartridge:".45 Colt",powders:["Power Pistol","Unique","A-2","Titegroup","Red Dot","Bullseye","AutoComp"],writer:"Pearce",conditions:[["Test gun","Colt New Frontier SAA, 5½-inch barrel"],["Cases","New Starline"],["Primers","CCI 300"],["Pressure limit","14,000 psi"],["Cast bullet diameter",".452 inch"]],head:["Bullet","Powder","Charge","OAL","Velocity"],rows:[["230 Hornady XTP","Power Pistol","9.0 gr","1.575 in","895 fps"],["230 Hornady XTP","Power Pistol","9.5 gr","1.575 in","934 fps"],["230 Hornady XTP","Power Pistol","10.0 gr","1.575 in","981 fps"],["230 Hornady XTP","Unique","9.0 gr","1.575 in","886 fps"],["230 Hornady XTP","Unique","9.5 gr","1.575 in","956 fps"],["250 Oregon Trail RNFP","A-2","6.5 gr","1.570 in","801 fps"],["250 Oregon Trail RNFP","A-2","7.2 gr","1.570 in","877 fps"],["250 Oregon Trail RNFP","Titegroup","5.0 gr","1.570 in","722 fps*"],["250 Oregon Trail RNFP","Titegroup","6.2 gr","1.570 in","870 fps"],["250 Oregon Trail RNFP","Red Dot","5.8 gr","1.570 in","786 fps"],["250 Oregon Trail RNFP","Red Dot","6.3 gr","1.570 in","843 fps"],["250 Oregon Trail RNFP","Bullseye","6.6 gr","1.570 in","864 fps"],["250 Oregon Trail RNFP","AutoComp","9.0 gr","1.570 in","871 fps"],["250 Oregon Trail RNFP","Unique","8.5 gr","1.570 in","900 fps"],["255 Lyman 454190","A-2","7.0 gr","1.575 in","876 fps"],["255 Lyman 454190","A-2","7.3 gr","1.575 in","904 fps"],["255 Lyman 454190","Titegroup","6.2 gr","1.575 in","889 fps"],["255 Lyman 454190","Bullseye","6.6 gr","1.575 in","878 fps"],["265 RCBS 45-250-FN","A-2","6.8 gr","1.640 in","813 fps"],["265 RCBS 45-250-FN","A-2","7.2 gr","1.640 in","856 fps**"]],maxRow:-1,note:"Complete transcription of Table VI on page 35. *Excellent cowboy competition load. **Potentially most accurate. Maximum cartridge length is 1.600 inches; maximum case length is 1.285 inches with a suggested trim length of 1.275 inches."},
+  {verify:false,title:"Pearce — S&W Model 329PD .44 Magnum Loads",who:"Brian Pearce",source:"From the Hip · Handloader No. 230 (owned scan)",cartridge:".44 Magnum",powders:["Power Pistol","Unique","AAC-7","VV-N110","2400","W-231","Red Dot","AAC-9"],writer:"Pearce",conditions:[["Test gun","Smith & Wesson Model 329PD, 4-inch barrel"],["Cases","Winchester"],["Temperature","60°F"]],head:["Bullet","Powder","Charge","Velocity","Comments"],rows:[["200 Hornady XTP","Power Pistol","14.0 gr","1,386 fps",""],["200 Hornady XTP","Unique","12.0 gr","1,301 fps",""],["240 Speer jacketed softpoint","AAC-7","15.5 gr","1,090 fps",""],["240 Speer jacketed softpoint","VV-N110","20.0 gr","1,312 fps",""],["240 Sierra jacketed hollowpoint","2400","19.0 gr","1,219 fps","Most accurate 240-grain load"],["249 RCBS cast 44-240-SWC","W-231","8.0 gr","969 fps",""],["250 Lyman cast 429421","Red Dot","6.0 gr","855 fps",""],["250 Lyman cast 429421","Unique","8.5 gr","889 fps",""],["250 Lyman cast 429421","Unique","9.5 gr","1,011 fps",""],["250 Lyman cast 429421","W-231","7.5 gr","931 fps",""],["250 Lyman cast 429421","W-231","8.0 gr","980 fps",""],["270 Speer Gold Dot","VV-N110","16.5 gr","1,122 fps","1¾-inch group"],["270 Speer Gold Dot","AAC-9","15.0 gr","1,048 fps",""]],maxRow:-1,note:"Complete transcription of the page-26 table. Pearce reported best accuracy with the 270-grain Gold Dot and 16.5 grains of VV-N110, grouping 1¾ inches at 25 yards. The 240-grain Sierra JHP with 19.0 grains of 2400 was the most accurate 240-grain load. Publisher warning: listed loads are valid only in the test firearm used."},
+  {verify:false,title:"Pearce — Turnbull Cowboy Classic/USFA .45 Colt Loads",who:"Brian Pearce",source:"Turnbull Cowboy Classic · Handloader No. 230 (owned scan)",cartridge:".45 Colt",powders:["W-231","Bullseye","Universal Clays","Red Dot","VV-3N37","Unique","HS-6"],writer:"Pearce",conditions:[["Test gun","Turnbull Cowboy Classic/USFA .45 Colt, 4¾-inch barrel"],["Cases","Starline"],["Primers","CCI 300"],["Temperature","80°F"]],head:["Bullet","Powder","Charge","Velocity","Comments"],rows:[["250 Oregon Trail RNFP","W-231","7.1 gr","851 fps","2.0-inch groups"],["250 Oregon Trail RNFP","Bullseye","6.0 gr","848 fps",""],["250 Oregon Trail RNFP","Universal Clays","9.0 gr","956 fps",""],["255 Lyman 454190 cast","Red Dot","6.0 gr","855 fps","Accurate factory duplication load"],["255 Lyman 454190 cast","VV-3N37","11.5 gr","1,002 fps",".90-inch groups"],["255 Oregon Trail SWC","Red Dot","6.5 gr","912 fps","1.75-inch groups"],["255 Lyman 454424 cast","Unique","9.0 gr","935 fps",""],["285 RCBS 45-270-SAA cast","HS-6","11.5 gr","998 fps","Accurate, excellent hunting load"],["230 Speer Gold Dot HP","Universal Clays","9.3 gr","916 fps","111 fps spreads; vertical spread"],["250 Hornady XTP","Unique","9.0 gr","851 fps","1.2-inch group"],["260 Speer JHP","VV-3N37","11.0 gr","891 fps",""]],maxRow:-1,note:"Complete transcription of the page-40 table. CCI 300 primers and Starline cases were used throughout at 80°F. Pearce reported close .452-inch throats, a .4515-inch bore and notably consistent accuracy across the tested loads. Publisher warning: listed loads are valid only in the test firearm used."},
+  {verify:false,title:"Pearce — Freedom Arms Model 1997 .45 Colt Loads",who:"Brian Pearce",source:"Freedom Arms Model 1997 · Handloader No. 231 (owned scan)",cartridge:".45 Colt",powders:["W-231","HS-7","Red Dot","HS-6","Power Pistol","Unique","2400","VV-3N37","H-110"],writer:"Pearce",conditions:[["Test gun","Freedom Arms Model 1997 .45 Colt, 3½-inch barrel"],["Cases","Starline"],["Primers","CCI 300 and 350"],["Temperature","85°F"]],head:["Bullet","Powder","Charge","Velocity","Comments"],rows:[["250 Cast Performance roundnose flatpoint","W-231","7.1 gr","839 fps",""],["250 Cast Performance roundnose flatpoint","HS-7","14.0 gr","877 fps",""],["255 Lyman 454190 cast","Red Dot","6.0 gr","833 fps","Factory duplicate; one inch at 25 yards"],["255 Lyman 454190 cast","HS-6","11.5 gr","939 fps",""],["255 Lyman 454190 cast","Power Pistol","9.0 gr","956 fps",""],["285 RCBS cast 45-270-SAA","HS-6","11.5 gr","967 fps",""],["285 RCBS cast 45-270-SAA","Unique","8.5 gr","961 fps",""],["338 Lyman 452651 cast","HS-6","12.0 gr","968 fps","Large game hunting load"],["225 Speer Mag JHP","HS-6","13.0 gr","905 fps",""],["250 Hornady XTP-HP","2400","19.5 gr","1,011 fps","Extreme spread 17 fps; ¾-inch groups"],["250 Hornady XTP-HP","HS-6","12.0 gr","842 fps","Grouped one ragged hole"],["250 Hornady XTP-HP","VV-3N37","12.0 gr","1,009 fps",""],["250 Hornady XTP-HP","2400","17.5 gr","914 fps",""],["260 Nosler Partition JHP","2400","17.5 gr","902 fps",""],["260 Nosler Partition JHP","2400","18.5 gr","973 fps","Five-shot spread, 11 fps"],["260 Nosler Partition JHP","2400","19.5 gr","1,055 fps",""],["260 Speer Mag JHP","Unique","9.0 gr","997 fps","Accurate load; extreme spread, 29 fps"],["260 Speer Mag JHP","HS-6","13.0 gr","978 fps","Spread 15 fps; accurate"],["300 Speer Plated SP","H-110","22.0 gr","1,140 fps","Fine big game hunting load"],["300 Hornady XTP-HP","HS-6","13.0 gr","975 fps",""],["300 Hornady XTP-HP","HS-6","14.0 gr","1,063 fps",""]],maxRow:-1,note:"Complete transcription of the page-41 table. Many loads exceed SAAMI maximum pressure for the .45 Colt and are only safe in Ruger and Freedom Arms revolvers. The Model 1997’s short cylinder requires close attention to overall length and seating depth; deeper seating can raise pressure substantially. Publisher warning: listed loads are valid only in the test firearm used."}
 ];
 const RETIRED_LIBRARY_TABLE_TITLES=new Set([
   "Pearce .45 Colt STANDARD — FULL #320 survey (SAA-safe, all bullets/powders)"
@@ -2659,7 +2662,7 @@ const LIB_ARTICLES=[{
   date:"December 2022–January 2023",
   department:"Feature",
   tags:["Colt Single Action Army","Colt SAA","Peacemaker","Model P","150th anniversary","first generation","second generation","third generation","Brian Pearce","handloads","revolver history",".32-20",".38 Special",".357 Magnum",".38-40",".44-40",".45 Colt"],
-  cartridges:[".32-20",".38 Special",".357 Mag",".38-40",".44-40",".45 Colt"],
+  cartridges:[".32-20",".38 Special",".357 Magnum",".38-40",".44-40",".45 Colt"],
   summary:"For the Colt Single Action Army’s 150th anniversary, Pearce surveys its military origins, frontier service, three production generations, mechanical strengths, handling qualities and dimensional changes, while supplying six complete handload tables spanning the SAA’s classic chamberings.",
   pages:[
     {page:"30",src:"assets/articles/pearce-colt-single-action-army-150-years/page-30.jpeg"},{page:"31",src:"assets/articles/pearce-colt-single-action-army-150-years/page-31.jpeg"},{page:"32",src:"assets/articles/pearce-colt-single-action-army-150-years/page-32.jpeg"},{page:"33",src:"assets/articles/pearce-colt-single-action-army-150-years/page-33.jpeg"},{page:"34",src:"assets/articles/pearce-colt-single-action-army-150-years/page-34.jpeg"},{page:"35",src:"assets/articles/pearce-colt-single-action-army-150-years/page-35.jpeg"},{page:"36",src:"assets/articles/pearce-colt-single-action-army-150-years/page-36.jpeg"},{page:"37",src:"assets/articles/pearce-colt-single-action-army-150-years/page-37.jpeg"}
@@ -2703,6 +2706,239 @@ const LIB_ARTICLES=[{
       <p>The important change concerns chamber throats. From 1873 through roughly 1910–1912, throats measured .449–.452 inch. Concern over smokeless powder’s sharp pressure impulse led Colt to open throats to .455 inch, a specification carried into second-generation production. Third-generation guns commonly run at least .456–.458 inch. For best cast-bullet accuracy, bullet diameter should correspond to throat diameter; Remington and Winchester factory loads used roughly .456-inch hollowbase bullets.</p>
       <p>Pearce closes by noting that he has only scratched the surface of this grand old sixgun and wishes he could be present for its 200th anniversary.</p>
       <aside class="article-caption">When properly timed and tuned, the Colt SAA can offer outstanding accuracy.</aside>`}
+  ]
+},{
+  id:"sengel-357-smith-wesson-magnum",
+  title:".357 S&W Magnum",
+  author:"Gil Sengel",
+  publication:"Handloader No. 230",
+  date:"August–September 2004",
+  department:"Cartridge Board",
+  tags:[".357 Magnum",".38-44 S&W Special",".38 Special","Smith & Wesson","Gil Sengel","Walter Roper","D.B. Wesson","Elmer Keith","Phil Sharpe","cartridge history","pressure","handloading history"],
+  cartridges:[".357 Mag",".38 Special",".38-44 S&W Special"],
+  summary:"Sengel traces the .357 Magnum from the heavy-frame .38-44 revolvers and dangerous interwar .38 Special overloads through Smith & Wesson’s decision to lengthen the case, separating documented development from later claims of individual authorship.",
+  pages:[
+    {page:"18",src:"assets/articles/sengel-357-smith-wesson-magnum/page-18.jpeg"},
+    {page:"20",src:"assets/articles/sengel-357-smith-wesson-magnum/page-20.jpeg"},
+    {page:"21",src:"assets/articles/sengel-357-smith-wesson-magnum/page-21.jpeg"},
+    {page:"22",src:"assets/articles/sengel-357-smith-wesson-magnum/page-22.jpeg"}
+  ],
+  transcript:[
+    {page:"18",html:`
+      <p>In the last column, we began the story of the .357 Magnum by covering its predecessor, the .38-44 S&amp;W Special. Unfortunately, we ran out of space, so that discussion is continued below. Then it will be on to Smith &amp; Wesson’s first magnum.</p>
+      <p>It seems that in the late 1920s, Walter F. Roper was employed as a representative of Smith &amp; Wesson. At the Camp Perry matches he was approached by the captain of the Royal Canadian Mounted Police pistol team, who wanted to know if S&amp;W would chamber its .44-caliber N-frame revolver for the .38 Special while retaining all exterior dimensions.</p>
+      <p>The reason is unclear, though extra weight for steadiness and reduced recoil in target shooting is logical. Officers’ period tendency to use handguns as clubs may also have contributed. Such a revolver would weigh about three pounds and make a formidable pounding device. Roper passed the RCMP request to his employer.</p>
+      <p>A few were produced and used for early .38-44 Special testing because their weight controlled recoil. When the cartridge appeared, S&amp;W offered the N-frame .38/44 Heavy Duty with fixed sights, followed a year later by the adjustable-sight .38-44 Outdoorsman. Colt responded with its heavy New Service .38 Special, renamed the Shooting Master, and called the cartridge the .38 Colt Special Hi-Speed.</p>
+      <p>The heavy-frame revolvers were suitable homes for the hot round, but ammunition shared the .38 Special’s exterior dimensions and inevitably found its way into lighter guns. Manufacturers encouraged this by saying .38-44 ammunition was safe in sound S&amp;W and Colt .38 Special revolvers, merely producing heavier recoil. Lighter guns sometimes shot loose or suffered cylinder failures.</p>
+      <p>Availability of heavy-frame revolvers and higher-powered ammunition encouraged handloaders to exceed even factory .38-44 loads. Period writers published their own and others’ overloads. Readers put them in ordinary .38 Specials, with guns quickly damaged or destroyed.</p>
+      <aside class="article-caption"><strong>.357 S&amp;W Magnum dimensions:</strong> overall length 1.590 inches; case length 1.290 inches; rim diameter .440 inch; head diameter .379 inch; neck diameter .379 inch.</aside>`},
+    {page:"20",html:`
+      <p>A documented example began before the .38-44’s introduction and continued until the .357 Magnum appeared. In <em>Sixgun Cartridges and Loads</em> (1936), Elmer Keith wrote that he loaded a 160-grain cast hollowpoint in the .38-44 Remington case with 11 grains of DuPont No. 80. Keith said the load wrecked several Colt Officers Models, though heavy .45-frame S&amp;Ws and a couple of Single Action Armys handled it. Peters Cartridge testing averaged 42,000 psi.</p>
+      <p>Keith later wrote that he used the same load with a heavier 173-grain bullet and fired 1,000 rounds to see whether he could blow up the gun. Sengel condemns publication of such material because it invites imitation.</p>
+      <p>J.R. Mattern’s <em>Handloading Ammunition</em> (1926) listed 11 grains of No. 80 behind a 160-grain bullet at 1,152 fps without pressure data. Sengel calls this especially troubling because Mattern described No. 80 as having erratic and sometimes dangerous pressures. Major Julian Hatcher opposed its use in revolvers, and Chauncey Thomas of <em>Outdoor Life</em> said he would not use it because it had blown up good arms.</p>
+      <p>Phil Sharpe’s <em>Complete Guide to Handloading</em> (1937) stated that No. 80 was designed for 14,000–19,000 psi burning pressure and was entirely unsatisfactory for high-velocity revolvers, producing pressures near the danger point. Sharpe said Keith had wrecked several revolvers experimenting with it—yet Sharpe also published .38 Special No. 80 loads reaching</p>`},
+    {page:"21",html:`
+      <p>38,000 psi as measured by DuPont. Sengel asks why such loads were published and calls the practice criminal. Readers may assume that if a published writer did it, they can safely do the same. When revolvers fail, the shooter may escape while friends or family are injured by flying steel.</p>
+      <p>Douglas B. Wesson wanted to hot-load the .38 Special for police performance, just as Colt had developed the .38 Super Auto from the .38 ACP. Nobody was overloading the .38 Super in Model 1911 pistols or publishing similarly irresponsible data—perhaps because a separated slide embedding itself in the writer’s forehead discouraged the urge.</p>
+      <p>S&amp;W recognized that overloaded .38 Specials and .38-44s required a new revolver and a new cartridge that would not fit older guns. Other calibers were briefly considered, but the company stayed with a .357-inch bullet to end unsafe .38 Special handloading.</p>
+      <p>D.B. Wesson did not want an entirely new frame size because it would</p>`},
+    {page:"22",html:`
+      <p>simply have been too costly. The existing N-frame in .38 Special and .38-44 was adequate and could tolerate minor changes for hotter loads. Its cylinder window fixed cylinder length at about 1.575 inches. With a nominal .060-inch rim, a new cartridge was limited to about 1.630 inches overall. The straightforward solution was to lengthen and rename the .38 Special case.</p>
+      <p>This reasoning had already been considered while developing the .38-44. An alternative new-cartridge concept was dropped because of cost and possible shooter confusion.</p>
+      <p>Several people later claimed credit. Walter Roper wrote that D.B. Wesson alone chose to lengthen the .38 Special; elsewhere he said Wesson consulted Elmer Keith. Keith later claimed Wesson called his experiments the determining factor in bringing out a revolver named the .357 Magnum. Sengel accepts that this may be true but not in the way Keith envisioned.</p>
+      <p>Phil Sharpe also claimed the cartridge was born in his mind years before introduction, while other people made similar claims for decades afterward. Sengel argues that the .357 Magnum was really the combined creation of Winchester, Remington, DuPont and Hercules working on load development after S&amp;W chose to lengthen the case as much as standard cylinders allowed.</p>
+      <p>The ammunition companies understood period smokeless powders, could measure breech pressure accurately and could test ammunition across temperatures—critical because many early powders were highly temperature-sensitive. Sharpe did participate in early development, which Sengel promises to cover in the next installment.</p>
+      <p>In 1935 the revolver changes and cartridge development came together as the Smith &amp; Wesson .357 Magnum. It was not perfect, but it was certainly unique. To be continued.</p>`}
+  ]
+},{
+  id:"pearce-from-the-hip-329pd-data-warning",
+  title:"Hodgdon .45 Colt Data Warning & S&W Model 329PD",
+  author:"Brian Pearce",
+  publication:"Handloader No. 230",
+  date:"August–September 2004",
+  department:"From the Hip",
+  tags:["Hodgdon data warning","Longshot",".45 Colt","standard pressure","Ruger-only loads","Smith & Wesson Model 329PD",".44 Magnum","scandium frame","titanium cylinder","Brian Pearce","revolver review","handloads"],
+  cartridges:[".45 Colt",".44 Magnum"],
+  summary:"Pearce corrects a dangerous 2004 Hodgdon manual error that placed two high-pressure Longshot .45 Colt loads among standard-pressure data, then reviews the 26½-ounce S&W Model 329PD and documents 13 tested .44 Magnum loads.",
+  pages:[
+    {page:"24",src:"assets/articles/pearce-from-the-hip-329pd-data-warning/page-24.jpeg"},
+    {page:"25",src:"assets/articles/pearce-from-the-hip-329pd-data-warning/page-25.jpeg"},
+    {page:"26",src:"assets/articles/pearce-from-the-hip-329pd-data-warning/page-26.jpeg"}
+  ],
+  transcript:[
+    {page:"24",html:`
+      <h3>Hodgdon .45 Colt Data Warning</h3>
+      <p>While visiting with Hodgdon ballistician Ron Reiber and discussing pressure sources for .45 Colt loads, Pearce learned of an error in the <em>2004 Hodgdon Annual Manual</em> concerning Longshot. Page 132 contains .45 Colt data labeled “Standard Pressure” and suitable for all guns, but two Longshot lines are actually <strong>high-pressure loads intended only for Ruger, Freedom Arms and Thompson/Center handguns</strong>.</p>
+      <p>Those loads are not safe in firearms designed for the standard .45 Colt pressure level of 14,000 psi, including the Colt Single Action Army and replicas. Pearce directs readers seeking more information to Hodgdon Powder Company.</p>
+      <h3>Smith &amp; Wesson Model 329PD .44 Magnum</h3>
+      <p>Pearce describes the Model 329PD as a general-review subject following many reader requests. It combines a dark gray titanium cylinder and matte-finished scandium-alloy N-frame. The 4-inch stainless barrel is sleeved by an aluminum shroud. Sights are a red Hi-Viz round front and a V-notch rear in S&amp;W’s Microm adjustable assembly.</p>
+      <p>Total weight is only 26½ ounces—claimed as the lightest production .44 Magnum of the period, compared with roughly 41 ounces for a Model 629 Mountain Gun. Suggested retail was $900. Chambers and throats were snug and uniform, improving accuracy and case life. Throats measured .429 inch; chambers aligned closely with the EDM-machined bore. A steel insert above the barrel-cylinder gap protects the scandium top strap from gas cutting.</p>
+      <p>After more than 600 rounds over roughly three months, Pearce calls it a high-quality revolver with exceptionally sharp recoil. Even four or five sessions per week were limited to about six to twelve shots. His principal complaint was the sights: the broad V-notch and bright front were quick but made a precise sight picture difficult on some targets.</p>
+      <aside class="article-caption">The Model 329PD features a wide V-notch rear and red Hi-Viz front sight. Pearce’s test groups with varied handloads were mostly under 2 inches at 25 yards.</aside>`},
+    {page:"25",html:`
+      <p>Pearce rejects the argument that precise sights do not matter on a backcountry revolver. Such a handgun may be used for hunting large or small game and personal defense, making precise shooting essential. He temporarily substituted sights borrowed from a Smith &amp; Wesson Mountain Gun to determine the revolver’s best performance.</p>
+      <p>He warns that full-power loads and bullets of every weight produce very quick, sharp recoil. One test used heavily reused brass with a 310-grain RCBS 44-300-SWC cast bullet over 20.0 grains of H-110 for 1,171 fps; bullets jumped the crimp and protruded from the cylinder, tying up the revolver. For full-power use, he recommends new or nearly new brass with strong bullet pull and crimp, naming Starline, Federal and Winchester as good choices.</p>
+      <p>Plain-base 250-grain Lyman 429421 bullets driven above about 1,050 fps produced leading and mediocre accuracy until the barrel was cleaned, despite BHN 18 alloy, .429-inch sizing and LBT Soft Blue lubricant. At roughly 1,000 fps or less, leading was minimal and accuracy reasonable. Loads that failed badly were omitted from the table.</p>
+      <aside class="article-caption">The 329PD barrel is stainless steel sleeved by an aluminum shroud.</aside>`},
+    {page:"26",html:`
+      <p>Pearce considers the 329PD a strong candidate for reduced- or midrange loads around 850–1,000 fps when fired regularly. The 250-grain Lyman 429421 over 8.0 grains of Winchester 231 reached 980 fps, produced an extreme spread under 20 fps and grouped under 2 inches at 25 yards, with only light leading just ahead of the forcing cone.</p>
+      <p>The gas-check RCBS 44-240-SWC, weighing about 249 grains in wheelweight alloy, used with the same powder charge gave slightly smaller groups and eliminated leading. Best accuracy came from Speer’s 270-grain Gold Dot at 1,122 fps with 16.5 grains of Vihtavuori N110, grouping 1¾ inches at 25 yards. A nearly equal load used a 240-grain Sierra JHP with 19.0 grains of Alliant 2400. Both used standard CCI 300 primers; non-magnum primers with these powders reduced pressure and extreme spreads.</p>
+      <p>The titanium cylinder and flexible scandium frame allow slight contact at the bottom of the frame with certain full-power loads, leaving a small witness mark without compromising safety, function or reliability. S&amp;W stated that chambers, cylinder and frame remained within specification; the revolver had passed proof-load and endurance testing.</p>
+      <p>At 26 ounces, the specialized 329PD appeals to those needing an ultralight big-bore revolver carried often and fired when needed. Handloading increases its versatility and makes regular practice more comfortable.</p>
+      <aside class="article-caption">The complete 13-row “S&amp;W Model 329PD .44 Magnum Loads” table is indexed separately in Tables.</aside>`}
+  ]
+},{
+  id:"pearce-turnbull-cowboy-classic",
+  title:"Turnbull Cowboy Classic",
+  author:"Brian Pearce",
+  publication:"Handloader No. 230",
+  date:"August–September 2004",
+  department:"Feature",
+  tags:["Turnbull Restoration","USFA","Cowboy Classic","Colt Single Action Army","prewar Colt","Doug Turnbull",".45 Colt","revolver review","accuracy","handloads","Brian Pearce"],
+  cartridges:[".45 Colt"],
+  summary:"Pearce evaluates Turnbull Restoration’s USFA-built Cowboy Classic, comparing its fit, finish, dimensions and metallurgy with prewar Colt Single Action Armys before testing eleven .45 Colt handloads for velocity and accuracy.",
+  pages:[
+    {page:"37",src:"assets/articles/pearce-turnbull-cowboy-classic/page-37.jpeg"},
+    {page:"38",src:"assets/articles/pearce-turnbull-cowboy-classic/page-38.jpeg"},
+    {page:"39",src:"assets/articles/pearce-turnbull-cowboy-classic/page-39.jpeg"},
+    {page:"40",src:"assets/articles/pearce-turnbull-cowboy-classic/page-40.jpeg"},
+    {page:"42",src:"assets/articles/pearce-turnbull-cowboy-classic/page-42.jpeg"}
+  ],
+  transcript:[
+    {page:"37",html:`
+      <p>Turnbull Restoration offered a carefully made copy of the pre-World War II Colt Single Action Army called the “Cowboy Classic.” Available in .32-20, .38 Special, .41 Colt, .38-40, .44-40, .44 Special and .45 Colt, it used premium steels, close tolerances and entirely American manufacture.</p>
+      <p>Pearce begins with the original Colt SAA. Revolvers made from 1873 through roughly 1883 used iron frames and are suitable only for black powder; their collector value also makes retirement preferable. Early civilian and military guns gave excellent service, but their fit and finish did not yet match what Colt achieved later.</p>
+      <p>By the middle 1880s the SAA had become a standard reliable and powerful sidearm. Colt continued improving steel, workmanship and decorative options, including engraving, plating and carved stocks.</p>`},
+    {page:"38",html:`
+      <p>Quality peaked during the 1890s and remained high for roughly two decades. Even plain working guns from this era show excellent polishing, flat and evenly joined frame surfaces, graceful trigger guards, precisely fitted hammers, rounded tapered front sights, large beveled cylinder flutes, rich blue and vivid case colors.</p>
+      <p>The Doug Turnbull revolvers were manufactured by U.S. Fire Arms and delivered unfinished “in the white.” Turnbull then performed the final fitting, polishing and period-correct finishing. Pearce credits Turnbull’s restoration experience with reproducing the metal preparation and finishes of late-nineteenth- and early-twentieth-century firearms.</p>
+      <aside class="article-caption">The test revolvers’ chamber throats measured .452 inch. Their .670-inch outside cylinder diameter was about .020 inch larger than a Colt SAA cylinder, adding material around the locking-bolt notches.</aside>`},
+    {page:"39",html:`
+      <p>The Cowboy Classic combines rich carbona blue with bone-and-charcoal-style color case hardening. USFA began in 1993 by importing Uberti SAA revolvers for American finishing, then moved to American-made cylinders, barrels and frames. In 2002 it completed a modern CNC-equipped facility capable of machining complete guns from raw steel.</p>
+      <p>Pearce found exceptionally tight cylinder lockup with almost no endshake or side play. Chamber alignment was confirmed with a range rod, barrel-cylinder gaps generally measured .003 to .005 inch, timing was flawless and both test revolvers’ triggers broke at about 3½ pounds.</p>
+      <p>Each part was individually fitted to its frame and numbered before final finishing. The cylinder used 4140-series steel heat-treated to Rockwell 37. A slightly taller frame window and cylinder about .020 inch larger than Colt’s placed the locking notches farther from the chamber centers and strengthened a normally weak area.</p>
+      <aside class="article-caption">Pearce tested a consecutively numbered pair of Turnbull Cowboy Classic .45 Colt revolvers with 4¾-inch barrels.</aside>`},
+    {page:"40",html:`
+      <p>Despite its added strength, Pearce warns that the USFA is not intended for the 30,000- to 32,000-psi heavy loads developed for Ruger single actions. It handles 15,000- to 20,000-psi ammunition comfortably; properly chosen 255- to 285-grain cast bullets can reach useful field velocities.</p>
+      <p>Small departures from prewar Colts include a thicker top strap, a slightly narrower and longer grip frame and a straight .10-inch-wide front sight that gives a more precise square sight picture. Master engraver Dennis Kies decorated the backstraps on Pearce’s pair.</p>
+      <p>The throats measured .452 inch and the bores slugged .4515 inch, close dimensions that favor both cast and jacketed-bullet accuracy. The two guns performed alike. A 255-grain Lyman 454190 over 6.0 grains of Red Dot produced 855 fps and roughly one-inch groups, though both revolvers initially printed 2 to 3 inches low at 25 yards and required slight front-sight filing.</p>
+      <aside class="article-caption">The complete eleven-row “Turnbull Cowboy Classic/USFA .45 Colt” table is indexed separately in Tables.</aside>`},
+    {page:"42",html:`
+      <p>The 285-grain RCBS 45-270-SAA bullet, designed by Dave Scovill, delivered excellent results. With 11.5 grains of Hodgdon HS-6 it reached nearly 1,000 fps and grouped just under one inch at 25 yards, making it suitable for field shooting and deer-sized game.</p>
+      <p>Jacketed loads also shot well. The 250-grain Hornady XTP over 9.0 grains of Unique reached about 850 fps and grouped into 1.2 inches. A 260-grain Speer MAG-JHP with 11.0 grains of Vihtavuori 3N37 approached 900 fps with similar accuracy, although both jacketed loads shifted impact a couple of inches left compared with the 250- and 255-grain cast loads.</p>
+      <p>Accuracy varied less from the best load to the worst than Pearce typically sees in a fixed-sight revolver. He attributes this consistency to .452-inch throats, minimal cylinder movement, correct chamber-to-bore alignment and a quality barrel cut with an 11-degree forcing cone.</p>
+      <p>The Cowboy Classic was offered in numerous calibers and with options such as ivory stocks, engraving and special-order finishes. Pearce judged it among the finest Colt-type single actions then produced and a genuine shooter; suggested retail prices began at $995.</p>`}
+  ]
+},{
+  id:"pearce-from-the-hip-base-pin-ruger-notes",
+  title:"Peacemaker Specialists Base Pin Retention Kit & Ruger Notes",
+  author:"Brian Pearce",
+  publication:"Handloader No. 231",
+  date:"October–November 2004",
+  department:"From the Hip",
+  tags:["Peacemaker Specialists","base pin retention kit","Colt Single Action Army","Mason base pin latch","Ruger Single-Six",".32 H&R Magnum","Ruger front sight","heavy bullets","Brian Pearce"],
+  cartridges:[".45 Colt",".32 H&R Magnum",".44 Magnum"],
+  summary:"Pearce evaluates an improved Colt SAA base-pin retention kit, answers a reader’s question about strong-frame .32 H&R Magnum handloads, and describes extra-tall front sights for Ruger revolvers shooting heavy bullets.",
+  pages:[
+    {page:"12",src:"assets/articles/pearce-from-the-hip-base-pin-ruger-notes/page-12.jpeg"},
+    {page:"13",src:"assets/articles/pearce-from-the-hip-base-pin-ruger-notes/page-13.jpeg"},
+    {page:"14",src:"assets/articles/pearce-from-the-hip-base-pin-ruger-notes/page-14.jpeg"}
+  ],
+  transcript:[
+    {page:"12",html:`
+      <h3>Peacemaker Specialists Base Pin Retention Kit</h3>
+      <p>Pearce recounts more than three decades with Colt Single Action revolvers, from hunting large game to casual black-powder shooting and studying prewar examples. He explains that Colt’s 1873–1896 frames used a front setscrew to retain the cylinder base pin. The Mason-pattern transverse latch appeared in 1896, although Colt did not warranty smokeless-powder use until 1900 on guns above serial number 192,000.</p>
+      <p>The early setscrew positively retained the pin but complicated rapid cylinder removal for field cleaning. Mason-latch frames are more convenient working guns, yet repeated recoil can batter the base pin’s forward edge and allow it to jump forward. The usual cure is periodic replacement of the pin and latch.</p>
+      <p>Eddie Janis of Peacemaker Specialists offered an improved kit with an original-style square-edged base pin, a latch shaped for greater bearing contact, tapered threads that resist loosening and a stronger spring that keeps the latch properly positioned.</p>`},
+    {page:"13",html:`
+      <p>Pearce installed the kit in a heavily used, 1900-era Colt SAA .45 Colt with a 4¾-inch barrel and fired more than 1,500 rounds. Test ammunition included a 260-grain Lyman 454190 cast bullet at 860 fps with 6.0 grains of Red Dot and a 285-grain RCBS 45-270-SAA over 11.5 grains of HS-6. He cautions that the heavier load is for smokeless-era revolvers and notes that his Colt had a later .45 Colt cylinder.</p>
+      <p>The base pin remained in place even with the heavier load. The stronger spring was noticeable but did not hinder cylinder removal, and inspection showed little or no wear. Suggested retail was $28.</p>
+      <h3>Ruger Bisley .32 H&amp;R</h3>
+      <p>Answering a reader, Pearce calls the Ruger Single-Six Bisley in .32 H&amp;R Magnum an accurate small- and medium-game combination. The original H&amp;R double-action revolvers established a 21,000-CUP standard, but the stronger Ruger can safely handle loads developed to 30,000 CUP.</p>
+      <p>For roughly 1,300 fps with a 100-grain Speer JHP, he specifies 11.8 to 12.0 grains of H-110, a Federal 100 primer and Starline cases. Because this is a compressed load, he advises an expander no larger than .308 inch and a heavy crimp. For plinking, 3.0 grains of Red Dot behind a 95-grain Mt. Baldy Keith-style cast bullet produced 960 fps from a 6½-inch barrel.</p>`},
+    {page:"14",html:`
+      <h3>Extra Tall Front Sights for Ruger Revolvers</h3>
+      <p>Heavier-than-traditional bullets in .44 Magnum and heavy-frame .45 Colt revolvers remain in the barrel longer and commonly strike higher than standard bullets. In some Rugers the rear sight cannot be lowered enough to obtain a 25- or 50-yard zero.</p>
+      <p>Jae-Bok Young offered taller replacement front sights for the Ruger Redhawk, Super Redhawk, Super Blackhawk Hunter and GP-100. One version was factory finished and ready to install; the other was an unfinished square blade that could be ground to the desired shape and height before bluing. Installed height was .365 inch above the rib, with both versions fitting the factory channels without play.</p>`}
+  ]
+},{
+  id:"sengel-357-smith-wesson-magnum-conclusion",
+  title:".357 S&W Magnum (Conclusion)",
+  author:"Gil Sengel",
+  publication:"Handloader No. 231",
+  date:"October–November 2004",
+  department:"Cartridge Board",
+  tags:[".357 Magnum",".357 S&W Magnum","Gil Sengel","cartridge history","Hercules 2400","copper crusher","CUP","Smith & Wesson","N-frame","law enforcement","factory ballistics"],
+  cartridges:[".357 Magnum"],
+  summary:"Sengel concludes his history of the .357 Magnum by examining its original high-pressure factory development, disputed 1,515-fps claim, first revolvers, postwar evolution and eventual role as a law-enforcement and personal-protection cartridge.",
+  pages:[
+    {page:"18",src:"assets/articles/sengel-357-smith-wesson-magnum-conclusion/page-18.jpeg"},
+    {page:"20",src:"assets/articles/sengel-357-smith-wesson-magnum-conclusion/page-20.jpeg"},
+    {page:"22",src:"assets/articles/sengel-357-smith-wesson-magnum-conclusion/page-22.jpeg"},
+    {page:"95",src:"assets/articles/sengel-357-smith-wesson-magnum-conclusion/page-95.jpeg"}
+  ],
+  transcript:[
+    {page:"18",html:`
+      <p>Sengel resumes the story after the ammunition and powder companies—Winchester, Remington, DuPont and Hercules—completed the work needed for the .357’s 1935 introduction. Their powder knowledge, pressure equipment and temperature testing allowed Smith &amp; Wesson to select a combination of power and revolver durability.</p>
+      <p>The first .357 Magnum ammunition was hot: a 158-grain bullet was advertised at 1,515 fps from an 8⅜-inch barrel. Hercules 2400, developed in 1931 and offered to handloaders in 1933, supplied the propellant. It had been intended for small rifle cartridges such as the .22 Hornet, but the new magnum’s pressure allowed it to burn effectively.</p>
+      <p>Period operating pressure is difficult to translate. Sources commonly cite 35,000 to 40,000, but those figures came from copper-crusher equipment rather than modern piezoelectric measurement. A drilled test barrel routed gas pressure to a mechanism that compressed a copper pellet; its shortening was compared with a calibration chart.</p>`},
+    {page:"20",html:`
+      <p>The old figures should be described as copper units of pressure, not modern psi. Mechanical crusher results could vary by 10 percent or more between laboratories. In 1935 the .357 stood at the edge of revolver-cartridge development, with ammunition makers increasing pressure while S&amp;W tested guns, changed steel and heat treatment, and evaluated lubrication and temperature extremes.</p>
+      <p>The 158-grain standard was retained to compare favorably with the .38 Special and .38-44. Heavier bullets would reduce the headline velocity, while lighter bullets offered little additional speed with period powders and gave poorer accuracy. Factories therefore used a 158-grain lead semiwadcutter and a 158-grain metal-piercing design.</p>
+      <p>Sengel explains the advertised 8⅜-inch barrel: combined with cylinder and rim dimensions it approached the ten-inch maximum allowed in bullseye competition. Pressure and velocity likely came from a ten-inch solid test barrel without a revolver’s barrel-cylinder gap. Actual production guns probably delivered about 1,425 to 1,450 fps rather than the published 1,515.</p>`},
+    {page:"22",html:`
+      <p>The first revolver chambered for the cartridge was the S&amp;W .357 Magnum Hand Ejector on the large N-Target frame. Colt soon offered the .357 in the Shooting Master, New Service and Single Action Army.</p>
+      <p>The original loading generated roughly 800 ft-lbs at the muzzle, less than 600 at 50 yards and perhaps 450 at 100 yards from the long barrel; a 6½-inch barrel reduced those figures about 12 percent. Sengel considers that closer to old .32-40 black-powder rifle performance than a true big-game handgun round, but the .357 became highly popular with law enforcement.</p>
+      <p>Published velocity soon declined from 1,515 to 1,460 fps, probably after a slight pressure reduction. Mass production had made pressure control difficult. Factory 2400 reportedly burned more slowly and was harder to ignite than canister powder sold to handloaders, and early .357 cases used Large Pistol primers.</p>`},
+    {page:"95",html:`
+      <p>After World War II the .357 remained concentrated among law enforcement and a small group of handgun hunters; widespread hunter interest shifted toward the .44 Magnum. Social changes and rising concern about violent crime in the late 1960s and 1970s expanded civilian interest in defensive handguns, and the double-action .357 fit that role well.</p>
+      <p>By the mid-1970s factories adopted lighter, high-velocity bullets. Four-inch test barrels produced about 1,235 fps with 158-grain bullets, 1,290 fps with 145-grain bullets, 1,450 fps with 125-grain bullets and 1,300 to 1,400 fps with 110-grain hollowpoints, depending on manufacturer.</p>
+      <p>Later 180-grain hunting loads could work, though Sengel preferred larger cartridges for a dedicated hunting handgun. He concludes that the .357 Magnum ultimately found its most suitable role in law enforcement and personal protection.</p>`}
+  ]
+},{
+  id:"pearce-freedom-arms-model-1997",
+  title:"Freedom Arms Model 1997",
+  author:"Brian Pearce",
+  publication:"Handloader No. 231",
+  date:"October–November 2004",
+  department:"Feature",
+  tags:["Freedom Arms","Model 1997",".45 Colt","round butt","3½-inch barrel","line-bored cylinder","compact revolver","Brian Pearce","handloads","accuracy","H-110","HS-6","2400"],
+  cartridges:[".45 Colt"],
+  summary:"Pearce reviews a compact, round-butt Freedom Arms Model 1997 with a 3½-inch barrel, explains its short-cylinder loading constraints, and tests 21 .45 Colt combinations from mild field loads through heavy hunting ammunition.",
+  pages:[
+    {page:"36",src:"assets/articles/pearce-freedom-arms-model-1997/page-36.jpeg"},
+    {page:"37",src:"assets/articles/pearce-freedom-arms-model-1997/page-37.jpeg"},
+    {page:"38",src:"assets/articles/pearce-freedom-arms-model-1997/page-38.jpeg"},
+    {page:"39",src:"assets/articles/pearce-freedom-arms-model-1997/page-39.jpeg"},
+    {page:"40",src:"assets/articles/pearce-freedom-arms-model-1997/page-40.jpeg"},
+    {page:"41",src:"assets/articles/pearce-freedom-arms-model-1997/page-41.jpeg"},
+    {page:"42",src:"assets/articles/pearce-freedom-arms-model-1997/page-42.jpeg"}
+  ],
+  transcript:[
+    {page:"36",html:`
+      <p>Pearce begins with Freedom Arms’ 1983 introduction of the five-shot Model 83 in .454 Casull. Correctly dimensioned, line-bored chambers and throats gave exceptional accuracy, while heat-treated 17-4 PH stainless construction, locking notches between chambers and a .001- to .002-inch barrel-cylinder gap produced unusual strength and durability with full-power ammunition averaging about 65,000 psi.</p>
+      <p>Demand for a smaller field revolver led to the Model 1997. By the time of the article it was offered in .17 HMR, .22 LR, .22 WMR, .32 H&amp;R Magnum, .32-20 WCF, .357 Magnum, .41 Magnum, .44 Special, .45 ACP and .45 Colt. The four largest chamberings used five-shot cylinders; smaller calibers held six.</p>`},
+    {page:"37",html:`
+      <p>The Model 1997 uses a self-activating transfer bar housed in the hammer, allowing all chambers to be loaded. At a Safari Club International convention, Freedom Arms president Bob Baker handed Pearce an experimental .45 Colt with adjustable sights, a rounded butt and a barrel and ejector housing shortened to 3½ inches.</p>
+      <p>Pearce normally disliked round-butt single actions but found this one well proportioned and encouraged production. His Premier Grade sample arrived with an express-style wide V rear sight, gold-bead front sight and black Micarta stocks, along with the company’s extra hand fitting, polishing and lifetime warranty.</p>`},
+    {page:"38",html:`
+      <p>Chambers were polished, countersunk and line bored; the forcing cone was cut to three degrees and polished. The cylinder showed virtually no endshake or side play, the barrel-cylinder gap measured .002 inch, throats measured .452 and the barrel slugged .4515 inch.</p>
+      <p>The modified grip frame was shortened about .050 inch and modestly rounded without forcing the recoil into the center of the palm or changing the wrist angle. The 3½-inch barrel was about the shortest usable with the standard base-pin head. Its ejector rod moved fired cases only about .200 inch, although a fast stroke usually cleared them. Cylinder removal required taking off the ejector-rod housing.</p>
+      <p>At 34 ounces, Pearce saw the compact revolver as useful to backpackers and outdoorsmen seeking a powerful, reliable sidearm.</p>`},
+    {page:"39",html:`
+      <p>The short cylinder imposes a maximum overall cartridge length of about 1.625 inches. Bullet nose length forward of the crimp cannot exceed roughly .340 inch, preventing normal use of some traditional cast designs unless they are crimped over the front driving band.</p>
+      <p>Pearce successfully loaded the RCBS 45-270-SAA in that manner. Lyman 454190 bullets around 255 to 260 grains fit well at about 1.580 inches. A gas-checked 338-grain Lyman 452651 could use its upper crimp groove and remain just under 1.600 inches. Some jacketed bullets with longer noses required seating to the correct length and taper crimping over the ogive.</p>
+      <p>Freedom Arms approved the Model 1997 for Ruger-level .45 Colt data generally associated with 30,000 to 32,000 CUP, but Pearce gives an important warning: seating heavy bullets more deeply than in a Ruger reduces powder capacity and can raise pressure substantially. A 300-grain Speer load listed at 24.0 grains of H-110 and 1.660 inches had to be reduced to 22.0 grains when seated near 1.600 inches for this revolver.</p>`},
+    {page:"40",html:`
+      <p>Pearce emphasizes that the .45 Colt does not need maximum pressure for effective field performance. Loads sending 250- to 260-grain bullets at 850 to 1,000 fps can handle deer-sized game while remaining accurate, pleasant and easy on cases. In a 34-ounce revolver, 300-grain bullets at 1,200 fps create enough recoil to shorten practice sessions.</p>
+      <p>The short Model 1997 regularly produced groups under one inch at 25 yards. Achieving that accuracy required learning the express sight picture, and the revolver’s interchangeable front blade allowed changes to sight height and presentation.</p>
+      <aside class="article-caption">The .45 Colt chambers measured .452 inch and were line bored. Cartridges longer than 1.625 inches protruded from the short cylinder and could tie up the gun.</aside>`},
+    {page:"41",html:`
+      <p>Pearce found the revolver accurate with a broad range of loads, with a slight preference for jacketed bullets. A 250-grain Hornady XTP at 1,009 fps with 12.0 grains of HS-6 or at 1,011 fps with 19.5 grains of 2400 stayed under one inch at 25 yards. The 300-grain Speer plated softpoint over 22.0 grains of H-110 reached 1,140 fps with similar accuracy and offered a tough big-game bullet.</p>
+      <aside class="article-caption">The complete 21-row “Freedom Arms Model 1997 .45 Colt” load table is indexed separately in Tables.</aside>`},
+    {page:"42",html:`
+      <p>Cast bullets also performed well. The 255-grain Lyman 454190 over 6.0 grains of Red Dot produced 833 fps and groups around one to 1¼ inches at 25 yards. The 338-grain gas-checked Lyman 452651 over 12.0 grains of HS-6 reached 968 fps, shot consistently on an informal 300-yard target and offered deep penetration for larger game.</p>
+      <p>Pearce describes the compact revolver as unusually enjoyable with everyday 255-grain loads around 850 to 900 fps. The round butt and 3½-inch barrel could be ordered together on a new Model 1997, or some existing guns could be factory converted. He closes by praising the durability and lifetime quality of Freedom Arms single actions.</p>`}
   ]
 }];
 
