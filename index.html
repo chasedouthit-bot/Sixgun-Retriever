@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.28.0">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.28.0">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.28.0">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.28.0">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.28.0">
+<link rel="manifest" href="/manifest.webmanifest?v=2.30.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.30.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.30.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.30.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.30.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -527,7 +527,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.28.0</div>
+    <div class="landing-version">Version 2.30.0</div>
   </div>
 </div>
 
@@ -958,8 +958,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.28.0";
-const CACHE_VERSION="sixgun-retriever-v2.28.0";
+const RELEASE_VERSION="2.30.0";
+const CACHE_VERSION="sixgun-retriever-v2.30.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -3233,6 +3233,302 @@ const LIB_ARTICLES=[{
   tags:["John Taffin","article index","bibliography","GUNS Magazine","American Handgunner","chronological archive","reference index"],
   cartridges:[".45 Colt",".45 ACP",".38 Special",".357 Mag",".41 Magnum",".44 Special",".44 Magnum"],
   summary:"A chronological byline index for locating Taffin's articles across GUNS Magazine, American Handgunner and other publications."
+},
+{
+  id:"american-rifleman-mild-mannered-45-colt",
+  title:"Handloads: A Mild-Mannered .45 Colt",
+  author:"Aaron Carter", publication:"American Rifleman", date:"January 11, 2023", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/content/handloads-a-mild-mannered-45-colt/",
+  tags:[".45 Colt","standard pressure","Ruger Vaquero","Power Pistol","250-grain XTP","accuracy","Aaron Carter"], cartridges:[".45 Colt"],
+  summary:"A compact standard-pressure .45 Colt loading feature built around a 250-grain Hornady XTP and Power Pistol, with practical cautions about the cartridge's large case and the risk of unnoticed double charges."
+},
+{
+  id:"handloader-loading-45-acp-pet-loads",
+  title:"Loading The .45 ACP (Pet Loads)",
+  author:"Brian Pearce", publication:"Handloader Magazine", date:"October 2017", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.handloadermagazine.com/loading-the-45-acp-pet-loads",
+  tags:[".45 ACP","Pet Loads","standard pressure","+P","1911","taper crimp","case length","primer selection","bullet seating","Brian Pearce"], cartridges:[".45 ACP"],
+  summary:"Pearce's full technical survey of .45 ACP handloading covers pistol reliability, case length and headspace, taper crimping, seating depth, primer and powder selection, bullet construction and standard-versus-+P pressure."
+},
+{
+  id:"american-rifleman-357-history-performance",
+  title:"The .357 Magnum: History & Performance",
+  author:"Dave Campbell", publication:"American Rifleman", date:"June 18, 2022", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/content/the-357-magnum-history-performance/",
+  tags:[".357 Magnum","cartridge history","Smith & Wesson","Registered Magnum","law enforcement","hunting","Dave Campbell"], cartridges:[".357 Mag"],
+  summary:"Campbell traces the .357 Magnum from its Depression-era introduction and Registered Magnum roots through its law-enforcement, sporting and defensive roles."
+},
+{
+  id:"american-rifleman-history-357-magnum",
+  title:"The History Of The .357 Magnum",
+  author:"Dave Campbell", publication:"American Rifleman", date:"November 23, 2010", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/articles/2010/11/23/the-history-of-the-357-magnum",
+  tags:[".357 Magnum","cartridge history","Prohibition","law enforcement","Elmer Keith","Phil Sharpe","Smith & Wesson","Dave Campbell"], cartridges:[".357 Mag"],
+  summary:"A history of the conditions, experimenters and firearm makers behind the .357 Magnum, beginning with the search for a more penetrating police revolver cartridge."
+},
+{
+  id:"american-rifleman-357-anything-but-boring",
+  title:"The .357 Magnum: Anything But Boring",
+  author:"Dave Campbell", publication:"American Rifleman", date:"November 16, 2016", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/articles/2016/11/16/the-357-magnum-anything-but-boring",
+  tags:[".357 Magnum","revolvers","single actions","Ruger Vaquero","field shooting","handloading","Dave Campbell"], cartridges:[".357 Mag"],
+  summary:"Campbell makes the practical and personal case for the .357 Magnum as an accurate, versatile and genuinely enjoyable revolver cartridge rather than merely a reduced-caliber alternative."
+},
+{
+  id:"taffin-playin-favorites-357-saas",
+  title:"Playin' Favorites: .357 Magnum SAAs",
+  author:"John Taffin", publication:"American Handgunner", date:"2021", department:"Linked article", sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/our-experts/playin-favorites-357-magnum-saas/",
+  tags:[".357 Magnum","single-action revolvers","Ruger New Vaquero","Freedom Arms Model 97","Colt SAA","Great Western","John Taffin"], cartridges:[".357 Mag"],
+  summary:"Taffin's subjective tour of favorite .357 Magnum single actions, placing the Colt, Great Western, Ruger and Freedom Arms designs in historical and shooting context."
+},
+{
+  id:"taffin-75-years-young-357",
+  title:"75 Years Young",
+  author:"John Taffin", publication:"GUNS Magazine", date:"2010", department:"Linked article", sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/guns/handguns/75-years-young/",
+  tags:[".357 Magnum","75th anniversary","Smith & Wesson","Registered Magnum","General Patton",".38/44","cartridge history","John Taffin"], cartridges:[".357 Mag",".38 Special"],
+  summary:"A 75th-anniversary history of the .357 Magnum that follows the .38/44 foundation, Smith & Wesson's original Magnum and the famous revolvers ordered by early owners such as George Patton."
+},
+{
+  id:"barsness-the-38-special",
+  title:"The .38 Special",
+  author:"John Barsness", publication:"GUNS Magazine", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/guns/handguns/the-38-special/",
+  tags:[".38 Special","cartridge history","standard pressure","+P","wadcutters","cast bullets","snubnose","handloads","John Barsness"], cartridges:[".38 Special",".357 Mag"],
+  summary:"Barsness combines .38 Special history with pressure-level guidance, bullet selection and handload testing in three revolvers ranging from an Airweight to a .357 Magnum Model 66."
+},
+{
+  id:"venturino-special-love-38",
+  title:"A “Special” Love",
+  author:"Mike “Duke” Venturino", publication:"GUNS Magazine", date:"2019", department:"Linked article", sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/our-experts/a-special-love/",
+  tags:[".38 Special","handloading","Smith & Wesson K-frame","target loads","cast bullets","Bullseye","Unique","Mike Venturino"], cartridges:[".38 Special"],
+  summary:"Venturino looks back on more than five decades of loading and shooting the .38 Special, with favorite revolvers, cast bullets and mild target combinations."
+},
+{
+  id:"reloader-learn-handloading-357-revolver",
+  title:"If You Want to Learn Handloading, Get a .357 Magnum Revolver",
+  author:"John Kleespies", publication:"Reloader.com", date:"August 6, 2024", department:"Linked article", sourceType:"external",
+  externalUrl:"https://reloader.com/2024/08/if-you-want-to-learn-handloading-get-a-357-magnum-revolver/",
+  tags:[".357 Magnum",".38 Special","beginning handloading","revolver","brass recovery","low recoil","wadcutters","John Kleespies"], cartridges:[".38 Special",".357 Mag"],
+  summary:"A concise case for learning to handload with mild .38 Special ammunition in a .357 Magnum revolver, emphasizing simplicity, low recoil, inexpensive components and easy brass recovery."
+},
+{
+  id:"guns-remembering-john-taffin",
+  title:"Remembering John Taffin",
+  author:"GUNS Staff and contributors", publication:"GUNS Magazine", date:"2025", department:"Linked article", sourceType:"external",
+  externalUrl:"https://gunsmagazine.com/our-experts/remembering-john-taffin/",
+  tags:["John Taffin","memorial","sixgun writing","GUNS Magazine","American Handgunner","firearms history"], cartridges:[".38 Special",".357 Mag",".41 Magnum",".44 Special",".44 Magnum",".45 Colt",".45 ACP"],
+  summary:"Editors and fellow writers remember Taffin's long career, encyclopedic sixgun knowledge, generosity, work ethic and influence on generations of handgun readers."
+},
+{
+  id:"taffin-single-action-sixguns-357",
+  title:"Single-Action Sixguns",
+  author:"John Taffin", publication:"American Handgunner", date:"2017", department:"Linked article", sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/our-experts/single-action-sixguns/",
+  tags:[".357 Magnum","single-action revolvers","Colt SAA","Great Western","Ruger Blackhawk","Freedom Arms",".357 Atomic","John Taffin"], cartridges:[".357 Mag"],
+  summary:"Taffin surveys favorite .357 Magnum single actions from rare first-generation Colts and Great Western's Atomic through Ruger Flat-Tops and modern Freedom Arms sixguns."
+},
+{
+  id:"pearce-bullets-brass-questionable-45-colt-data",
+  title:"Bullets & Brass: Questionable .45 Colt Data",
+  author:"Brian Pearce", publication:"Handloader Magazine", date:"April 2022", department:"Linked column", sourceType:"external",
+  externalUrl:"https://www.handloadermagazine.com/bullets-brass-30",
+  tags:[".45 Colt","Bullets & Brass","Titegroup","Colt New Frontier","overpressure","load data","Brian Pearce"], cartridges:[".45 Colt"],
+  summary:"Pearce analyzes a reader's damaged Colt New Frontier, explains why the cited Titegroup charge was excessive for an SAA-pattern revolver and distinguishes that failure from a true double charge."
+},
+{
+  id:"pearce-bullets-brass-real-world-45-colt-accuracy",
+  title:"Bullets & Brass: Real World .45 Colt Accuracy",
+  author:"Brian Pearce", publication:"Handloader Magazine", date:"February 2020", department:"Linked column", sourceType:"external",
+  externalUrl:"https://www.handloadermagazine.com/bullets-brass-17",
+  tags:[".45 Colt","Bullets & Brass","Colt SAA","cylinder throats","accuracy","gunsmithing","Brian Pearce"], cartridges:[".45 Colt"],
+  summary:"Pearce answers a reader's questions about improving a second-generation Colt SAA by fitting a correctly chambered cylinder, while setting realistic expectations for the accuracy gain."
+},
+{
+  id:"hoover-pet-loads-cast-bullets",
+  title:"Pet Loads With Cast Bullets",
+  author:"Jeff “Tank” Hoover", publication:"American Handgunner", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/gear/pet-loads-with-cast-bullets/",
+  tags:["cast bullets","pet loads",".32 H&R Magnum",".38 Special",".44 Special",".45 Colt","2400","Unique","Jeff Hoover"], cartridges:[".32 H&R Mag",".38 Special",".44 Special",".45 Colt"],
+  summary:"Hoover shares a cross-cartridge collection of personally proven cast-bullet loads, beginning with the .32 H&R and continuing through traditional .38, .44 and .45 revolver combinations."
+},
+{
+  id:"riac-elmer-keith-guns-wisdom",
+  title:"Elmer Keith Guns and Wisdom",
+  author:"Kurt Allemeier", publication:"Rock Island Auction Company", date:"October 18, 2023", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.rockislandauction.com/riac-blog/elmer-keith-guns-and-wisdom",
+  tags:["Elmer Keith","gun collection",".357 Magnum",".41 Magnum",".44 Magnum","handgun history","Rock Island Auction"], cartridges:[".357 Mag",".41 Magnum",".44 Special",".44 Magnum"],
+  summary:"A biographical look at Keith through his writing, cartridge work and surviving personal firearms, using documented guns handled by Rock Island Auction to connect his ideas with the objects he owned."
+},
+{
+  id:"hoover-setting-record-straight-keith-saa",
+  title:"Setting the Record Straight …",
+  author:"Jeff “Tank” Hoover", publication:"American Handgunner", date:"2024", department:"Linked article", sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/discover/setting-the-record-straight-2/",
+  tags:["Elmer Keith","Colt SAA","blown cylinder","Wrecking the S.A. Colt","historical correction","Jeff Hoover"], cartridges:[".45 Colt"],
+  summary:"Hoover reconstructs the real circumstances of Keith's famous destroyed Single Action Army by comparing Keith's own accounts with surviving photographs and later retellings."
+},
+{
+  id:"american-rifleman-look-back-model-19",
+  title:"A Look Back at the Smith & Wesson Model 19",
+  author:"Dave Campbell", publication:"American Rifleman", date:"June 7, 2018", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/content/a-look-back-at-the-smith-wesson-model-19/",
+  tags:["Smith & Wesson Model 19","Combat Magnum","Bill Jordan","K-frame",".357 Magnum","revolver history","Dave Campbell"], cartridges:[".357 Mag",".38 Special"],
+  summary:"Campbell traces Bill Jordan's lighter K-frame .357 concept, the Combat Magnum's development and the Model 19's long service and production history."
+},
+{
+  id:"ammoland-model-19-classic-review",
+  title:"Smith & Wesson Model 19 Classic “Combat Magnum” Review",
+  author:"Mike Hardesty", publication:"AmmoLand", date:"October 17, 2025", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.ammoland.com/2025/10/smith-wesson-model-19-classic-combat-magnum-review/",
+  tags:["Smith & Wesson Model 19 Classic","Combat Magnum","Bill Jordan","K-frame",".357 Magnum","field review","Mike Hardesty"], cartridges:[".357 Mag",".38 Special"],
+  summary:"A current-production Model 19 Classic review that combines the design's Bill Jordan history with handling, field use and practical roles for the modern K-frame revolver."
+},
+{
+  id:"guns-custom-model-19-review",
+  title:"Smith & Wesson Model 19 .357 Combat Magnum",
+  author:"Guns.com staff", publication:"Guns.com", date:"Date not listed", department:"Linked review", sourceType:"external",
+  externalUrl:"https://www.guns.com/news/reviews/smith-wesson-model-19-357-combat-magnum",
+  tags:["Smith & Wesson Model 19","Combat Magnum","custom revolver","Bushnell Phantom","metallic silhouette","long-range handgun",".357 Magnum"], cartridges:[".357 Mag",".38 Special"],
+  summary:"A hands-on review of an unusually customized six-inch Model 19 fitted with finger-groove stocks and a vintage long-eye-relief Bushnell scope, including history, measurements and range impressions."
+},
+{
+  id:"american-rifleman-look-back-colt-python",
+  title:"A Look Back at the Colt Python",
+  author:"Dave Campbell", publication:"American Rifleman", date:"September 15, 2016", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/articles/2016/9/15/a-look-back-at-the-colt-python/",
+  tags:["Colt Python",".357 Magnum","Colt revolvers","hand fitting","revolver history","Royal Blue","Dave Campbell"], cartridges:[".357 Mag",".38 Special"],
+  summary:"Campbell explains how Colt's postwar manufacturing position, target-revolver lineage and skilled hand fitting produced the original Python and its exceptional reputation."
+},
+{
+  id:"shooting-times-original-colt-python-history",
+  title:"The Original Colt Python Revolver: Iconic History",
+  author:"Shooting Times staff", publication:"Shooting Times", date:"November 15, 2024", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.shootingtimes.com/editorial/original-colt-python-review/510644",
+  tags:["Colt Python","first generation","second generation",".357 Magnum","lockwork","hand fitting","revolver history"], cartridges:[".357 Mag",".38 Special"],
+  summary:"A focused comparison of the original hand-fitted Python with the revived design, covering the early revolver's mechanics, finish, reputation and tendency to lose timing under heavy use."
+},
+{
+  id:"american-rifleman-150-years-colt-saa",
+  title:"150 Years Of The Colt Single Action Army",
+  author:"Rick Hacker", publication:"American Rifleman", date:"January 3, 2023", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/content/150-years-of-the-colt-single-action-army/",
+  tags:["Colt Single Action Army","Model P","Peacemaker","150th anniversary","military history","collecting","Rick Hacker"], cartridges:[".45 Colt",".44-40",".38-40",".357 Mag"],
+  summary:"Hacker's illustrated 150th-anniversary feature follows the SAA from military adoption through its factory options, production generations, famous users and collector significance."
+},
+{
+  id:"american-rifleman-colt-saa-look-back",
+  title:"The Colt Single Action Army: A Look Back",
+  author:"Dave Campbell", publication:"American Rifleman", date:"December 5, 2016", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.americanrifleman.org/content/the-colt-single-action-army-a-look-back/",
+  tags:["Colt Single Action Army","Model P","Peacemaker","Colt history","Rollin White patent","production history","Dave Campbell"], cartridges:[".45 Colt",".44-40",".38-40",".357 Mag"],
+  summary:"Campbell places the SAA within Colt's longer revolver story, explaining the patent and manufacturing path to the Model P and why demand repeatedly returned it to production."
+},
+{
+  id:"safariland-colt-peacemaker-origins-legacy",
+  title:"The Colt Peacemaker: Its Origins and Legacy",
+  author:"James Hebert", publication:"Inside Safariland", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://inside.safariland.com/blog/the-colt-peacemaker-its-origins-and-legacy/",
+  tags:["Colt Peacemaker","Colt SAA","military history","Indian Wars",".45 Colt",".44-40","training doctrine","James Hebert"], cartridges:[".45 Colt",".44-40"],
+  summary:"A military- and cultural-history treatment of the Peacemaker, from the Rollin White patent and Army adoption through frontier use, design changes and its influence on later handgun doctrine."
+},
+{
+  id:"venturino-beginning-bullet-casting-part-iii",
+  title:"Beginning Bullet Casting Part III",
+  author:"Mike Venturino", publication:"Handloader Magazine", date:"April 2017", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.handloadermagazine.com/beginning-bullet-casting-part-iii",
+  tags:["bullet casting","cast bullets","fluxing","mould temperature","casting cadence","bullet inspection","Mike Venturino"], cartridges:["Cast bullets"],
+  summary:"Part III of Venturino's series concentrates on producing sound bullets: alloy preparation, fluxing, preheating moulds, maintaining cadence and deciding which visible defects matter for different shooting tasks."
+},
+{
+  id:"venturino-beginning-bullet-casting-part-iv",
+  title:"Beginning Bullet Casting Part IV",
+  author:"Mike Venturino", publication:"Handloader Magazine", date:"October 2017", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.handloadermagazine.com/beginning-bullet-casting-part-iv",
+  tags:["bullet casting","cast bullets","sizing","lubrication","gas checks","case mouth belling","crimping","Mike Venturino"], cartridges:["Cast bullets"],
+  summary:"The final installment moves from cast projectile to loaded cartridge, covering sizing, lubricant, gas-check installation, expander selection, case-mouth preparation and appropriate crimp."
+},
+{
+  id:"venturino-casting-good-handgun-bullets",
+  title:"Casting Good Handgun Bullets and Plenty of Them",
+  author:"Mike Venturino", publication:"Handloader Magazine", date:"October 2026", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.handloadermagazine.com/casting-good-handgun-bullets-and-plenty-of-them",
+  tags:["bullet casting","handgun bullets","bottom-pour furnace","multi-cavity moulds","lead alloy","production casting","Mike Venturino"], cartridges:["Cast bullets"],
+  summary:"Venturino contrasts precision rifle casting with faster handgun production and explains how furnace type, mould capacity, alloy hardness and realistic quality control produce useful bullets in quantity."
+},
+{
+  id:"haviland-learn-to-reload-choosing-bullet",
+  title:"Learn To Reload: Choosing Bullet",
+  author:"John Haviland", publication:"Handloader Magazine", date:"October 2019", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.handloadermagazine.com/learn-to-reload-handloading-basics-3",
+  tags:["handloading basics","bullet selection","bullet construction","seating depth","accuracy","terminal performance","John Haviland"], cartridges:["Handloading basics"],
+  summary:"A fundamentals article on matching bullet composition, shape, weight and construction to the intended target, then accounting for seating depth and other loading consequences."
+},
+{
+  id:"venturino-starline-lead-alloy-bullets",
+  title:"Lead Alloy Bullets",
+  author:"Mike Venturino", publication:"Starline Brass", date:"July 31, 2013", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.starlinebrass.com/articles/lead-alloy-bullets-handloading-lead-bullets/",
+  tags:["lead alloy bullets","cast bullets","bullet hardness","case mouth belling","expander plugs","roll crimp","taper crimp","Mike Venturino"], cartridges:["Cast bullets"],
+  summary:"Venturino explains the enduring usefulness of lead-alloy handgun bullets and the small but important loading changes needed to avoid damaging them during seating and crimping."
+},
+{
+  id:"ssusa-accurizing-revolver",
+  title:"Accurizing a Revolver",
+  author:"David Sams", publication:"Shooting Sports USA", date:"September 29, 2015", department:"Linked article", sourceType:"external",
+  externalUrl:"https://www.ssusa.org/content/accurizing-a-revolver/",
+  tags:["revolver accuracy","blueprinting","barrel-cylinder gap","timing","forcing cone","cylinder alignment","match revolver","David Sams"], cartridges:["Revolver gunsmithing"],
+  summary:"Master gunsmith David Sams outlines the interacting barrel, cylinder, alignment, timing, gap, forcing-cone and action variables involved in preparing a revolver for match-grade accuracy."
+},
+{
+  id:"huntington-timing-is-everything",
+  title:"Timing Is Everything",
+  author:"Roy Huntington", publication:"American Handgunner", date:"2020", department:"Linked article", sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/discover/timing-is-everything/",
+  tags:["revolver timing","carry-up","Smith & Wesson K-frame","cylinder stop","hand","diagnosis","Roy Huntington"], cartridges:["Revolver gunsmithing"],
+  summary:"Huntington explains the sequence hidden inside a double-action trigger pull, how to recognize an out-of-time revolver and which interacting parts control cylinder carry-up and lock."
+},
+{
+  id:"bowen-manson-forcing-cone-tools",
+  title:"Manson Reamers Forcing Cone Tools",
+  author:"Hamilton Bowen", publication:"American Handgunner", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/handguns/revolvers/manson-reamers-forcing-cone-tools/",
+  tags:["forcing cone","Manson reamers","Hamilton Bowen","revolver accuracy","piloted cutters","barrel-cylinder gap","pistolsmithing"], cartridges:["Revolver gunsmithing"],
+  summary:"Bowen reviews a piloted forcing-cone cutting system and explains why concentricity, pilot fit, cone angle, surface finish and mouth diameter matter to revolver accuracy and leading."
+},
+{
+  id:"venturino-more-revolver-accuracy-variables",
+  title:"More Revolver Accuracy Variables",
+  author:"Mike “Duke” Venturino", publication:"American Handgunner", date:"Date not listed", department:"Linked article", sourceType:"external",
+  externalUrl:"https://americanhandgunner.com/our-experts/more-revolver-accuracy-variables/",
+  tags:["revolver accuracy","cylinder throats","groove diameter","forcing cone","cast bullets","Colt SAA","Mike Venturino"], cartridges:[".45 Colt",".38-40","Revolver gunsmithing"],
+  summary:"Venturino shows why matching a cast bullet only to groove diameter is insufficient, using chamber-mouth uniformity and forcing-cone condition to explain otherwise puzzling accuracy and leading."
+},
+{
+  id:"revolverguy-meet-gunsmith-guncrank",
+  title:"Meet The . . . Gunsmith? Guncrank?",
+  author:"Mike Wood", publication:"RevolverGuy", date:"December 9, 2023", department:"Linked profile", sourceType:"external",
+  externalUrl:"https://revolverguy.com/meet-the-gunsmith-guncrank/",
+  tags:["Roy Huntington","pistolsmithing","custom revolvers","forcing cone","muzzle work","revolver restoration","Mike Wood"], cartridges:["Revolver gunsmithing"],
+  summary:"A detailed profile of Roy Huntington's path from police firearms instructor and editor to hands-on revolver work, illustrated through the practical repairs and custom touches he performs."
+},
+{
+  id:"revolverguy-gunsmith-roundup-part-ii",
+  title:"Revolver Gunsmith Roundup, Part II",
+  author:"Mike Wood", publication:"RevolverGuy", date:"September 18, 2021", department:"Linked article", sourceType:"external",
+  externalUrl:"https://revolverguy.com/revolver-gunsmith-roundup-part-ii/",
+  tags:["revolver gunsmiths","custom revolvers","blueprinting","action work","barrel-cylinder gap","forcing cone","Mike Wood"], cartridges:["Revolver gunsmithing"],
+  summary:"A carefully reported directory of specialist revolver gunsmiths, their backgrounds and the repair, action, accuracy, restoration and full-custom work each shop emphasizes."
+},
+{
+  id:"gunsamerica-slick-up-ruger-single-action",
+  title:"DIY: Slick Up a Ruger Single Action",
+  author:"Sam Trisler", publication:"GunsAmerica Digest", date:"July 2, 2014", department:"Linked article", sourceType:"external",
+  externalUrl:"https://gunsamerica.com/digest/diy-slick-ruger-single-action/",
+  tags:["Ruger Blackhawk","Ruger Vaquero","single-action revolver","action smoothing","trigger pull","springs","DIY gunsmithing","Sam Trisler"], cartridges:["Revolver gunsmithing"],
+  summary:"A step-by-step action-smoothing feature for an otherwise safe and functional Ruger single action, focused on reducing friction and improving trigger feel without presenting itself as a repair guide."
 },
 {
   id:"skelton-44-special-reappraisal",

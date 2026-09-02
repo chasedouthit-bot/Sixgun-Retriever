@@ -53,6 +53,35 @@ const skeeterArticleIds=[
 assert.equal(skeeterArticleIds.length,30,"Dark Canyon batch must contain all 30 individual Skeeter pieces");
 for(const article of skeeterArticleIds)assert(html.includes(`id:"${article}"`),`Library must include linked Skeeter entry ${article}`);
 for(const archive of ["skelton-handguns-hipshots-archive","skelton-dark-canyon-index"])assert(html.includes(`id:"${archive}"`),`Library must include Skeeter archive ${archive}`);
+const verifiedReadingListIds=[
+  "american-rifleman-mild-mannered-45-colt","handloader-loading-45-acp-pet-loads","american-rifleman-357-history-performance",
+  "american-rifleman-history-357-magnum","american-rifleman-357-anything-but-boring","taffin-playin-favorites-357-saas",
+  "taffin-75-years-young-357","barsness-the-38-special","venturino-special-love-38","reloader-learn-handloading-357-revolver",
+  "guns-remembering-john-taffin","taffin-single-action-sixguns-357","pearce-bullets-brass-questionable-45-colt-data",
+  "pearce-bullets-brass-real-world-45-colt-accuracy","hoover-pet-loads-cast-bullets"
+];
+for(const article of verifiedReadingListIds)assert(html.includes(`id:"${article}"`),`Library must include verified reading-list entry ${article}`);
+const verifiedHistoryAndGunsmithingIds=[
+  "riac-elmer-keith-guns-wisdom","hoover-setting-record-straight-keith-saa","american-rifleman-look-back-model-19",
+  "ammoland-model-19-classic-review","guns-custom-model-19-review","american-rifleman-look-back-colt-python",
+  "shooting-times-original-colt-python-history","american-rifleman-150-years-colt-saa","american-rifleman-colt-saa-look-back",
+  "safariland-colt-peacemaker-origins-legacy","venturino-beginning-bullet-casting-part-iii",
+  "venturino-beginning-bullet-casting-part-iv","venturino-casting-good-handgun-bullets",
+  "haviland-learn-to-reload-choosing-bullet","venturino-starline-lead-alloy-bullets","ssusa-accurizing-revolver",
+  "huntington-timing-is-everything","bowen-manson-forcing-cone-tools","venturino-more-revolver-accuracy-variables",
+  "revolverguy-meet-gunsmith-guncrank","revolverguy-gunsmith-roundup-part-ii","gunsamerica-slick-up-ruger-single-action"
+];
+for(const article of verifiedHistoryAndGunsmithingIds)assert(html.includes(`id:"${article}"`),`Library must include verified history/gunsmithing entry ${article}`);
+for(const rejectedSource of [
+  "guncollectorsclub.com/elmer-keith.html","watch-colt-python-revolver-history","150-years-of-colt-s-single-action-army",
+  "americanhandgunner.com/discover/gunsmithing/","cylindersmith.com/triggerspring.html"
+])assert(!html.includes(rejectedSource),`Library must not add incomplete, duplicate, index-only, or unverifiable source ${rejectedSource}`);
+for(const rejectedHost of ["sixguns.com/t/","levergunscommunity.org/viewtopic.php","associates.vbulletin.net/forum/"]){
+  assert(!html.includes(rejectedHost),`Library reading list must not add forum-hosted source ${rejectedHost}`);
+}
+for(const deadPage of ["taffincustomsingleactions1.html","taffincustomsingleactions2.html"]){
+  assert(!html.includes(deadPage),`Library must not add unreadable source ${deadPage}`);
+}
 assert.equal((html.match(/assets\/articles\/pearce-understanding-45-colt\/page-/g)||[]).length, 7, "Pearce article must preserve all seven scanned pages");
 for(const tier of ["14,000-psi Loads","16,000- to 19,000-psi Loads","23,000-psi Loads","32,000-CUP Loads","50,000-psi Loads"]){
   assert(html.includes(`Pearce .45 Colt — ${tier}`), `Tables must include Pearce's ${tier} data`);
