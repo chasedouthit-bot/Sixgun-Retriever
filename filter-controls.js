@@ -1,6 +1,6 @@
 (function(){
   const version=document.querySelector(".landing-version");
-  if(version)version.textContent="Version 2.10.3";
+  if(version)version.textContent="Version 2.34.0";
   if(document.getElementById("filterDrawer"))return;
 
   const screen=document.getElementById("s-loads");
@@ -36,7 +36,7 @@
   controls.className="filter-controls";
   controls.setAttribute("aria-label","Load filters");
   controls.innerHTML=[["gun","Guns"],["powder","Powders"],["tier","Tiers"]].map(([key,label])=>
-    `<button class="filter-toggle" id="${key}FilterBtn" type="button" aria-controls="${key}FilterPanel" aria-expanded="false"><span class="filter-toggle-copy"><span class="filter-toggle-label">${label}</span><span class="filter-toggle-value" id="${key}FilterValue">All</span></span><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>`
+    `<button class="filter-toggle" id="${key}FilterBtn" type="button" aria-controls="${key}FilterPanel" aria-expanded="false"><span class="filter-toggle-copy"><span class="filter-toggle-label" id="${key}FilterLabel">${label}</span><span class="filter-toggle-value" id="${key}FilterValue">All</span></span><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>`
   ).join("");
 
   const drawer=document.createElement("div");
@@ -53,6 +53,7 @@
   const rows={gun:gunChips,powder:powderChips,tier:tierChips};
   function summary(key){
     const selected=rows[key].querySelector(".chip.on");
+    if(key==="tier"&&rows[key].dataset.enabled==="false"&&(!selected||selected.dataset.t==="all"))return"Off";
     if(!selected)return"All";
     const text=selected.textContent.trim();
     return text==="All guns"||text==="All powders"?"All":text;
@@ -65,6 +66,7 @@
       const panel=document.getElementById(`${key}FilterPanel`);
       const selected=row.querySelector(".chip.on");
       const isOpen=openPanel===key;
+      if(key==="tier")document.getElementById("tierFilterLabel").textContent=row.dataset.enabled==="false"?"Status":"Tiers";
       document.getElementById(`${key}FilterValue`).textContent=summary(key);
       button.disabled=key==="powder"&&!row.children.length;
       button.classList.toggle("open",isOpen);
@@ -76,7 +78,7 @@
   Object.keys(rows).forEach(key=>{
     document.getElementById(`${key}FilterBtn`).addEventListener("click",()=>{openPanel=openPanel===key?null:key;refresh();});
     rows[key].addEventListener("click",event=>{if(event.target.closest(".chip:not(.disabled)"))setTimeout(()=>{openPanel=null;refresh();},0);});
-    new MutationObserver(refresh).observe(rows[key],{childList:true,subtree:true,attributes:true,attributeFilter:["class"]});
+    new MutationObserver(refresh).observe(rows[key],{childList:true,subtree:true,attributes:true,attributeFilter:["class","data-enabled"]});
   });
   refresh();
 })();

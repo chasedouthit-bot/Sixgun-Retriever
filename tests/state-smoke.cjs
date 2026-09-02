@@ -117,6 +117,10 @@ assert(html.includes('nav button[data-s]'), "tab navigation must exclude the cen
 assert(filterControls.includes('["gun","Guns"]'), "Loads must expose a compact Guns filter control");
 assert(filterControls.includes('["powder","Powders"]'), "Loads must expose a compact Powders filter control");
 assert(filterControls.includes('["tier","Tiers"]'), "Loads must expose a compact Tiers filter control");
+assert(html.includes('id="s-tier-settings"'), "Loads must expose per-caliber tier settings");
+assert(html.includes("Existing assignments stay saved."), "tier controls must explain that disabling tiers preserves assignments");
+assert(html.includes('class="tier-manage-btn"'), "the tier filter must expose its customization entry point");
+assert(filterControls.includes('row.dataset.enabled==="false"?"Status":"Tiers"'), "a disabled tier system must leave a compact status filter and settings entry point");
 assert(filterControls.includes('drawer.classList.toggle("open",!!openPanel)'), "load filter chips must open through the shared sliding drawer");
 assert(filterControls.includes('openPanel=null;refresh()'), "choosing a load filter must collapse the chip drawer");
 assert(html.includes('class="session-pager"'), "load detail must expose a swipeable session pager");
@@ -261,7 +265,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,sameCloudQueueJob,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,ensureTierSettings,tierKeys,tierLabel,tierColor,tierSortRank,tierValue,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,sameCloudQueueJob,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -301,6 +305,30 @@ const neutralDamage=api.taNeutralDamageCandidates(targetPixels,targetW,targetH,t
 assert.equal(neutralDamage.length,3,"reactive target damage must produce one marker per compact neutral splatter patch");
 const db = api.getDB();
 const catalog = api.ensureCatalog();
+const colt = db.cartridges[".45 Colt"];
+const coltTierAssignments = colt.loads.map(load => load.tier);
+assert.deepEqual(JSON.parse(JSON.stringify(api.tierKeys(colt, true))), ["1", "2", "3", "4"], "legacy .45 Colt tiers must retain their order");
+assert.deepEqual(Object.values(colt.tiers).map(tier => tier.name), ["Plinking", "SAA", "Field", "Brown Bear"], "legacy .45 Colt tier names must survive migration unchanged");
+assert.equal(api.ensureTierSettings(colt).enabled, true, "legacy cartridges must migrate with tiers enabled");
+assert.equal(api.tierLabel(2, colt), "Tier 2 · SAA", "legacy numbered tier labels must remain familiar");
+colt.tiers["2"].name = "Standard & SAA";
+assert.equal(api.tierLabel(2, colt), "Tier 2 · Standard & SAA", "custom names must flow through tier labels");
+assert.deepEqual(colt.loads.map(load => load.tier), coltTierAssignments, "renaming a tier must not alter existing load assignments");
+colt.tiers["2"].name = "SAA";
+colt.tierSettings.enabled = false;
+assert.deepEqual(colt.loads.map(load => load.tier), coltTierAssignments, "turning tiers off must preserve existing load assignments");
+colt.tierSettings.enabled = true;
+const magnum = db.cartridges[".357 Mag"];
+assert.deepEqual(JSON.parse(JSON.stringify(api.tierKeys(magnum, true))), ["Target", "Field", "Defense"], "named tiers must migrate without being converted to numbers");
+magnum.tiers.Custom = { name: "Trail", active: true, color: "#5f9b92" };
+magnum.tierSettings.order.splice(1, 0, "Custom");
+assert.equal(api.tierLabel("Custom", magnum, false), "Trail", "custom per-caliber tiers must support stable string identifiers");
+assert.equal(api.tierSortRank("Custom", magnum), 1, "custom tier order must drive load sorting");
+assert.equal(api.tierValue("Custom"), "Custom", "custom tier identifiers must survive load creation");
+assert.equal(api.tierValue("2"), 2, "legacy numeric tier identifiers must remain numeric");
+const tierSafe = api.cloudSafeState(db).cartridges[".45 Colt"];
+assert.equal(tierSafe.tierSettings.enabled, true, "per-caliber tier settings must persist in the cloud state snapshot");
+assert.deepEqual(tierSafe.loads.map(load => load.tier), coltTierAssignments, "cloud serialization must preserve every existing tier assignment");
 const garminCsv = `"Pistol session started at 10:52"
 #,SPEED (FPS),Δ AVG (FPS),KE (FT-LB),POWER FACTOR (KGR⋅FT/S),TIME,CLEAN BORE,COLD BORE,SHOT NOTES
 1, 980.0, 0.0, , , 10:53:11 AM, yes, yes, First shot
