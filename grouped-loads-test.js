@@ -1,9 +1,6 @@
 (function(){
   'use strict';
 
-  const isTestRoute=location.pathname.replace(/\/$/,'')==='/loads-test'||new URLSearchParams(location.search).has('loads-test');
-  if(!isTestRoute)return;
-
   const collapsed=new Set();
 
   function statusFor(load){
@@ -93,16 +90,6 @@
     </section>`;
   }
 
-  function installPreviewLabel(){
-    const screen=document.getElementById('s-loads');
-    if(!screen||document.getElementById('groupedPreviewBar'))return;
-    const bar=document.createElement('div');
-    bar.id='groupedPreviewBar';
-    bar.className='gl-preview-bar';
-    bar.innerHTML='<span><b>Grouped loads test</b><small>Your current Loads screen is unchanged</small></span><a href="/">Current view</a>';
-    screen.insertBefore(bar,screen.firstChild);
-  }
-
   function renderGroupedLoads(){
     const el=document.getElementById('loadList');
     const list=filteredLoads();
@@ -133,8 +120,6 @@
     const style=document.createElement('style');
     style.id='groupedLoadsTestStyles';
     style.textContent=`
-      .gl-preview-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 9px;padding:9px 10px;border:1px dashed var(--brass-dim);border-radius:10px;background:rgba(199,154,75,.055)}
-      .gl-preview-bar b,.gl-preview-bar small{display:block}.gl-preview-bar b{font:700 12px Bitter,serif;color:var(--brass)}.gl-preview-bar small{margin-top:2px;color:var(--ink-faint);font-size:9px}.gl-preview-bar a{flex:none;padding:7px 9px;border:1px solid var(--line);border-radius:8px;color:var(--ink-dim);font-size:10px;font-weight:700;text-decoration:none}
       .gl-group{position:relative;margin:0 0 12px;border:1px solid var(--line);border-radius:15px;background:var(--bg2);overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.12)}
       .gl-group:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(var(--brass),var(--copper))}
       .gl-group-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 13px 17px;border:0;border-bottom:1px solid var(--line);background:linear-gradient(145deg,var(--bg3),var(--bg2));color:var(--ink);text-align:left;cursor:pointer}
@@ -150,7 +135,7 @@
 
   function init(){
     if(typeof renderLoads!=='function')return;
-    styles();installPreviewLabel();
+    styles();
     const base=renderLoads;
     renderLoads=function(){base.apply(this,arguments);renderGroupedLoads();};
     renderLoads.__groupedTest=true;
