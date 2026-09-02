@@ -124,6 +124,12 @@ assert(html.includes('value="__new__">＋ New Powder'), "import must allow creat
 assert(html.includes('value="__new__">＋ New Bullet'), "import must allow creating a Catalog bullet");
 assert(html.includes('＋ New Firearm'), "import must allow creating a Catalog firearm");
 assert(html.includes('onclick="taAutoSetup()"'), "target analyzer must expose one-touch auto setup");
+assert(html.includes('class="ta-workflow"'), "target analyzer must expose the compact four-step workflow");
+assert(html.includes('class="ta-context-main"'), "target controls must render in a contextual tray below the workflow");
+assert(html.includes('class="ta-readout-zoom'), "zoom must live in the fixed results toolbar outside the target canvas");
+assert(html.includes('.ta-stage{flex:1 1 auto;position:relative;overflow:hidden'), "zoomed target content must remain clipped to its dedicated canvas");
+assert(html.includes('.ta-readout{flex:none;width:100%'), "target measurements must occupy a separate full-width row below the canvas");
+assert(!html.includes('＋ Center marker'), "the target marker action must use the clearer Add hole label");
 assert(html.includes('autoTargetKind=detection.kind'), "auto setup must preserve the detected target family for hit filtering");
 assert(html.includes('targetResult[key]??session?.[key]'), "the load editor must prefer the newest analyzed target measurements");
 assert(html.includes('load.group=g.groupIn!=null'), "saving a target must mirror group inches onto its load");
