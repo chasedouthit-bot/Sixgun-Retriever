@@ -1,0 +1,40 @@
+name: Wire Tier Controls
+
+on:
+  push:
+    paths:
+      - '.github/workflows/wire-tier-controls.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load tier controls from app entry point
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('index.html')
+          text = path.read_text()
+          tag = '<script src="/filter-controls.js?v=2.35.6"></script>'
+          if tag not in text:
+              if '</body>' not in text:
+                  raise SystemExit('index.html has no </body> tag')
+              text = text.replace('</body>', f'{tag}\n</body>', 1)
+              path.write_text(text)
+          PY
+      - name: Commit entry-point fix
+        run: |
+          if git diff --quiet -- index.html; then
+            echo 'index.html already wired'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Load tier controls in app entry point'
+          git push
