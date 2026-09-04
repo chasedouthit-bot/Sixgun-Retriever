@@ -1,7 +1,6 @@
-/* Sixgun Retriever 2.7.1 — load status + compare-card hotfix */
+/* Sixgun Retriever — load status + compare-card hotfix */
 (function(){
 'use strict';
-const VERSION='2.7.1';
 
 function allCurrentLoads(){try{return C().loads||[];}catch(e){return[];}}
 function loadById(id){return allCurrentLoads().find(l=>String(l.id)===String(id));}
@@ -16,7 +15,7 @@ function normalizeStatusUI(){
     if(!tags)return;
     let badge=tags.querySelector('.keeper');
     const raw=String(load.keep||'').toLowerCase();
-    const status=raw==='yes'?['yes','Keeper']:(raw==='work'||raw==='reshoot')?['work','Watch']:raw==='loaded'?['loaded','Loaded']:null;
+    const status=raw==='yes'?['yes','Keeper']:raw==='work'?['work','Watch']:raw==='reshoot'?['reshoot','Reshoot']:(raw==='loaded'||raw==='pending')?['loaded','Loaded']:null;
     if(!status){if(badge)badge.remove();return;}
     if(!badge){badge=document.createElement('span');tags.insertBefore(badge,tags.firstChild);}
     badge.className=`keeper ${status[0]}`;
@@ -30,25 +29,6 @@ function patchRenderLoads(){
   const patched=function(){const r=base.apply(this,arguments);requestAnimationFrame(normalizeStatusUI);return r;};
   patched.__srStatusFix=true;
   renderLoads=patched;
-}
-
-function patchLoadForm(){
-  if(typeof openLoadForm!=='function'||openLoadForm.__srStatusFix)return;
-  const base=openLoadForm;
-  const patched=function(loadId=null){
-    const load=loadId?loadById(loadId):null;
-    const r=base.apply(this,arguments);
-    const select=document.querySelector('#editorOverlay select[name="keep"], .editor-overlay select[name="keep"], select[name="keep"]');
-    if(select){
-      const raw=String(load?.keep||'').toLowerCase();
-      const value=raw==='yes'?'yes':(raw==='work'||raw==='reshoot')?'work':raw==='loaded'?'loaded':'';
-      select.innerHTML='<option value="">— None —</option><option value="yes">Keeper</option><option value="work">Watch</option><option value="loaded">Loaded</option>';
-      select.value=value;
-    }
-    return r;
-  };
-  patched.__srStatusFix=true;
-  openLoadForm=patched;
 }
 
 function addStyles(){
@@ -69,17 +49,9 @@ function addStyles(){
   document.head.appendChild(s);
 }
 
-function stampVersion(){
-  document.querySelectorAll('.landing-version').forEach(el=>{
-    if(/v\d+\.\d+\.\d+/i.test(el.textContent))el.textContent=el.textContent.replace(/v\d+\.\d+\.\d+/i,'v'+VERSION);
-  });
-}
-
 function init(){
   addStyles();
-  patchLoadForm();
   patchRenderLoads();
-  stampVersion();
   normalizeStatusUI();
   try{if(typeof renderLoads==='function')renderLoads();}catch(e){console.warn('status hotfix render',e);}
 }

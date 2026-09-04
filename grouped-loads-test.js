@@ -1,4 +1,4 @@
-/* Sixgun Retriever 2.35.8 — accessible load-card expand control */
+/* Sixgun Retriever — accessible load-card expand control */
 (function(){
   'use strict';
 

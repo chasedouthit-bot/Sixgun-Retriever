@@ -1,13 +1,13 @@
-/* Sixgun Retriever 2.35.5 — Library reader safe-area fix */
+/* Sixgun Retriever — Library reader safe-area fix */
 (function(){
   'use strict';
-  const VERSION='2.35.5';
   let srMode='library';
   let tableQuery='';
   let tablePowder='all';
   let tableCartridge='all';
   let tableWriter='all';
   let tableSort='title';
+  let libraryUiReady=false;
   const READER_FONT_SIZES=[14,16,18,20,22];
   let readerFontIndex=1;
   try{
@@ -86,13 +86,13 @@
         };
         patched.__srNoTables=true;
         libraryItems=patched;
-        if(typeof renderLibraryShelf==='function')renderLibraryShelf();
       }
     }catch(e){console.warn('Library item split',e);}
   }
 
   function tableSearchText(t){return plain([t.title,t.who,t.writer,t.source,t.cartridge,t.powders?.join(' '),t.conditions?.flat().join(' '),t.head?.join(' '),t.rows?.flat().join(' '),t.note].join(' ')).toLowerCase();}
-  function unique(values){return [...new Set(values.filter(Boolean).map(x=>String(x).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));}
+  function canonical(value){return typeof libraryCanonicalTag==='function'?libraryCanonicalTag(value):String(value||'').trim();}
+  function unique(values){return [...new Set(values.filter(Boolean).map(canonical).filter(Boolean))].sort((a,b)=>a.localeCompare(b));}
   function tableWriterName(t){return t.writer||t.who||'';}
 
   function tableMarkup(t){
@@ -140,7 +140,6 @@
     document.getElementById('srTableCartridge').onchange=e=>{tableCartridge=e.target.value;renderTables();};
     document.getElementById('srTableWriter').onchange=e=>{tableWriter=e.target.value;renderTables();};
     document.getElementById('srTableSort').onchange=e=>{tableSort=e.target.value;renderTables();};
-    renderTables();
   }
 
   function renderTables(){
@@ -148,14 +147,15 @@
     let list=[...(Array.isArray(LIB_TABLES)?LIB_TABLES:[])];
     const q=tableQuery.trim().toLowerCase();
     if(q)list=list.filter(t=>tableSearchText(t).includes(q));
-    if(tablePowder!=='all')list=list.filter(t=>(t.powders||[]).includes(tablePowder));
-    if(tableCartridge!=='all')list=list.filter(t=>String(t.cartridge||'')===tableCartridge);
+    if(tablePowder!=='all')list=list.filter(t=>(t.powders||[]).some(value=>canonical(value)===tablePowder));
+    if(tableCartridge!=='all')list=list.filter(t=>canonical(t.cartridge)===tableCartridge);
     if(tableWriter!=='all')list=list.filter(t=>tableWriterName(t)===tableWriter);
     const key=t=>tableSort==='writer'?tableWriterName(t):tableSort==='cartridge'?(t.cartridge||''):tableSort==='powder'?((t.powders||[])[0]||''):(t.title||'');
     list.sort((a,b)=>String(key(a)).localeCompare(String(key(b))));
     const total=Array.isArray(LIB_TABLES)?LIB_TABLES.length:0;
     document.getElementById('srTableCount').innerHTML=`Showing <b>${list.length}</b> of ${total} tables`;
-    out.innerHTML=list.length?list.map(tableMarkup).join(''):'<div class="sr-reference-empty">No tables match those filters.</div>';
+    out.innerHTML=list.length?list.map((t,index)=>`<details class="sr-reference-table" data-sr-table="${index}"><summary class="sr-reference-head"><span class="sr-reference-kicker">Reference table</span><span class="sr-reference-title">${escText(t.title)}</span><span class="sr-reference-src">${escText(t.who)} · ${escText(t.source)}</span></summary><div data-sr-table-body></div></details>`).join(''):'<div class="sr-reference-empty">No tables match those filters.</div>';
+    out.querySelectorAll('[data-sr-table]').forEach(details=>details.addEventListener('toggle',()=>{if(!details.open)return;const body=details.querySelector('[data-sr-table-body]');if(body&&!body.childElementCount)body.innerHTML=tableMarkup(list[Number(details.dataset.srTable)]);},{once:true}));
   }
 
   function setMode(mode){
@@ -209,7 +209,7 @@
     installReaderFontControls();
   }
 
-  function stampVersion(){document.querySelectorAll('.landing-version').forEach(el=>{el.textContent='Version '+VERSION;});}
-  function init(){addStyles();patchTagline();patchLibraryItems();patchReader();buildTablesPanel();setMode('library');stampVersion();}
+  function ensureLibraryUi(){if(libraryUiReady)return;libraryUiReady=true;patchLibraryItems();buildTablesPanel();setMode('library');}
+  function init(){addStyles();patchTagline();patchReader();if(typeof renderLibrary==='function'&&!renderLibrary.__srLazy){const base=renderLibrary;const patched=function(){ensureLibraryUi();const result=base.apply(this,arguments);setMode(srMode);return result;};patched.__srLazy=true;renderLibrary=patched;}}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(init,0));else setTimeout(init,0);
 })();

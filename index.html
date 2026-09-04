@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.35.8">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.35.8">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.35.8">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.35.8">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.35.8">
+<link rel="manifest" href="/manifest.webmanifest?v=2.35.9">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.35.9">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.35.9">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.35.9">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.35.9">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,6 +115,7 @@ body>header .sub{font-size:11px;color:var(--ink-faint);letter-spacing:.14em;text
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:81;background:var(--bg2);border-top:1px solid var(--line);
   border-radius:22px 22px 0 0;padding:10px 16px calc(20px + var(--safe-b));transform:translateY(110%);transition:.28s cubic-bezier(.32,.72,0,1);max-height:70vh;overflow-y:auto}
 .sheet.open{transform:translateY(0)}
+.sheet[hidden],.sheet-scrim[hidden]{display:none}
 .sheet-grip{width:38px;height:4px;background:var(--line);border-radius:2px;margin:6px auto 12px}
 .sheet-title{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);font-weight:700;margin:0 4px 12px}
 .cart-opt{display:flex;align-items:center;justify-content:space-between;padding:15px 14px;border:1px solid var(--line);border-radius:12px;margin-bottom:9px;cursor:pointer;transition:.15s}
@@ -480,6 +481,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
 .pr-postcard-moment{padding:1px 2px 7px;color:#6f512c;text-align:left;font:700 10px/1.1 "Playfair Display",Georgia,serif;letter-spacing:.09em;text-transform:uppercase}.pr-record-album{position:relative;z-index:1;padding:22px 0 10px}.pr-record-album .pr-album-page{position:relative;box-shadow:inset 0 0 0 4px rgba(255,250,235,.34),inset 0 0 24px rgba(91,65,34,.08)}.pr-record-album+.pr-end{padding-top:24px}.pr-viewer-caption{white-space:pre-line}
 @media(max-width:650px){.pr-record-album{padding-top:16px}.pr-album-page{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 10px;padding:14px 9px 20px}.pr-postcard{box-sizing:border-box;width:auto;max-width:100%;padding:6px 6px 8px}.pr-postcard:nth-child(2n){transform:rotate(1.1deg) translateY(4px)}.pr-postcard .pr-photo img{max-height:245px}.pr-postcard-moment{padding-bottom:5px;font-size:8px;letter-spacing:.07em}.pr-postcard-note{min-height:22px;padding-top:6px;font-size:11px;line-height:1.2}.pr-postcard-note-meta{font-size:7px;letter-spacing:.07em}.pr-album-end{margin-top:6px;font-size:7px}.pr-album-end:before,.pr-album-end:after{width:24px;margin-left:5px;margin-right:5px}}
 .pdf-postcard-moment{padding:1px 2px 7px;color:#6f512c;text-align:left;font:700 10px/1.1 "Playfair Display",Georgia,serif;letter-spacing:.09em;text-transform:uppercase}
+.pr-viewer-arrow{position:absolute;top:50%;z-index:3;transform:translateY(-50%);border:1px solid rgba(255,255,255,.3)!important;background:rgba(15,13,11,.72)!important}.pr-viewer-prev{left:10px}.pr-viewer-next{right:10px}.pr-postcard[role="button"]:focus-visible{outline:3px solid #8a672e;outline-offset:4px}
 .pr-record-album .pr-postcard-note-main,.pdf-postcard-note-main{color:#686158;font:500 18px/1.02 "Caveat","Bradley Hand",cursive;letter-spacing:.01em;text-shadow:.25px .25px 0 rgba(58,52,45,.25);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}.pr-record-album .count-5.layout-wide>.pr-postcard:first-child{grid-column:1/-1}.pr-record-album .count-5.layout-mixed>.pr-postcard:first-child{grid-row:span 2}.pr-record-album .has-featured>.featured-card{grid-column:1/-1;grid-row:auto}.pr-record-album .count-4 .pr-postcard .pr-photo img{max-height:275px}.pr-record-album .count-5 .pr-postcard .pr-photo img{max-height:220px}.pr-record-album .count-5.layout-wide>.pr-postcard:first-child .pr-photo img,.pr-record-album .has-featured>.featured-card .pr-photo img{max-height:250px}
 @media(max-width:650px){.pr-record-album .pr-album-page.count-4,.pr-record-album .pr-album-page.count-5{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.pr-record-album .count-4 .pr-postcard .pr-photo img{max-height:150px}.pr-record-album .count-5 .pr-postcard .pr-photo img{max-height:105px}.pr-record-album .count-5.layout-wide>.pr-postcard:first-child .pr-photo img,.pr-record-album .has-featured>.featured-card .pr-photo img{max-height:145px}.pr-record-album .count-5.layout-mixed>.pr-postcard:first-child .pr-photo img{max-height:225px}.pr-record-album .pr-postcard-note-main{font-size:14px;line-height:1}.pr-record-album .count-5 .pr-postcard-note{min-height:16px;padding-top:4px}.pr-record-album .count-5 .pr-postcard-note-meta{font-size:6.5px}.pr-record-album .count-5 .pr-postcard-moment{font-size:7px}}
 .pm-paper{padding-bottom:62px}.pm-head{position:relative;z-index:1;text-align:center}.pm-head>.letter-mast{aspect-ratio:3/2;height:auto!important;min-height:0!important}.pm-subtitle{font-size:17px;font-style:italic;color:#6d5b44;margin:8px 0 34px}.pm-section{position:relative;z-index:1;padding:28px 0}.pm-section+.pm-section{border-top:1px solid rgba(101,73,38,.42)}.pm-section-title{display:flex;align-items:center;gap:14px;font:700 clamp(22px,4.5vw,31px)/1.1 "Playfair Display",Georgia,serif;text-transform:uppercase;letter-spacing:.055em;margin-bottom:18px}.pm-section-title:after{content:"";height:1px;flex:1;background:#a08354}.pm-empty{padding:26px 8px;color:#75654f;font-size:17px;font-style:italic}.pm-part{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;padding:17px 8px;border-bottom:1px solid rgba(101,73,38,.25)}.pm-part-title{font:700 19px "Playfair Display",Georgia,serif;letter-spacing:.025em}.pm-part-meta{color:#7a5d35;font-size:14px;font-style:italic;margin-top:3px}.pm-part-desc{grid-column:1/-1;font-size:16px;line-height:1.45;color:#4e4030;max-width:680px}.pm-actions{display:flex;gap:6px;align-items:flex-start}.pm-ledger{border-top:2px double rgba(87,61,31,.52)}.pm-ledger-head,.pm-ledger-row{display:grid;grid-template-columns:112px 150px 95px minmax(0,1fr);gap:12px;padding:10px 8px;border-bottom:1px solid rgba(101,73,38,.27);align-items:start}.pm-ledger-head{font:700 9px Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#806332}.pm-ledger-date{font-weight:600}.pm-ledger-type{font-style:italic;color:#684d2d}.pm-ledger-rounds{text-align:right;font-variant-numeric:tabular-nums}.pm-ledger-notes{line-height:1.35}.pm-ledger-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:6px}.pm-pdf-page .letter-mast{height:250px!important;min-height:250px!important}.pm-pdf-page .letterhead-name{font-size:25px}.pm-pdf-body{position:relative;z-index:1}.pm-pdf-section-title{font:700 20px "Playfair Display",Georgia,serif;text-transform:uppercase;letter-spacing:.055em;margin:18px 0 8px;border-bottom:1px solid rgba(101,73,38,.42);padding-bottom:6px}.pm-pdf-part{padding:8px 2px;border-bottom:1px solid rgba(101,73,38,.22)}.pm-pdf-part strong{font-family:"Playfair Display",Georgia,serif}.pm-pdf-meta{font-size:12px;font-style:italic;color:#725a3c;margin-left:8px}.pm-pdf-desc{font-size:13px;line-height:1.3;margin-top:3px}.pm-pdf-ledger-row{display:grid;grid-template-columns:100px 125px 80px 1fr;gap:9px;padding:7px 2px;border-bottom:1px solid rgba(101,73,38,.24);font-size:12px;line-height:1.25}.pm-pdf-ledger-row.head{font:700 8px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#806332}
@@ -530,7 +532,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.35.8</div>
+    <div class="landing-version">Version 2.35.9</div>
   </div>
 </div>
 
@@ -545,8 +547,8 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
   </button>
 </header>
 
-<div class="sheet-scrim" id="cartScrim"></div>
-<div class="sheet" id="cartSheet">
+<div class="sheet-scrim" id="cartScrim" hidden></div>
+<div class="sheet" id="cartSheet" hidden inert aria-hidden="true">
   <div class="sheet-grip"></div>
   <div class="sheet-title">Cartridge</div>
   <div id="cartOptions"></div>
@@ -689,8 +691,8 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
   <button data-s="catalog"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Catalog</button>
 </nav>
 
-<div class="sheet-scrim" id="createScrim"></div>
-<div class="sheet create-sheet" id="createSheet" role="dialog" aria-modal="true" aria-labelledby="createSheetTitle">
+<div class="sheet-scrim" id="createScrim" hidden></div>
+<div class="sheet create-sheet" id="createSheet" role="dialog" aria-modal="true" aria-labelledby="createSheetTitle" hidden inert aria-hidden="true">
   <div class="sheet-grip"></div>
   <div class="sheet-title" id="createSheetTitle">Add to the loading book</div>
   <button type="button" class="create-option" id="createLoadAction">
@@ -707,7 +709,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
 
 <div id="photoViewer" class="pr-viewer" role="dialog" aria-modal="true" aria-label="Photograph viewer">
   <div class="pr-viewer-bar"><button id="photoViewerClose" aria-label="Close viewer">✕</button><div class="pr-viewer-count" id="photoViewerCount"></div><button id="photoViewerManage" aria-label="Manage photograph">•••</button></div>
-  <div class="pr-viewer-stage" id="photoViewerStage"><img class="pr-viewer-img" id="photoViewerImg" alt=""></div>
+  <div class="pr-viewer-stage" id="photoViewerStage"><button class="pr-viewer-arrow pr-viewer-prev" id="photoViewerPrev" aria-label="Previous photograph">‹</button><img class="pr-viewer-img" id="photoViewerImg" alt=""><button class="pr-viewer-arrow pr-viewer-next" id="photoViewerNext" aria-label="Next photograph">›</button></div>
   <div class="pr-viewer-caption" id="photoViewerCaption"></div>
 </div>
 
@@ -980,8 +982,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.35.8";
-const CACHE_VERSION="sixgun-retriever-v2.35.8";
+const RELEASE_VERSION="2.35.9";
+const CACHE_VERSION="sixgun-retriever-v2.35.9";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -1014,11 +1016,26 @@ function tierValue(value){const raw=String(value??"");return /^\d+$/.test(raw)?N
 /* ---------- catalog + editors ---------- */
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function norm(v){return String(v||"").trim().toLowerCase().replace(/\s+/g," ");}
+function finiteNumber(v){return v==null||v===""||!Number.isFinite(Number(v))?null:Number(v);}
+function moaFromGroup(groupIn,distanceYd){
+  const group=finiteNumber(groupIn),distance=finiteNumber(distanceYd);if(!(group>=0)||!(distance>0))return null;
+  return group/((distance*36)*Math.tan(Math.PI/10800));
+}
+function targetAccuracyMoa(target){return moaFromGroup(target?.groupIn,target?.distanceYd)??finiteNumber(target?.moa);}
+function latestTargetRecord(load){
+  return (load?.targets||[]).map((target,index)=>({target,index,date:String(target?.date||target?.sessionDate||"")})).sort((a,b)=>b.date.localeCompare(a.date)||b.index-a.index)[0]?.target||null;
+}
+function reconcileLoadAccuracy(load){
+  let repaired=0;
+  for(const target of load?.targets||[]){const calculated=moaFromGroup(target.groupIn,target.distanceYd);if(calculated==null)continue;const rounded=+calculated.toFixed(3);if(finiteNumber(target.moa)!==rounded){target.moa=rounded;repaired++;}}
+  const target=latestTargetRecord(load);if(target){const group=finiteNumber(target.groupIn),rawMoa=targetAccuracyMoa(target),moa=rawMoa==null?null:+rawMoa.toFixed(3);if(load.group!==group){load.group=group;repaired++;}if(load.moa!==moa){load.moa=moa;repaired++;}}
+  return repaired;
+}
 function gunDisplay(g){return [g.make,g.model].filter(v=>String(v||"").trim()).join(" ").trim()||String(g.name||"").trim()||"Unnamed gun";}
 function bulletDisplay(b){return b.display||[b.manufacturer,b.product,b.weight_gr!=null?`${Number(b.weight_gr)}gr`:"",b.style].filter(Boolean).join(" ").trim()||"Unnamed bullet";}
 function bulletNorm(v){return String(v||"").toLowerCase().replace(/[’']/g,"").replace(/\b(grains?|grs?|gns?)\b/g,"gr").replace(/\bsemi[\s-]*wad[\s-]*cutter\b/g,"swc").replace(/\bround[\s-]*nose[\s-]*flat[\s-]*point\b/g,"rnfp").replace(/\bwide[\s-]*flat[\s-]*nose\b/g,"wfn").replace(/\bpowder[\s-]*coat(?:ed)?\b/g,"pc").replace(/(\d)\s*gr\b/g,"$1gr").replace(/[^a-z0-9.]+/g," ").trim().replace(/\s+/g," ");}
 function bulletFields(text,load={}){const raw=String(text||"").trim(),wm=raw.match(/\b(\d+(?:\.\d+)?)\s*(?:grains?|grs?|gns?)\b/i),dm=String(load.dia||"").match(/\.?\d+(?:\.\d+)?/);return{manufacturer:String(load.brand||"").trim(),product:raw,weight_gr:wm?Number(wm[1]):null,diameter:dm?dm[0]:"",caliber:"",style:"",notes:"",display:raw};}
-let pendingLoadMerges=0;
+let pendingLoadMerges=0,pendingAccuracyRepairs=0;
 function loadRecipeKey(l){return[l.gunCatalogKey||norm(l.gun),l.powderCatalogKey||norm(l.powder),l.bulletCatalogKey||bulletNorm(l.bullet),Number(l.charge),String(l.tier??"")].join("|");}
 function compatibleLoadValue(a,b,tolerance=0){if(a==null||a===""||b==null||b==="")return true;return tolerance?Math.abs(Number(a)-Number(b))<=tolerance:norm(a)===norm(b);}
 function mergeUniqueRecords(a=[],b=[],keyFn){const seen=new Set(),out=[];for(const item of [...a,...b]){const key=keyFn(item);if(seen.has(key))continue;seen.add(key);out.push(item);}return out;}
@@ -1040,20 +1057,21 @@ function ensureCatalog(state=DB){
       if(!l.gunCatalogKey)l.gunCatalogKey=(c.guns||[]).find(g=>norm(g.name)===norm(l.gun))?._legacyKey||`${cart}::${l.gun}`;
       if(l.powder){const key=l.powderCatalogKey||norm(l.powder);l.powderCatalogKey=key;if(!powderKeys.has(key)){state.catalog.powders.push({_legacyKey:key,name:l.powder,notes:""});powderKeys.add(key);}}
       if(l.bullet){let b=l.bulletCatalogKey&&state.catalog.bullets.find(x=>x._legacyKey===l.bulletCatalogKey);if(!b)b=bulletByNorm.get(bulletNorm(l.bullet));if(!b){b={_legacyKey:`bullet::${crypto.randomUUID()}`,...bulletFields(l.bullet,l)};state.catalog.bullets.push(b);bulletByNorm.set(bulletNorm(l.bullet),b);}l.bulletCatalogKey=b._legacyKey;l.bullet=bulletDisplay(b);}
+      const repaired=reconcileLoadAccuracy(l);if(state===DB)pendingAccuracyRepairs+=repaired;
     }
     const merged=reconcileDuplicateLoads(c);if(state===DB)pendingLoadMerges+=merged;
     (c.journal||[]).forEach((j,i)=>{j._syncKey=j._syncKey||`${cart}::journal::${j.date||"undated"}::${i}`;if(j.gun&&!j.gunCatalogKey)j.gunCatalogKey=(c.guns||[]).find(g=>norm(g.name)===norm(j.gun))?._legacyKey||`${cart}::${j.gun}`;if(j.powder&&!j.powderCatalogKey)j.powderCatalogKey=norm(j.powder);});
   }
   state.catalog.guns.sort((a,b)=>gunDisplay(a).localeCompare(gunDisplay(b)));state.catalog.powders.sort((a,b)=>a.name.localeCompare(b.name));state.catalog.bullets.sort((a,b)=>bulletDisplay(a).localeCompare(bulletDisplay(b)));return state.catalog;
 }
-function exactGun(name,cart=null){ensureCatalog();return DB.catalog.guns.find(g=>norm(gunDisplay(g))===norm(name)&&(!cart||!g.caliber||norm(g.caliber)===norm(cart)))||null;}
+function exactGun(name,cart=null){ensureCatalog();const eligible=DB.catalog.guns.filter(g=>!cart||!g.caliber||norm(g.caliber)===norm(cart)),exact=eligible.find(g=>norm(gunDisplay(g))===norm(name));if(exact)return exact;const modelMatches=eligible.filter(g=>norm(g.model||g.name)===norm(name));return modelMatches.length===1?modelMatches[0]:null;}
 function exactPowder(name){ensureCatalog();return DB.catalog.powders.find(p=>norm(p.name)===norm(name))||null;}
 function exactBullet(value){ensureCatalog();return DB.catalog.bullets.find(b=>b._legacyKey===value||bulletNorm(bulletDisplay(b))===bulletNorm(value))||null;}
 function attachGunToCartridge(g,cart=g.caliber){const c=DB.cartridges[cart];if(!c)return;if(!(c.guns||[]).some(x=>x._legacyKey===g._legacyKey||norm(x.name)===norm(gunDisplay(g))))c.guns.push({...clone(g),name:gunDisplay(g),caliber:cart});}
 function addGunRecord(values){const model=String(values.model||"").trim();if(!model)throw new Error("Model is required");const g={_legacyKey:`catalog::${crypto.randomUUID()}`,make:String(values.make||"").trim(),model,caliber:String(values.caliber||DB.activeCartridge).trim(),serial:String(values.serial||"").trim(),purchase_date:values.purchase_date||null,source:String(values.source||"").trim(),price:values.price===""||values.price==null?null:Number(values.price),rotation_status:String(values.rotation_status||"in rotation").trim(),rotation_note:String(values.rotation_note||"").trim(),barrel_length:String(values.barrel_length||values.barrel||"").trim(),finish:String(values.finish||"").trim(),sight_height_in:values.sight_height_in===""||values.sight_height_in==null?null:Number(values.sight_height_in)};g.name=gunDisplay(g);if(exactGun(g.name,g.caliber))throw new Error("That gun is already in the Catalog");ensureCatalog().guns.push(g);attachGunToCartridge(g);return g;}
 function addPowderRecord(values){const name=String(values.name||"").trim();if(!name)throw new Error("Powder name is required");if(exactPowder(name))throw new Error("That powder is already in the Catalog");const p={_legacyKey:`catalog::${crypto.randomUUID()}`,name,notes:String(values.notes||"").trim()};ensureCatalog().powders.push(p);return p;}
 function addBulletRecord(values){const product=String(values.product||values.display||"").trim();if(!product)throw new Error("Bullet product/name is required");const b={_legacyKey:`bullet::${crypto.randomUUID()}`,manufacturer:String(values.manufacturer||"").trim(),product,weight_gr:values.weight_gr===""||values.weight_gr==null?null:Number(values.weight_gr),diameter:String(values.diameter||"").trim(),caliber:String(values.caliber||"").trim(),style:String(values.style||"").trim(),bc_g1:values.bc_g1===""||values.bc_g1==null?null:Number(values.bc_g1),bc_source:String(values.bc_source||"").trim(),notes:String(values.notes||"").trim()};b.display=bulletDisplay(b);if(exactBullet(b.display))throw new Error("That bullet is already in the Catalog");ensureCatalog().bullets.push(b);return b;}
-function editorOpen(title,html,onSubmit){const scrim=document.getElementById("editorScrim"),form=document.getElementById("editorForm");document.getElementById("editorTitle").textContent=title;form.innerHTML=html;scrim.style.display="flex";form.querySelectorAll('.editor-actions button:not([type])').forEach(button=>button.type="submit");form.querySelectorAll('input,select,textarea').forEach(field=>field.oninvalid=e=>{e.preventDefault();const label=field.closest('.field')?.querySelector('label')?.textContent?.replace('*','').trim()||'Required field';field.scrollIntoView({behavior:'smooth',block:'center'});field.focus({preventScroll:true});toast(`${label} needs attention`);});form.onsubmit=async e=>{e.preventDefault();const submitter=e.submitter||form.querySelector('.editor-actions .primary'),original=submitter?.textContent;if(submitter){submitter.disabled=true;submitter.textContent="Saving…";}try{await onSubmit(new FormData(form),form);}catch(err){toast(err.message||"Could not save");if(submitter?.isConnected){submitter.disabled=false;submitter.textContent=original;}}};}
+function editorOpen(title,html,onSubmit){const scrim=document.getElementById("editorScrim"),form=document.getElementById("editorForm");document.getElementById("editorTitle").textContent=title;form.innerHTML=html;scrim.style.display="flex";form.querySelectorAll('.field').forEach((field,index)=>{const label=field.querySelector(':scope>label'),control=field.querySelector(':scope>input,:scope>select,:scope>textarea');if(label&&control&&!label.contains(control)){control.id=control.id||`editorField${index}`;label.htmlFor=control.id;}});form.querySelectorAll('.editor-actions button:not([type])').forEach(button=>button.type="submit");form.querySelectorAll('input,select,textarea').forEach(field=>field.oninvalid=e=>{e.preventDefault();const label=field.closest('.field')?.querySelector('label')?.textContent?.replace('*','').trim()||'Required field';field.scrollIntoView({behavior:'smooth',block:'center'});field.focus({preventScroll:true});toast(`${label} needs attention`);});form.onsubmit=async e=>{e.preventDefault();const submitter=e.submitter||form.querySelector('.editor-actions .primary'),original=submitter?.textContent;if(submitter){submitter.disabled=true;submitter.textContent="Saving…";}try{await onSubmit(new FormData(form),form);}catch(err){toast(err.message||"Could not save");if(submitter?.isConnected){submitter.disabled=false;submitter.textContent=original;}}};}
 function editorClose(){document.getElementById("editorScrim").style.display="none";document.getElementById("editorForm").innerHTML="";}
 document.getElementById("editorClose").onclick=editorClose;document.getElementById("editorScrim").onclick=e=>{if(e.target.id==="editorScrim")editorClose();};
 function entityLists(){ensureCatalog();return `<datalist id="gunSuggestions">${DB.catalog.guns.map(g=>`<option value="${esc(gunDisplay(g))}">${esc(g.caliber||"")}</option>`).join("")}</datalist><datalist id="powderSuggestions">${DB.catalog.powders.map(p=>`<option value="${esc(p.name)}">${esc(p.notes||"")}</option>`).join("")}</datalist>`;}
@@ -1520,14 +1538,15 @@ function sessionPagerMove(id,delta){
 function sessionPagerSync(pager){
   if(pager.__sessionFrame)return;pager.__sessionFrame=requestAnimationFrame(()=>{pager.__sessionFrame=null;const page=sessionPagerIndex(pager),detail=pager.closest('.detail');detail?.querySelectorAll('[data-session-dot]').forEach((dot,index)=>dot.classList.toggle('on',index===page));const prev=detail?.querySelector('[data-session-prev]'),next=detail?.querySelector('[data-session-next]'),count=pager.querySelectorAll('[data-session-page]').length;if(prev)prev.disabled=page===0;if(next)next.disabled=page===count-1;});
 }
-function fmtDate2(d){const dt=new Date(d);if(isNaN(dt))return d;return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function dateForDisplay(value){const raw=String(value||"");if(/^\d{4}-\d{2}-\d{2}$/.test(raw))return new Date(`${raw}T00:00:00`);return new Date(raw);}
+function fmtDate2(d){const dt=dateForDisplay(d);if(isNaN(dt))return d;return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
 
 /* ---------- render: BENCH ---------- */
 function renderBench(){
   const entries=(C().journal||[]).slice().sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
-  const latest=entries[0]||null,nextPlan=String(latest?.next||"").trim();
+  const latest=entries[0]||null,latestRangeDate=[...entries.filter(entry=>String(entry.type||'').toLowerCase()==='range').map(entry=>entry.date),...C().loads.flatMap(load=>(load.sessions||[]).map(sessionRecordDay))].filter(Boolean).sort().pop()||null,nextEntry=entries.find(entry=>String(entry.next||"").trim()&&!['done','superseded'].includes(String(entry.next_status||'active').toLowerCase())&&(!latestRangeDate||String(entry.date||'')>=latestRangeDate))||null,nextPlan=String(nextEntry?.next||"").trim();
   document.getElementById("nextTitle").textContent=nextPlan||"No next-session plan logged";
-  document.getElementById("nextBody").textContent=latest?`From the ${fmtDate(latest.date)} journal entry.`:"Add a journal entry to set the next-session plan.";
+  document.getElementById("nextBody").textContent=nextEntry?`From the ${fmtDate(nextEntry.date)} journal entry.`:latest?"All recorded next-session plans are complete or superseded.":"Add a journal entry to set the next-session plan.";
   document.getElementById("nextSteps").innerHTML="";
   document.getElementById("nextSteps").style.display="none";
   document.getElementById("journalList").innerHTML=entries.map(j=>`
@@ -1536,11 +1555,11 @@ function renderBench(){
       <div class="did">${esc(j.did||j.note||"")}</div>
       ${(j.gun||j.powder)?`<div class="j-meta">${j.gun?`<span class="j-pill">${esc(j.gun)}</span>`:""}${j.powder?`<span class="j-pill">${esc(j.powder)}</span>`:""}</div>`:""}
       ${(j.photos||j.photo_urls||[]).length?`<div class="j-photos">${(j.photos||j.photo_urls||[]).map(src=>`<img src="${esc(src)}" alt="Journal attachment">`).join("")}</div>`:""}
-      ${j.next?`<div class="next"><b>Next:</b> ${esc(j.next)}</div>`:''}
+      ${j.next?`<div class="next"><b>Next${j.next_status&&j.next_status!=="active"?` · ${esc(j.next_status)}`:""}:</b> ${esc(j.next)}</div>`:''}
     </div>`).join("");
   document.querySelectorAll("[data-edit-journal]").forEach(b=>b.onclick=()=>openJournalForm(b.dataset.editJournal));
 }
-function fmtDate(d){const dt=new Date(d+"T00:00");return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function fmtDate(d){return fmtDate2(d);}
 
 /* Inventory / Load Builder removed — inventory data kept dormant in storage for future rebuild */
 
@@ -1548,7 +1567,7 @@ function openLoadForm(loadId=null){
   ensureCatalog();const load=loadId?(C().loads||[]).find(l=>String(l.id)===String(loadId)):null;
   const sessions=load?.sessions||[],session=sessions.slice().sort((a,b)=>new Date(b.date||0)-new Date(a.date||0))[0]||null;
   const latestTarget=(load?.targets||[]).slice().reverse().sort((a,b)=>new Date(b.date||0)-new Date(a.date||0))[0]||null;
-  const targetResult={dist:latestTarget?.distanceYd,group:latestTarget?.groupIn,moa:latestTarget?.moa};
+  const targetResult={dist:latestTarget?.distanceYd,group:latestTarget?.groupIn,moa:targetAccuracyMoa(latestTarget)};
   const result=(key)=>targetResult[key]??session?.[key]??load?.[key]??"";
   const tierSettings=ensureTierSettings(),visibleTiers=tierKeys(),selectedTier=String(load?.tier??visibleTiers[0]??"");
   const availableTiers=load?.tier!=null&&!visibleTiers.includes(String(load.tier))?[...visibleTiers,String(load.tier)]:visibleTiers;
@@ -1564,12 +1583,16 @@ function openLoadForm(loadId=null){
     const hasSession=Object.values(sessionValues).some(x=>x!==null&&x!=="");
     if(values.signature_load)for(const cx of Object.values(DB.cartridges||{}))for(const other of cx.loads||[])if(other!==load&&other.gunCatalogKey===gun._legacyKey)other.signature_load=false;
     let record=load;if(record)Object.assign(record,values);else{record={id:`load-${crypto.randomUUID()}`,...values,sessions:[],targets:[]};C().loads.push(record);}if(session)Object.assign(session,sessionValues);else if(hasSession)record.sessions.push({_syncKey:`manual-session::${crypto.randomUUID()}`,...sessionValues});activeGun=values.gun;await save();editorClose();renderAll();toast(load?"Load updated":"Load added");
-  });wireEntityInput("loadGun","gun",DB.activeCartridge);wireEntityInput("loadPowder","powder");
+  });
+  const moaInput=document.querySelector('#editorForm input[name="moa"]'),groupInput=document.querySelector('#editorForm input[name="group"]'),distanceInput=document.querySelector('#editorForm input[name="dist"]');
+  if(moaInput){moaInput.readOnly=true;moaInput.tabIndex=-1;moaInput.title="Calculated automatically from group size and distance";const updateMoa=()=>{const moa=moaFromGroup(groupInput?.value,distanceInput?.value);moaInput.value=moa==null?"":moa.toFixed(3);};groupInput?.addEventListener("input",updateMoa);distanceInput?.addEventListener("input",updateMoa);updateMoa();}
+  const pressureInput=document.querySelector('#editorForm input[name="estpress"]');if(pressureInput){pressureInput.placeholder="23,000 psi · source";const label=pressureInput.closest('.field')?.querySelector('label');if(label)label.textContent="Estimated pressure (PSI or CUP)";}
+  wireEntityInput("loadGun","gun",DB.activeCartridge);wireEntityInput("loadPowder","powder");
 }
 function fileDataUrl(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(file);});}
 function openJournalForm(entryKey=null){
   ensureCatalog();const entry=entryKey?(C().journal||[]).find(j=>j._syncKey===entryKey):null,now=new Date(),today=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
-  const tagOptions=["Bench","Range"].map(x=>`<option value="${x}" ${String(entry?.type||"Bench").toLowerCase()===x.toLowerCase()?"selected":""}>${x.toUpperCase()}</option>`).join("");
+  const tagOptions=["Bench","Range","Reference"].map(x=>`<option value="${x}" ${String(entry?.type||"Bench").toLowerCase()===x.toLowerCase()?"selected":""}>${x.toUpperCase()}</option>`).join("");
   const existingPhotos=entry?(entry.photo_urls||entry.photos||[]):[];
   editorOpen(entry?"Edit Journal Entry":"New Journal Entry",`${entityLists()}<div class="form-grid"><div class="field"><label>Date *</label><input type="date" name="date" value="${esc(entry?.date||today)}" required></div><div class="field"><label>Tag</label><select name="type">${tagOptions}</select></div><div class="field full"><label>Gun</label><input id="journalGun" name="gun" list="gunSuggestions" value="${esc(entry?.gun||"")}" autocomplete="off"><div class="entity-hint" id="journalGunHint"></div></div><div class="field full"><label>Powder</label><input id="journalPowder" name="powder" list="powderSuggestions" value="${esc(entry?.powder||"")}" autocomplete="off"><div class="entity-hint" id="journalPowderHint"></div></div><div class="field full"><label>What happened? *</label><textarea name="note" required>${esc(entry?.did||entry?.note||"")}</textarea></div><div class="field full"><label>For next session</label><textarea name="next" placeholder="What should you test, change, or remember next time?">${esc(entry?.next||"")}</textarea></div><div class="field full"><label>${entry?"Add photos":"Photos"}</label><input type="file" id="journalPhoto" accept="image/*" multiple><div class="photo-preview" id="journalPhotoPreview">${existingPhotos.map(src=>`<img src="${esc(src)}" alt="Existing journal attachment">`).join("")}</div></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">${entry?"Save Changes":"Add Entry"}</button></div>`,async(fd,form)=>{
     const v=Object.fromEntries(fd),gun=v.gun?exactGun(v.gun,DB.activeCartridge):null,powder=v.powder?exactPowder(v.powder):null;if(v.gun&&!gun)throw new Error("Choose a Catalog gun or add it first");if(v.powder&&!powder)throw new Error("Choose a Catalog powder or add it first");if(gun)attachGunToCartridge(gun,DB.activeCartridge);const files=[...form.querySelector("#journalPhoto").files],photos=[];for(const file of files)photos.push(await fileDataUrl(file));const values={date:v.date,type:v.type,did:v.note.trim(),note:v.note.trim(),next:v.next.trim(),gun:gun?gunDisplay(gun):null,gunCatalogKey:gun?gun._legacyKey:null,powder:powder?powder.name:null,powderCatalogKey:powder?powder._legacyKey:null};if(entry){Object.assign(entry,values);entry.photos=[...(entry.photos||[]),...photos];}else C().journal.push({_syncKey:`journal::${crypto.randomUUID()}`,...values,photos,photoPaths:[]});await save();editorClose();renderAll();toast(entry?"Journal entry updated":"Journal entry added");
@@ -1581,7 +1604,7 @@ function biographyGun(){ensureCatalog();return DB.catalog.guns.find(g=>g._legacy
 function gunMatches(g,key,cart,record){return record.gunCatalogKey===key||(!record.gunCatalogKey&&norm(record.gun)===norm(gunDisplay(g))&&(!g.caliber||norm(g.caliber)===norm(cart)));}
 function biographyStats(g){
   const dates=[],moas=[],byCartridge={};
-  for(const [cart,cx] of Object.entries(DB.cartridges||{}))for(const l of cx.loads||[])if(gunMatches(g,g._legacyKey,cart,l)){byCartridge[cart]=(byCartridge[cart]||0)+1;for(const s of l.sessions||[]){if(s.date)dates.push(s.date);if(num(s.moa)!=null)moas.push(num(s.moa));}for(const t of l.targets||[]){if(t.date)dates.push(t.date);if(num(t.moa)!=null)moas.push(num(t.moa));}if(num(l.moa)!=null)moas.push(num(l.moa));}
+  for(const [cart,cx] of Object.entries(DB.cartridges||{}))for(const l of cx.loads||[])if(gunMatches(g,g._legacyKey,cart,l)){byCartridge[cart]=(byCartridge[cart]||0)+1;for(const s of l.sessions||[])if(s.date)dates.push(s.date);const targetMoas=[];for(const t of l.targets||[]){if(t.date)dates.push(t.date);const moa=targetAccuracyMoa(t);if(moa!=null)targetMoas.push(moa);}if(targetMoas.length)moas.push(...targetMoas);else{for(const s of l.sessions||[])if(num(s.moa)!=null)moas.push(num(s.moa));if(num(l.moa)!=null)moas.push(num(l.moa));}}
   const unique=[...new Set(dates)].sort(),first=unique[0]||null;let gap=null;for(let i=1;i<unique.length;i++){const days=Math.round((new Date(unique[i]+"T00:00")-new Date(unique[i-1]+"T00:00"))/86400000);if(!gap||days>gap.days)gap={days,from:unique[i-1],to:unique[i]};}
   const most=Object.entries(byCartridge).sort((a,b)=>b[1]-a[1])[0]||null;return{first,best:moas.length?Math.min(...moas):null,most,gap};
 }
@@ -1589,7 +1612,8 @@ function openBiography(key){activeBiographyKey=key;goto("biography");renderBiogr
 
 function gunLoads(g){const out=[];for(const [cart,cx] of Object.entries(DB.cartridges||{}))for(const l of cx.loads||[])if(gunMatches(g,g._legacyKey,cart,l))out.push({cart,load:l});return out;}
 function loadMetric(load,key){
-  const vals=[];if(num(load[key])!=null)vals.push(num(load[key]));for(const s of load.sessions||[])if(num(s[key])!=null)vals.push(num(s[key]));if(key==="moa")for(const t of load.targets||[])if(num(t.moa)!=null)vals.push(num(t.moa));return vals.length?Math.min(...vals):null;
+  if(key==="moa"){const targetValues=(load.targets||[]).map(targetAccuracyMoa).filter(v=>v!=null);if(targetValues.length)return Math.min(...targetValues);}
+  const vals=[];if(num(load[key])!=null)vals.push(num(load[key]));for(const s of load.sessions||[])if(num(s[key])!=null)vals.push(num(s[key]));return vals.length?Math.min(...vals):null;
 }
 function loadPerformanceScore(load){const moa=loadMetric(load,"moa"),es=loadMetric(load,"es"),sd=loadMetric(load,"sd");if(moa==null&&es==null&&sd==null)return null;return{score:(moa??10)*10+(es??100)*.08+(sd??30)*.2,moa,es,sd};}
 function loadLabel(load){return`${load.bullet||"Unspecified bullet"} · ${load.charge!=null?`${load.charge}gr `:""}${load.powder||"Unspecified powder"}`;}
@@ -1669,7 +1693,7 @@ function renderPhotoRecord(){
   el.innerHTML=`<article class="pr-paper${photoRecordEditing?" editing":""}"><header class="pr-head"><div class="pr-kicker">Private Collection · ${esc(gunDisplay(g))}</div><div class="pr-title">${esc(rec.title)}</div><div class="pr-subtitle">${esc(rec.subtitle)}</div><div class="pr-rule"><span>◆</span></div>${photoRecordEditing?`<div class="pr-edit-controls" style="justify-content:center;margin-top:15px"><button class="pr-mini" data-record-settings>Edit title & subtitle</button></div>`:""}</header>${moments.length?moments.map((m,mi)=>renderPhotoMoment(m,mi,moments.length)).join(""):`<div class="pr-empty"><h2>${esc(rec.title)}</h2><p>The visual history of this sixgun begins here.</p><button class="action-btn primary" data-add-first>Add First Photograph</button></div>`}${moments.length?`<div class="pr-end">The record continues</div>`:""}</article>`;
   const recordHead=el.querySelector(".pr-head"),legacyHead=recordHead?.querySelector(".pr-kicker");if(recordHead&&legacyHead){legacyHead.remove();recordHead.querySelector(".pr-title")?.remove();recordHead.insertAdjacentHTML("afterbegin",archiveMasthead(rec.title,`Private Collection · ${gunDisplay(g)}`,"assets/photographic-record-masthead.webp","Archival engraving of a boundary waters lake, vintage camera, canoe, birds, and Henry the retriever watermarked in the clouds"));}
   if(!photoRecordEditing&&moments.length){el.querySelectorAll(".pr-moment").forEach(node=>node.remove());el.querySelector(".pr-end")?.remove();recordHead.insertAdjacentHTML("afterend",renderRecordAlbum(moments));}
-  el.querySelectorAll(".pr-postcard").forEach(node=>node.onclick=e=>{if(e.target.closest("button")||photoRecordEditing)return;const key=node.querySelector(".pr-photo")?.dataset.photoKey;openPhotoViewer(allPhotos.findIndex(p=>p._syncKey===key),allPhotos);});
+  el.querySelectorAll(".pr-postcard").forEach(node=>{if(!photoRecordEditing){node.tabIndex=0;node.setAttribute("role","button");node.setAttribute("aria-label","Open photograph");}const open=e=>{if(e.target.closest("button")||photoRecordEditing)return;const key=node.querySelector(".pr-photo")?.dataset.photoKey;openPhotoViewer(allPhotos.findIndex(p=>p._syncKey===key),allPhotos);};node.onclick=open;node.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open(e);}};});
   el.querySelector("[data-add-first]")?.addEventListener("click",openPhotoUpload);
   el.querySelector("[data-record-settings]")?.addEventListener("click",openPhotoRecordSettings);
   wireAlbumNavigation(el);
@@ -1719,9 +1743,11 @@ function openPhotoUpload(){
   const input=document.getElementById("recordPhotoFiles"),preview=document.getElementById("recordPhotoPreview"),choice=document.getElementById("recordMomentChoice"),newFields=document.getElementById("newMomentFields");choice.onchange=()=>newFields.style.display=choice.value==="new"?"block":"none";input.onchange=()=>{const files=[...input.files];preview.innerHTML=files.map((f,i)=>`<div class="pr-preview-item"><img src="${URL.createObjectURL(f)}" alt="Selected photograph"><button type="button" data-remove-file="${i}" aria-label="Remove ${esc(f.name)}">✕</button></div>`).join("");preview.querySelectorAll("[data-remove-file]").forEach(b=>b.onclick=()=>{const dt=new DataTransfer();files.forEach((f,i)=>{if(i!==Number(b.dataset.removeFile))dt.items.add(f);});input.files=dt.files;input.dispatchEvent(new Event("change"));});};
 }
 function openPhotoViewer(index,photos){if(index<0||!photos.length)return;viewerPhotos=photos;viewerIndex=index;viewerScale=1;document.getElementById("photoViewer").classList.add("open");document.body.style.overflow="hidden";renderPhotoViewer();}
+function movePhotoViewer(delta){if(!viewerPhotos.length)return;viewerIndex=(viewerIndex+delta+viewerPhotos.length)%viewerPhotos.length;viewerScale=1;renderPhotoViewer();}
 function renderPhotoViewer(){const p=viewerPhotos[viewerIndex],img=document.getElementById("photoViewerImg"),moment=DB.catalog.photo_moments.find(x=>x._syncKey===p.moment_key);img.src=photoSrc(p,true);img.style.transform=`scale(${viewerScale})`;document.getElementById("photoViewerCount").textContent=`${viewerIndex+1} / ${viewerPhotos.length}`;const meta=moment?[photoMeta(moment),moment.location].filter(Boolean).join(" · "):"";document.getElementById("photoViewerCaption").textContent=moment?[moment.title,meta,p.caption||moment.caption].filter(Boolean).join("\n"):"";}
 function closePhotoViewer(){document.getElementById("photoViewer").classList.remove("open");document.body.style.overflow="";viewerPointers.clear();viewerScale=1;}
 document.getElementById("photoViewerClose").onclick=closePhotoViewer;document.getElementById("photoViewerManage").onclick=()=>{const p=viewerPhotos[viewerIndex];closePhotoViewer();photoRecordEditing=true;renderPhotoRecord();setTimeout(()=>document.querySelector(`[data-photo-key="${CSS.escape(p._syncKey)}"]`)?.scrollIntoView({behavior:"smooth",block:"center"}),50);};
+document.getElementById("photoViewerPrev").onclick=e=>{e.stopPropagation();movePhotoViewer(-1);};document.getElementById("photoViewerNext").onclick=e=>{e.stopPropagation();movePhotoViewer(1);};document.addEventListener("keydown",e=>{if(!document.getElementById("photoViewer").classList.contains("open"))return;if(e.key==="ArrowLeft")movePhotoViewer(-1);if(e.key==="ArrowRight")movePhotoViewer(1);if(e.key==="Escape")closePhotoViewer();});
 const viewerStage=document.getElementById("photoViewerStage");function pointerDistance(){const pts=[...viewerPointers.values()];return pts.length<2?0:Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);}viewerStage.onpointerdown=e=>{viewerStage.setPointerCapture?.(e.pointerId);viewerPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(viewerPointers.size===1)viewerStartX=e.clientX;if(viewerPointers.size===2){viewerPinchStart=pointerDistance();viewerPinchScale=viewerScale;}};viewerStage.onpointermove=e=>{if(!viewerPointers.has(e.pointerId))return;viewerPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(viewerPointers.size===2&&viewerPinchStart){viewerScale=Math.max(1,Math.min(4,viewerPinchScale*pointerDistance()/viewerPinchStart));document.getElementById("photoViewerImg").style.transform=`scale(${viewerScale})`;}};viewerStage.onpointerup=e=>{const wasSingle=viewerPointers.size===1,dx=e.clientX-viewerStartX;viewerPointers.delete(e.pointerId);if(wasSingle&&Math.abs(dx)>55&&viewerScale===1){viewerIndex=(viewerIndex+(dx<0?1:-1)+viewerPhotos.length)%viewerPhotos.length;renderPhotoViewer();}};viewerStage.onpointercancel=e=>viewerPointers.delete(e.pointerId);document.getElementById("photoViewerImg").ondblclick=()=>{viewerScale=viewerScale===1?2:1;renderPhotoViewer();};
 document.getElementById("photoRecordBackBtn").onclick=()=>goto("biography");document.getElementById("photoRecordAddBtn").onclick=openPhotoUpload;document.getElementById("photoRecordEditBtn").onclick=()=>{photoRecordEditing=!photoRecordEditing;renderPhotoRecord();};
 
@@ -1828,8 +1854,10 @@ document.getElementById("addGunBtn").onclick=openGunForm;document.getElementById
 /* ---------- nav ---------- */
 const createNavBtn=document.getElementById("createNavBtn"),createSheet=document.getElementById("createSheet"),createScrim=document.getElementById("createScrim");
 function activeScreenName(){return document.querySelector(".screen.active")?.id?.replace(/^s-/,"")||"loads";}
-function closeCreateMenu(){createSheet.classList.remove("open");createScrim.classList.remove("open");createNavBtn.classList.remove("open");createNavBtn.setAttribute("aria-expanded","false");}
-function openCreateMenu(){document.getElementById("cartSheet").classList.remove("open");document.getElementById("cartScrim").classList.remove("open");createSheet.classList.add("open");createScrim.classList.add("open");createNavBtn.classList.add("open");createNavBtn.setAttribute("aria-expanded","true");}
+function hideSheet(sheet,scrim){sheet.classList.remove("open");scrim.classList.remove("open");sheet.inert=true;sheet.setAttribute("aria-hidden","true");setTimeout(()=>{if(!sheet.classList.contains("open")){sheet.hidden=true;scrim.hidden=true;}},300);}
+function showSheet(sheet,scrim){sheet.hidden=false;scrim.hidden=false;sheet.inert=false;sheet.setAttribute("aria-hidden","false");requestAnimationFrame(()=>{sheet.classList.add("open");scrim.classList.add("open");});}
+function closeCreateMenu(){hideSheet(createSheet,createScrim);createNavBtn.classList.remove("open");createNavBtn.setAttribute("aria-expanded","false");}
+function openCreateMenu(){closeSheet();showSheet(createSheet,createScrim);createNavBtn.classList.add("open");createNavBtn.setAttribute("aria-expanded","true");}
 createNavBtn.onclick=()=>createSheet.classList.contains("open")?closeCreateMenu():openCreateMenu();
 createScrim.onclick=closeCreateMenu;
 document.getElementById("createLoadAction").onclick=()=>{closeCreateMenu();openLoadForm();};
@@ -1908,8 +1936,8 @@ function renderCartOptions(){
   }).join("");
   el.querySelectorAll(".cart-opt").forEach(o=>o.onclick=()=>switchCartridge(o.dataset.c));
 }
-function openSheet(){renderCartOptions();document.getElementById("cartScrim").classList.add("open");document.getElementById("cartSheet").classList.add("open");}
-function closeSheet(){document.getElementById("cartScrim").classList.remove("open");document.getElementById("cartSheet").classList.remove("open");}
+function openSheet(){renderCartOptions();showSheet(document.getElementById("cartSheet"),document.getElementById("cartScrim"));}
+function closeSheet(){hideSheet(document.getElementById("cartSheet"),document.getElementById("cartScrim"));}
 function switchCartridge(name){
   DB.activeCartridge=name;save();
   activeGun=null;tierFilter="all";statusFilter="all";powderFilter="all"; // renderGunChips will pick the new cartridge's first gun
@@ -4050,6 +4078,7 @@ document.querySelectorAll(".lib-nav-btn").forEach(b=>b.onclick=()=>{
 let libraryView="all",libraryTag="all",libraryQuery="";
 const LIBRARY_TAG_ALIASES=new Map(Object.entries({
   ".32 h&r mag":".32 H&R Magnum",
+  ".357":".357 Magnum",
   ".357 mag":".357 Magnum",
   ".357 s&w magnum":".357 Magnum",
   ".38 s&w special":".38 Special",
@@ -4074,6 +4103,11 @@ const LIBRARY_TAG_ALIASES=new Map(Object.entries({
   "handguns":"handguns",
   "handloading basics":"handloading basics",
   "h-110":"H110",
+  "14000 psi":"14,000 psi",
+  "17000 psi":"17,000 psi",
+  "23000 psi":"23,000 psi",
+  "gas check":"gas checks",
+  "blackhawk":"Ruger Blackhawk",
   "pet loads":"pet loads",
   "revolver":"revolvers",
   "revolver gunsmithing":"revolver gunsmithing",
@@ -4097,9 +4131,9 @@ function libraryItems(){
 function libraryScopedItems(){return libraryItems().filter(x=>(libraryView==="all"||libraryView==="articles"&&x.kind==="article"||libraryView==="fragments"&&x.kind==="fragment"));}
 function libraryFilteredItems(){const q=libraryQuery.trim().toLowerCase();return libraryScopedItems().filter(x=>(libraryTag==="all"||x.tags.some(t=>t.toLowerCase()===libraryTag.toLowerCase()))&&(!q||x.search.includes(q)));}
 function renderLibraryTags(){
-  const el=document.getElementById("libraryTagFilter"),items=libraryScopedItems(),counts=new Map();
+  const el=document.getElementById("libraryTagFilter"),q=libraryQuery.trim().toLowerCase(),items=libraryScopedItems().filter(x=>!q||x.search.includes(q)),counts=new Map();
   items.forEach(x=>x.tags.forEach(t=>{const k=t.toLowerCase(),prior=counts.get(k);counts.set(k,{label:prior?.label||t,count:(prior?.count||0)+1});}));
-  const tags=[...counts.values()].sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label));
+  const allTags=[...counts.values()].sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label)),active=allTags.find(t=>t.label.toLowerCase()===libraryTag.toLowerCase()),tags=allTags.slice(0,36);if(active&&!tags.includes(active))tags.push(active);
   if(libraryTag!=="all"&&!tags.some(t=>t.label.toLowerCase()===libraryTag.toLowerCase()))libraryTag="all";
   el.innerHTML=`<button type="button" class="library-tag ${libraryTag==="all"?"on":""}" data-library-tag="all" aria-pressed="${libraryTag==="all"}">All tags</button>`+tags.map(t=>`<button type="button" class="library-tag ${libraryTag.toLowerCase()===t.label.toLowerCase()?"on":""}" data-library-tag="${esc(t.label)}" aria-pressed="${libraryTag.toLowerCase()===t.label.toLowerCase()}">${esc(t.label)}</button>`).join("");
   el.querySelectorAll("[data-library-tag]").forEach(b=>b.onclick=()=>{const next=b.dataset.libraryTag;libraryTag=next!=="all"&&libraryTag.toLowerCase()===next.toLowerCase()?"all":next;renderLibraryShelf();});
@@ -4948,7 +4982,7 @@ document.getElementById("taSave").onclick=async function(){
   const latestSessionDate=(load.sessions||[]).map(sessionRecordDay).filter(Boolean).sort().pop()||null;
   const targetRecord={
     // A target belongs to the range session, even when its photo is analyzed later.
-    date:existingTarget?.date||latestSessionDate||new Date().toISOString().slice(0,10),
+    date:existingTarget?.date||latestSessionDate||todayValue(),
     photo:TA.imgData,
     photoPath:existingTarget?.photoPath||null,
     scaleBox:TA.scaleBox?{x:+TA.scaleBox.x.toFixed(1),y:+TA.scaleBox.y.toFixed(1),size:+TA.scaleBox.size.toFixed(1)}:null,
@@ -5176,7 +5210,7 @@ async function hydrateCloud(){
   if(!partRows.error)DB.catalog.parts_modifications=(partRows.data||[]).map(p=>({_syncKey:p.legacy_key,gun_key:p.guns.legacy_key,title:p.title,description:p.description||"",date:p.date,cost:p.cost,vendor:p.vendor||""}));
   if(!maintenanceRows.error)DB.catalog.maintenance_entries=(maintenanceRows.data||[]).map(m=>({_syncKey:m.legacy_key,gun_key:m.guns.legacy_key,date:m.date,category:m.category,notes:m.notes||"",round_count:m.round_count}));
   if(!targetPhotoRows.error){const paths=new Map((targetPhotoRows.data||[]).filter(row=>row.photo_path).map(row=>[row.legacy_key,row.photo_path]));for(const [cart,c] of Object.entries(DB.cartridges||{}))for(const load of c.loads||[])(load.targets||[]).forEach((target,index)=>{const path=paths.get(targetKey(cart,load,index,target));if(path)target.photoPath=path;});}
-  await signTargetPhotos();await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});renderAll();cloudStatus("Synced","ok");if(pendingLoadMerges){pendingLoadMerges=0;await saveCloudState();}
+  await signTargetPhotos();await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});renderAll();cloudStatus("Synced","ok");if(pendingLoadMerges||pendingAccuracyRepairs){pendingLoadMerges=0;pendingAccuracyRepairs=0;await saveCloudState();}
 }
 async function onSignedIn(session){cloudUser=session.user;document.getElementById("cloudAuth").classList.add("hidden");cloudStatus("Connecting…","warn");try{await hydrateCloud();}catch(e){console.error(e);cloudStatus("Setup needed · run Supabase SQL","error");toast("Supabase setup is not finished yet");}}
 async function cloudBoot(){
@@ -5193,6 +5227,5 @@ window.addEventListener("online",()=>flushCloudQueue());window.addEventListener(
 /* ---------- init ---------- */
 cloudBoot();
 </script>
-<script src="/filter-controls.js?v=2.35.8"></script>
 </body>
 </html>

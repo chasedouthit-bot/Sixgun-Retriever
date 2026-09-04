@@ -6,6 +6,7 @@ const { webcrypto } = require("crypto");
 const html = fs.readFileSync("index.html", "utf8");
 const performanceIntelligence = fs.readFileSync("performance-intelligence.js", "utf8");
 const filterControls = fs.readFileSync("filter-controls.js", "utf8");
+const statusHotfix = fs.readFileSync("status-hotfix.js", "utf8");
 const libraryReaderHotfix = fs.readFileSync("library-reader-hotfix.js", "utf8");
 const worker = fs.readFileSync("worker.js", "utf8");
 const serviceMigration = fs.readFileSync("supabase/migrations/20260826_parts_maintenance.sql", "utf8");
@@ -15,7 +16,16 @@ const cacheVersion = html.match(/const CACHE_VERSION="sixgun-retriever-v([^";]+)
 const releaseVersion = html.match(/const RELEASE_VERSION="([^";]+)"/)?.[1];
 assert(landingVersion && landingVersion === cacheVersion, "landing and cache versions must be present and match");
 assert.equal(releaseVersion, landingVersion, "release, landing, and cache versions must match");
+assert(worker.includes(`const RELEASE_VERSION = '${releaseVersion}'`), "worker and application release versions must match");
+for (const asset of ["performance-intelligence.js","status-hotfix.js","filter-controls.js","pearce-bibliography.js","library-reader-hotfix.js","grouped-loads-test.js"]) {
+  assert(worker.includes(`'${asset}'`), `worker must inject ${asset}`);
+  assert(fs.existsSync(asset), `injected asset ${asset} must exist in the deployment root`);
+}
+assert.equal((html.match(/<script[^>]+filter-controls\.js/g)||[]).length, 0, "worker-injected scripts must not also be hard-coded in index.html");
 assert(html.includes('libraryTag=next!=="all"&&libraryTag.toLowerCase()===next.toLowerCase()?"all":next'), "tapping the active Library tag must clear the filter");
+assert(html.includes("allTags.slice(0,36)"), "Library must cap its eager tag controls");
+assert(libraryReaderHotfix.includes("function ensureLibraryUi()"), "Library tables must initialize only when Library opens");
+assert(libraryReaderHotfix.includes("data-sr-table-body")&&libraryReaderHotfix.includes("addEventListener('toggle'"), "reference table rows must render only when expanded");
 assert(html.includes('"colt saa":"Colt Single Action Army"'), "Library taxonomy must merge Colt SAA into Colt Single Action Army");
 assert(html.includes('".357 mag":".357 Magnum"'), "Library taxonomy must merge abbreviated .357 Magnum tags");
 assert(html.includes(".map(libraryCanonicalTag)"), "Library tags must be canonicalized before duplicate removal");
@@ -193,12 +203,17 @@ assert(html.includes('tg-board tg-grid-board'), "trajectory targets must render 
 assert(html.includes('onclick="taMode(\'aim\')"'), "target analysis must allow marking the exact point of aim");
 assert(html.includes('poiYIn:g.poiYIn'), "saved targets must preserve measured vertical point of impact");
 assert(html.includes('button.type="submit"'), "editor primary actions must explicitly submit their form");
+assert(html.includes('moaInput.readOnly=true'), "manual group MOA must be calculated rather than independently editable");
+assert(html.includes('["Bench","Range","Reference"]'), "journal entry tags must include Reference");
+assert(statusHotfix.includes("raw==='reshoot'?['reshoot','Reshoot']"), "the status layer must preserve Reshoot as a distinct status");
+assert(html.includes('id="photoViewerPrev"')&&html.includes('id="photoViewerNext"'), "photo viewer must expose visible previous and next controls");
+assert(html.includes('e.key==="ArrowLeft"')&&html.includes('e.key==="ArrowRight"'), "photo viewer must support keyboard navigation");
 assert(performanceIntelligence.includes("typeof taAutoSetup==='function'"), "legacy target assist must yield to the native auto setup control");
 assert(performanceIntelligence.includes('Trajectory Comparison'), "load comparison must include bullet-drop comparison");
 assert(performanceIntelligence.includes("all loads use a ${zeroYd}-yard zero"), "trajectory comparison must normalize loads to one shared zero");
 assert(performanceIntelligence.includes('Every square = 1 inch'), "trajectory comparison must retain the physical one-inch grid");
 assert(performanceIntelligence.includes("Difference</th>"), "trajectory comparison must report the impact difference between loads");
-assert(worker.includes(`/performance-intelligence.js?v=${releaseVersion}`), "worker must load the current target-assist cache version");
+assert(worker.includes("APP_SCRIPTS.map")&&worker.includes("?v=${RELEASE_VERSION}"), "worker must version every injected application script from one release value");
 assert(html.includes("assets/parts-maintenance-masthead-v2.jpg"), "service page and PDF must use the cabin workbench masthead");
 assert(html.includes("Selected service records for this sixgun"), "service page must use the archival subtitle convention");
 assert(html.includes('name="include_maintenance"'), "PDF export must expose the Parts & Maintenance toggle");
@@ -270,11 +285,17 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,ensureTierSettings,tierKeys,tierLabel,tierColor,tierSortRank,tierValue,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,catalogUsage,removeCatalogEntry,cloudSafeState,sameCloudQueueJob,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,ensureTierSettings,tierKeys,tierLabel,tierColor,tierSortRank,tierValue,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,reconcileLoadAccuracy,moaFromGroup,targetAccuracyMoa,dateForDisplay,fmtDate2,catalogUsage,removeCatalogEntry,cloudSafeState,sameCloudQueueJob,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
 const api = context.__test;
+assert(Math.abs(api.moaFromGroup(1.99,10)-19.003)<0.01,"1.99 inches at 10 yards must calculate to about 19.00 MOA");
+const staleAccuracy={moa:5.95,group:1.99,targets:[{date:"2026-08-26",groupIn:1.99,distanceYd:10,moa:5.95}]};
+api.reconcileLoadAccuracy(staleAccuracy);
+assert.equal(staleAccuracy.targets[0].moa,19.003,"target MOA must be repaired from its measured group and distance");
+assert.equal(staleAccuracy.moa,19.003,"the load summary must mirror the authoritative analyzed target");
+assert.equal(api.fmtDate2("2026-09-03"),"Sep 3, 2026","date-only records must render as calendar dates without a UTC shift");
 assert(api.sameCloudQueueJob({token:"current",updatedAt:1},{token:"current",updatedAt:1}),"a sync may clear the exact queue job it processed");
 assert(!api.sameCloudQueueJob({token:"newer",updatedAt:2},{token:"older",updatedAt:1}),"an older sync must preserve a newer queued save");
 assert(api.sameCloudQueueJob({updatedAt:1},{updatedAt:1}),"legacy queue jobs without tokens must remain compatible");
