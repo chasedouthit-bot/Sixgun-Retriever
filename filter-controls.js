@@ -36,6 +36,7 @@
     .gun-tier-toggle input{width:18px;height:18px;accent-color:var(--brass);flex:none}
     .gun-tier-dot{width:10px;height:10px;border-radius:50%;flex:none}
     .gun-tier-toggle span:last-child{min-width:0;font-size:13px;font-weight:600;color:var(--ink)}
+    .tier-access-note{display:block;width:100%;margin:7px 0 1px;padding:8px 10px;border:1px dashed var(--brass-dim);border-radius:9px;background:rgba(199,154,75,.055);color:var(--brass);font-size:10px;font-weight:700;text-align:left;cursor:pointer}
     @media(max-width:620px){.filter-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
   `;
   document.head.appendChild(style);
@@ -145,6 +146,12 @@
   };
 
   const baseRenderChips=renderChips;
+  function openFirearmTierSettings(g){
+    const catalogGun=DB.catalog?.guns?.find(x=>x._legacyKey&&x._legacyKey===g?._legacyKey)||DB.catalog?.guns?.find(x=>norm(gunDisplay(x))===norm(g?.name));
+    if(!catalogGun)return toast('Open this firearm in Catalog to change tier access');
+    goto('catalog');openGunEdit(catalogGun._legacyKey);
+  }
+  window.openFirearmTierSettings=openFirearmTierSettings;
   renderChips=function(){
     const g=currentGun?.();
     if(g){
@@ -161,7 +168,12 @@
       const disabled=!allowed.has(String(chip.dataset.t));
       chip.classList.toggle("disabled",disabled);
       chip.setAttribute("aria-disabled",String(disabled));
+      if(disabled){chip.title='Unavailable for this firearm. Tap to change it in the firearm profile.';chip.onclick=()=>openFirearmTierSettings(g);}
     });
+    const disabledCount=document.querySelectorAll('#tierChips .chip.disabled[data-t]').length;
+    let note=document.getElementById('gunTierAccessNote');
+    if(disabledCount&&!note){note=document.createElement('button');note.id='gunTierAccessNote';note.className='tier-access-note';document.getElementById('tierChips').after(note);}
+    if(note){note.hidden=!disabledCount;note.textContent='Some tiers are unavailable for this firearm · Change in firearm profile';note.onclick=()=>openFirearmTierSettings(g);}
   };
   renderChips();
 })();

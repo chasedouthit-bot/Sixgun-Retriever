@@ -98,7 +98,7 @@
   function tableMarkup(t){
     const ch=Math.max(0,(t.head||[]).indexOf('Charge'));
     const cond=[];
-    if(t.powders&&t.powders.length)cond.push(`<span class="sr-reference-cond"><b>Powder</b>${escText(t.powders.join(', '))}</span>`);
+    if(t.powders&&t.powders.length)cond.push(`<span class="sr-reference-cond"><b>Powder</b>${escText([...new Set(t.powders.map(canonical))].join(', '))}</span>`);
     (t.conditions||[]).forEach(pair=>{if(Array.isArray(pair))cond.push(`<span class="sr-reference-cond"><b>${escText(pair[0])}</b>${escText(pair[1])}</span>`);});
     if(t.cartridge)cond.push(`<span class="sr-reference-cond"><b>Cartridge</b>${escText(t.cartridge)}</span>`);
     return `<section class="sr-reference-table">

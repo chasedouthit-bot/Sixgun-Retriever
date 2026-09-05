@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.35.9">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.35.9">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.35.9">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.35.9">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.35.9">
+<link rel="manifest" href="/manifest.webmanifest?v=2.36.0">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.36.0">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.36.0">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.36.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.36.0">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -532,7 +532,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.35.9</div>
+    <div class="landing-version">Version 2.36.0</div>
   </div>
 </div>
 
@@ -830,7 +830,7 @@ const SEED = {
     {id:"l15",tier:3,gun:"Blackhawk",bullet:"255gr Keith SWC (PC)",powder:"Unique",charge:9.5,primer:"CCI 300",oal:1.594,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"Loaded, not fired."},
     {id:"l16",tier:3,gun:"Blackhawk",bullet:"255gr Keith SWC (PC)",powder:"Unique",charge:10.0,primer:"CCI 300",oal:1.594,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"Loaded, not fired. Watch ES up top — Unique fills case better."},
     {id:"l17",tier:3,gun:"Blackhawk",bullet:"255gr Keith SWC (PC)",powder:"Unique",charge:10.5,primer:"CCI 300",oal:1.594,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"Loaded, not fired."},
-    {id:"l23",tier:3,gun:"Blackhawk",bullet:"255gr Keith SWC (PC)",powder:"IMR 4227",charge:20.0,primer:"CCI 300",oal:null,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"PLACEHOLDER — charge unverified, not worked up. IMR 4227 field option to test. Confirm ladder against published data before loading."},
+    {id:"l23",tier:3,gun:"Blackhawk",bullet:"255gr Keith SWC (PC)",powder:"IMR 4227",charge:20.0,primer:"CCI 300",oal:null,avg:null,sd:null,es:null,moa:null,keep:"draft",note:"PLACEHOLDER — charge unverified, not worked up. IMR 4227 field option to test. Confirm ladder against published data before loading."},
     // ---- Tier 1 plinking ----
     {id:"l18",tier:1,gun:"Blackhawk",bullet:"250gr RNFP",powder:"W244",charge:6.2,primer:"CCI 300",oal:null,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"Est. 795 fps. Not yet chrono'd."},
     {id:"l19",tier:1,gun:"Blackhawk",bullet:"250gr RNFP",powder:"W244",charge:6.4,primer:"CCI 300",oal:null,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"Est. 810 fps."},
@@ -862,7 +862,7 @@ const SEED = {
     {id:"f8",tier:3,gun:"FA97",bullet:"255gr Keith SWC (PC)",powder:"Unique",charge:9.5,primer:"CCI 300",oal:1.594,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"FA97 Unique field ladder."},
     {id:"f9",tier:3,gun:"FA97",bullet:"255gr Keith SWC (PC)",powder:"Unique",charge:10.0,primer:"CCI 300",oal:1.594,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"FA97 Unique field ladder."},
     {id:"f10",tier:3,gun:"FA97",bullet:"255gr Keith SWC (PC)",powder:"Unique",charge:10.5,primer:"CCI 300",oal:1.594,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"FA97 Unique field ladder."},
-    {id:"f11",tier:4,gun:"FA97",bullet:"300gr WFN",powder:"IMR 4227",charge:21.0,primer:"CCI 350",oal:null,avg:null,sd:null,es:null,moa:null,keep:"pending",note:"PLACEHOLDER — charge unverified, not worked up. IMR 4227 bear-load option to test. Confirm ladder against published data before loading."}
+    {id:"f11",tier:4,gun:"FA97",bullet:"300gr WFN",powder:"IMR 4227",charge:21.0,primer:"CCI 350",oal:null,avg:null,sd:null,es:null,moa:null,keep:"draft",note:"PLACEHOLDER — charge unverified, not worked up. IMR 4227 bear-load option to test. Confirm ladder against published data before loading."}
   ],
   inventory:{
     Powder:[
@@ -982,8 +982,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.35.9";
-const CACHE_VERSION="sixgun-retriever-v2.35.9";
+const RELEASE_VERSION="2.36.0";
+const CACHE_VERSION="sixgun-retriever-v2.36.0";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -1031,11 +1031,14 @@ function reconcileLoadAccuracy(load){
   const target=latestTargetRecord(load);if(target){const group=finiteNumber(target.groupIn),rawMoa=targetAccuracyMoa(target),moa=rawMoa==null?null:+rawMoa.toFixed(3);if(load.group!==group){load.group=group;repaired++;}if(load.moa!==moa){load.moa=moa;repaired++;}}
   return repaired;
 }
+function loadHasFiredData(load){return finiteNumber(load?.avg)!=null||(load?.sessions||[]).some(s=>finiteNumber(s.avg)!=null||finiteNumber(s.shots)>0)||(load?.targets||[]).length>0;}
+function loadDisplayNote(load){const note=String(load?.note||"");return loadHasFiredData(load)?note.replace(/(?:^|\s)Loaded,\s*not fired\.\s*/gi," ").replace(/\s+/g," ").trim():note;}
+function reconcileLoadState(load){let repaired=0;const note=String(load?.note||"");if(/\b(?:placeholder|charge unverified|confirm ladder against published data before loading)\b/i.test(note)&&String(load?.keep||"pending").toLowerCase()!=="draft"){load.keep="draft";repaired++;}if(loadHasFiredData(load)&&/Loaded,\s*not fired\./i.test(note)){load.note=loadDisplayNote(load);repaired++;}return repaired;}
 function gunDisplay(g){return [g.make,g.model].filter(v=>String(v||"").trim()).join(" ").trim()||String(g.name||"").trim()||"Unnamed gun";}
 function bulletDisplay(b){return b.display||[b.manufacturer,b.product,b.weight_gr!=null?`${Number(b.weight_gr)}gr`:"",b.style].filter(Boolean).join(" ").trim()||"Unnamed bullet";}
 function bulletNorm(v){return String(v||"").toLowerCase().replace(/[’']/g,"").replace(/\b(grains?|grs?|gns?)\b/g,"gr").replace(/\bsemi[\s-]*wad[\s-]*cutter\b/g,"swc").replace(/\bround[\s-]*nose[\s-]*flat[\s-]*point\b/g,"rnfp").replace(/\bwide[\s-]*flat[\s-]*nose\b/g,"wfn").replace(/\bpowder[\s-]*coat(?:ed)?\b/g,"pc").replace(/(\d)\s*gr\b/g,"$1gr").replace(/[^a-z0-9.]+/g," ").trim().replace(/\s+/g," ");}
 function bulletFields(text,load={}){const raw=String(text||"").trim(),wm=raw.match(/\b(\d+(?:\.\d+)?)\s*(?:grains?|grs?|gns?)\b/i),dm=String(load.dia||"").match(/\.?\d+(?:\.\d+)?/);return{manufacturer:String(load.brand||"").trim(),product:raw,weight_gr:wm?Number(wm[1]):null,diameter:dm?dm[0]:"",caliber:"",style:"",notes:"",display:raw};}
-let pendingLoadMerges=0,pendingAccuracyRepairs=0;
+let pendingLoadMerges=0,pendingAccuracyRepairs=0,pendingStateRepairs=0;
 function loadRecipeKey(l){return[l.gunCatalogKey||norm(l.gun),l.powderCatalogKey||norm(l.powder),l.bulletCatalogKey||bulletNorm(l.bullet),Number(l.charge),String(l.tier??"")].join("|");}
 function compatibleLoadValue(a,b,tolerance=0){if(a==null||a===""||b==null||b==="")return true;return tolerance?Math.abs(Number(a)-Number(b))<=tolerance:norm(a)===norm(b);}
 function mergeUniqueRecords(a=[],b=[],keyFn){const seen=new Set(),out=[];for(const item of [...a,...b]){const key=keyFn(item);if(seen.has(key))continue;seen.add(key);out.push(item);}return out;}
@@ -1057,7 +1060,7 @@ function ensureCatalog(state=DB){
       if(!l.gunCatalogKey)l.gunCatalogKey=(c.guns||[]).find(g=>norm(g.name)===norm(l.gun))?._legacyKey||`${cart}::${l.gun}`;
       if(l.powder){const key=l.powderCatalogKey||norm(l.powder);l.powderCatalogKey=key;if(!powderKeys.has(key)){state.catalog.powders.push({_legacyKey:key,name:l.powder,notes:""});powderKeys.add(key);}}
       if(l.bullet){let b=l.bulletCatalogKey&&state.catalog.bullets.find(x=>x._legacyKey===l.bulletCatalogKey);if(!b)b=bulletByNorm.get(bulletNorm(l.bullet));if(!b){b={_legacyKey:`bullet::${crypto.randomUUID()}`,...bulletFields(l.bullet,l)};state.catalog.bullets.push(b);bulletByNorm.set(bulletNorm(l.bullet),b);}l.bulletCatalogKey=b._legacyKey;l.bullet=bulletDisplay(b);}
-      const repaired=reconcileLoadAccuracy(l);if(state===DB)pendingAccuracyRepairs+=repaired;
+      const repaired=reconcileLoadAccuracy(l),stateRepaired=reconcileLoadState(l);if(state===DB){pendingAccuracyRepairs+=repaired;pendingStateRepairs+=stateRepaired;}
     }
     const merged=reconcileDuplicateLoads(c);if(state===DB)pendingLoadMerges+=merged;
     (c.journal||[]).forEach((j,i)=>{j._syncKey=j._syncKey||`${cart}::journal::${j.date||"undated"}::${i}`;if(j.gun&&!j.gunCatalogKey)j.gunCatalogKey=(c.guns||[]).find(g=>norm(g.name)===norm(j.gun))?._legacyKey||`${cart}::${j.gun}`;if(j.powder&&!j.powderCatalogKey)j.powderCatalogKey=norm(j.powder);});
@@ -1332,7 +1335,7 @@ function renderChips(){
   document.getElementById("tierManageBtn").onclick=openTierSettings;
 }
 function renderStatusChips(){
-  const el=document.getElementById("statusChips"),opts=[["all","All statuses"],["yes","Keeper"],["work","Watch"],["reshoot","Reshoot"],["pending","Loaded"]];
+  const el=document.getElementById("statusChips"),opts=[["all","All statuses"],["yes","Keeper"],["work","Watch"],["reshoot","Reshoot"],["pending","Loaded"],["draft","Draft / Unverified"]];
   el.innerHTML=opts.map(([key,label])=>`<div class="chip ${statusFilter===key?'on':''}" data-s="${key}">${label}</div>`).join("");
   el.querySelectorAll(".chip").forEach(chip=>chip.onclick=()=>{statusFilter=chip.dataset.s;renderStatusChips();renderPowderChips();renderLoads();});
 }
@@ -1573,7 +1576,7 @@ function openLoadForm(loadId=null){
   const availableTiers=load?.tier!=null&&!visibleTiers.includes(String(load.tier))?[...visibleTiers,String(load.tier)]:visibleTiers;
   const tiers=availableTiers.map(k=>`<option value="${esc(k)}" ${selectedTier===String(k)?"selected":""}>${esc(tierLabel(k))}${C().tiers[k]?.active===false?" (hidden)":""}</option>`).join("");
   const tierField=tierSettings.enabled!==false?`<div class="field"><label>${esc(tierSettings.noun||"Tier")}</label><select name="tier">${tiers}</select></div>`:"";
-  const status=[['pending','Loaded'],['yes','Keeper'],['work','Watch'],['reshoot','Reshoot']].map(([v,l])=>`<option value="${v}" ${(load?.keep||'pending')===v?'selected':''}>${l}</option>`).join("");
+  const status=[['','— None —'],['draft','Draft / Unverified'],['pending','Loaded'],['yes','Keeper'],['work','Watch'],['reshoot','Reshoot']].map(([v,l])=>`<option value="${v}" ${(load?.keep??'pending')===v?'selected':''}>${l}</option>`).join("");
   editorOpen(load?"Edit Load":"New Load",`${entityLists()}<div class="form-grid"><div class="field full"><label>Gun *</label><input id="loadGun" name="gun" list="gunSuggestions" value="${esc(load?.gun||activeGun||"")}" required autocomplete="off"><div class="entity-hint" id="loadGunHint"></div></div><div class="field full"><label>Powder *</label><input id="loadPowder" name="powder" list="powderSuggestions" value="${esc(load?.powder||"")}" required autocomplete="off"><div class="entity-hint" id="loadPowderHint"></div></div><div class="field full"><label>Bullet *</label><input name="bullet" value="${esc(load?.bullet||"")}" required></div><div class="field"><label>Bullet brand</label><input name="brand" value="${esc(load?.brand||"")}"></div><div class="field"><label>Charge (gr) *</label><input type="number" min="0" step="0.1" name="charge" value="${esc(load?.charge??"")}" required></div><div class="field"><label>Primer</label><input name="primer" value="${esc(load?.primer||"")}"></div><div class="field"><label>Case</label><input name="case" value="${esc(load?.case||"")}"></div><div class="field"><label>OAL (in.)</label><input type="number" min="0" step="0.001" name="oal" value="${esc(load?.oal??"")}"></div><div class="field"><label>Bullet diameter</label><input name="dia" value="${esc(load?.dia||"")}" placeholder=".452"></div><div class="field"><label>BHN</label><input type="number" min="0" step="0.1" name="bhn" value="${esc(load?.bhn??"")}"></div><div class="field"><label>Sizing</label><input name="sized" value="${esc(load?.sized||"")}" placeholder="As-cast"></div>${tierField}<div class="field"><label>Status</label><select name="keep">${status}</select></div><div class="field full"><label>Load notes</label><textarea name="note">${esc(load?.note||"")}</textarea></div><div class="detail-label full">Latest session</div><div class="field"><label>Date</label><input type="date" name="session_date" value="${esc(result("date"))}"></div><div class="field"><label>Temperature (°F)</label><input type="number" step="1" name="temp" value="${esc(result("temp"))}"></div><div class="field"><label>Shots</label><input type="number" min="0" step="1" name="shots" value="${esc(result("shots"))}"></div><div class="field"><label>Average velocity (fps)</label><input type="number" min="0" step="0.1" name="avg" value="${esc(result("avg"))}"></div><div class="field"><label>SD</label><input type="number" min="0" step="0.1" name="sd" value="${esc(result("sd"))}"></div><div class="field"><label>ES</label><input type="number" min="0" step="0.1" name="es" value="${esc(result("es"))}"></div><div class="field"><label>Estimated velocity (fps)</label><input type="number" min="0" step="0.1" name="estvel" value="${esc(result("estvel"))}"></div><div class="field"><label>Estimated pressure</label><input name="estpress" value="${esc(result("estpress"))}"></div><div class="field"><label>Distance (yd)</label><input type="number" min="0" step="0.1" name="dist" value="${esc(result("dist"))}"></div><div class="field"><label>Group (in.)</label><input type="number" min="0" step="0.001" name="group" value="${esc(result("group"))}"></div><div class="field"><label>Group MOA</label><input type="number" min="0" step="0.001" name="moa" value="${esc(result("moa"))}"></div><div class="field full"><label>Session notes</label><textarea name="session_notes">${esc(session?.notes||"")}</textarea></div><div class="field full"><label><input type="checkbox" name="signature_load" value="1" ${load?.signature_load?"checked":""}> Signature load for this gun</label></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">${load?"Save Changes":"Add Load"}</button></div>`,async fd=>{
     const v=Object.fromEntries(fd),gun=exactGun(v.gun,DB.activeCartridge),powder=exactPowder(v.powder);if(!gun)throw new Error("Choose a Catalog gun or add it first");if(!powder)throw new Error("Choose a Catalog powder or add it first");attachGunToCartridge(gun,DB.activeCartridge);
     const optionalNumber=name=>v[name]===""?null:Number(v[name]);
@@ -1593,9 +1596,10 @@ function fileDataUrl(file){return new Promise((resolve,reject)=>{const r=new Fil
 function openJournalForm(entryKey=null){
   ensureCatalog();const entry=entryKey?(C().journal||[]).find(j=>j._syncKey===entryKey):null,now=new Date(),today=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
   const tagOptions=["Bench","Range","Reference"].map(x=>`<option value="${x}" ${String(entry?.type||"Bench").toLowerCase()===x.toLowerCase()?"selected":""}>${x.toUpperCase()}</option>`).join("");
+  const planStatusOptions=[["active","Active"],["done","Done"],["superseded","Superseded"]].map(([value,label])=>`<option value="${value}" ${String(entry?.next_status||"active").toLowerCase()===value?"selected":""}>${label}</option>`).join("");
   const existingPhotos=entry?(entry.photo_urls||entry.photos||[]):[];
-  editorOpen(entry?"Edit Journal Entry":"New Journal Entry",`${entityLists()}<div class="form-grid"><div class="field"><label>Date *</label><input type="date" name="date" value="${esc(entry?.date||today)}" required></div><div class="field"><label>Tag</label><select name="type">${tagOptions}</select></div><div class="field full"><label>Gun</label><input id="journalGun" name="gun" list="gunSuggestions" value="${esc(entry?.gun||"")}" autocomplete="off"><div class="entity-hint" id="journalGunHint"></div></div><div class="field full"><label>Powder</label><input id="journalPowder" name="powder" list="powderSuggestions" value="${esc(entry?.powder||"")}" autocomplete="off"><div class="entity-hint" id="journalPowderHint"></div></div><div class="field full"><label>What happened? *</label><textarea name="note" required>${esc(entry?.did||entry?.note||"")}</textarea></div><div class="field full"><label>For next session</label><textarea name="next" placeholder="What should you test, change, or remember next time?">${esc(entry?.next||"")}</textarea></div><div class="field full"><label>${entry?"Add photos":"Photos"}</label><input type="file" id="journalPhoto" accept="image/*" multiple><div class="photo-preview" id="journalPhotoPreview">${existingPhotos.map(src=>`<img src="${esc(src)}" alt="Existing journal attachment">`).join("")}</div></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">${entry?"Save Changes":"Add Entry"}</button></div>`,async(fd,form)=>{
-    const v=Object.fromEntries(fd),gun=v.gun?exactGun(v.gun,DB.activeCartridge):null,powder=v.powder?exactPowder(v.powder):null;if(v.gun&&!gun)throw new Error("Choose a Catalog gun or add it first");if(v.powder&&!powder)throw new Error("Choose a Catalog powder or add it first");if(gun)attachGunToCartridge(gun,DB.activeCartridge);const files=[...form.querySelector("#journalPhoto").files],photos=[];for(const file of files)photos.push(await fileDataUrl(file));const values={date:v.date,type:v.type,did:v.note.trim(),note:v.note.trim(),next:v.next.trim(),gun:gun?gunDisplay(gun):null,gunCatalogKey:gun?gun._legacyKey:null,powder:powder?powder.name:null,powderCatalogKey:powder?powder._legacyKey:null};if(entry){Object.assign(entry,values);entry.photos=[...(entry.photos||[]),...photos];}else C().journal.push({_syncKey:`journal::${crypto.randomUUID()}`,...values,photos,photoPaths:[]});await save();editorClose();renderAll();toast(entry?"Journal entry updated":"Journal entry added");
+  editorOpen(entry?"Edit Journal Entry":"New Journal Entry",`${entityLists()}<div class="form-grid"><div class="field"><label>Date *</label><input type="date" name="date" value="${esc(entry?.date||today)}" required></div><div class="field"><label>Tag</label><select name="type">${tagOptions}</select></div><div class="field full"><label>Gun</label><input id="journalGun" name="gun" list="gunSuggestions" value="${esc(entry?.gun||"")}" autocomplete="off"><div class="entity-hint" id="journalGunHint"></div></div><div class="field full"><label>Powder</label><input id="journalPowder" name="powder" list="powderSuggestions" value="${esc(entry?.powder||"")}" autocomplete="off"><div class="entity-hint" id="journalPowderHint"></div></div><div class="field full"><label>What happened? *</label><textarea name="note" required>${esc(entry?.did||entry?.note||"")}</textarea></div><div class="field full"><label>For next session</label><textarea name="next" placeholder="What should you test, change, or remember next time?">${esc(entry?.next||"")}</textarea></div><div class="field"><label>Next-session plan status</label><select name="next_status">${planStatusOptions}</select><small>Done and superseded plans stay in the journal but leave the active plan card.</small></div><div class="field full"><label>${entry?"Add photos":"Photos"}</label><input type="file" id="journalPhoto" accept="image/*" multiple><div class="photo-preview" id="journalPhotoPreview">${existingPhotos.map(src=>`<img src="${esc(src)}" alt="Existing journal attachment">`).join("")}</div></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">${entry?"Save Changes":"Add Entry"}</button></div>`,async(fd,form)=>{
+    const v=Object.fromEntries(fd),gun=v.gun?exactGun(v.gun,DB.activeCartridge):null,powder=v.powder?exactPowder(v.powder):null;if(v.gun&&!gun)throw new Error("Choose a Catalog gun or add it first");if(v.powder&&!powder)throw new Error("Choose a Catalog powder or add it first");if(gun)attachGunToCartridge(gun,DB.activeCartridge);const files=[...form.querySelector("#journalPhoto").files],photos=[];for(const file of files)photos.push(await fileDataUrl(file));const values={date:v.date,type:v.type,did:v.note.trim(),note:v.note.trim(),next:v.next.trim(),next_status:v.next.trim()?(v.next_status||"active"):"done",gun:gun?gunDisplay(gun):null,gunCatalogKey:gun?gun._legacyKey:null,powder:powder?powder.name:null,powderCatalogKey:powder?powder._legacyKey:null};if(entry){Object.assign(entry,values);entry.photos=[...(entry.photos||[]),...photos];}else C().journal.push({_syncKey:`journal::${crypto.randomUUID()}`,...values,photos,photoPaths:[]});await save();editorClose();renderAll();toast(entry?"Journal entry updated":"Journal entry added");
   });wireEntityInput("journalGun","gun",DB.activeCartridge);wireEntityInput("journalPowder","powder");document.getElementById("journalPhoto").onchange=async e=>{const box=document.getElementById("journalPhotoPreview"),urls=entry?[...(entry.photo_urls||entry.photos||[])]:[];for(const f of e.target.files)urls.push(await fileDataUrl(f));box.innerHTML=urls.map(u=>`<img src="${u}" alt="Journal attachment">`).join("");};
 }
 
@@ -1754,21 +1758,26 @@ document.getElementById("photoRecordBackBtn").onclick=()=>goto("biography");docu
 /* ---------- parts & maintenance ---------- */
 function gunParts(g){ensureCatalog();return DB.catalog.parts_modifications.filter(x=>x.gun_key===g._legacyKey).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));}
 function gunMaintenance(g){ensureCatalog();return DB.catalog.maintenance_entries.filter(x=>x.gun_key===g._legacyKey).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));}
-function maintenanceSummary(g){const entries=gunMaintenance(g);return{count:entries.length,last:entries[0]?.date||null};}
+function gunRoundsBetween(g,fromExclusive=null,toInclusive=todayValue()){
+  let rounds=0;for(const [cart,cx] of Object.entries(DB.cartridges||{}))for(const load of cx.loads||[])if(gunMatches(g,g._legacyKey,cart,load))for(const session of load.sessions||[]){const day=sessionRecordDay(session);if(day&&(!fromExclusive||day>fromExclusive)&&(!toInclusive||day<=toInclusive))rounds+=Math.max(0,Number(session.shots)||0);}
+  return rounds;
+}
+function calculatedMaintenanceRounds(g,date=todayValue(),excludeKey=null){const previous=gunMaintenance(g).filter(x=>x._syncKey!==excludeKey&&x.date&&x.date<date)[0];return gunRoundsBetween(g,previous?.date||null,date);}
+function maintenanceSummary(g){const entries=gunMaintenance(g),last=entries[0]?.date||null;return{count:entries.length,last,roundsSinceLast:gunRoundsBetween(g,last)};}
 function money(v){return v==null||v===""?"":new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(Number(v));}
 function openPartsMaintenance(){const g=biographyGun();if(!g)return;goto("parts-maintenance");renderPartsMaintenance();}
 function renderPartsMaintenance(){
   const g=biographyGun(),el=document.getElementById("partsMaintenanceContent");if(!g||!el){goto("catalog");return;}const parts=gunParts(g),maintenance=gunMaintenance(g);
-  const partRows=parts.map(p=>`<article class="pm-part"><div><div class="pm-part-title">${esc(p.title)}</div><div class="pm-part-meta">${[p.date?fmtDate(p.date):"Undated",p.vendor,p.cost!=null?money(p.cost):null].filter(Boolean).map(esc).join(" · ")}</div></div><div class="pm-actions"><button class="pr-mini" data-edit-part="${esc(p._syncKey)}">Edit</button><button class="pr-mini danger" data-delete-part="${esc(p._syncKey)}">Delete</button></div>${p.description?`<div class="pm-part-desc">${esc(p.description)}</div>`:""}</article>`).join("");
-  const maintenanceRows=maintenance.map(m=>`<div class="pm-ledger-row"><div class="pm-ledger-date">${m.date?esc(fmtDate(m.date)):"Undated"}</div><div class="pm-ledger-type">${esc(m.category||"Maintenance")}</div><div class="pm-ledger-rounds">${m.round_count!=null?`${esc(m.round_count)} rds`:"—"}</div><div class="pm-ledger-notes">${esc(m.notes||"—")}</div><div class="pm-ledger-actions"><button class="pr-mini" data-edit-maintenance="${esc(m._syncKey)}">Edit</button><button class="pr-mini danger" data-delete-maintenance="${esc(m._syncKey)}">Delete</button></div></div>`).join("");
-  el.innerHTML=`<article class="pr-paper pm-paper"><header class="pm-head">${archiveMasthead("Parts & Maintenance",`Private Collection · ${gunDisplay(g)}`,"https://raw.githubusercontent.com/chasedouthit-bot/Sixgun-Retriever/main/assets/parts-maintenance-masthead-v2.jpg","Engraved cabin workbench overlooking the Grand Tetons")}<div class="pm-subtitle">Selected service records for this sixgun</div></header><section class="pm-section"><h2 class="pm-section-title">Parts & Modifications</h2>${partRows||`<div class="pm-empty">No parts or modifications have been recorded.</div>`}</section><section class="pm-section"><h2 class="pm-section-title">Maintenance Log</h2>${maintenanceRows?`<div class="pm-ledger"><div class="pm-ledger-head"><div>Date</div><div>Service</div><div>Rounds</div><div>Notes</div></div>${maintenanceRows}</div>`:`<div class="pm-empty">No maintenance has been logged.</div>`}</section></article>`;
+  const summary=maintenanceSummary(g),partRows=parts.map(p=>`<article class="pm-part"><div><div class="pm-part-title">${esc(p.title)}</div><div class="pm-part-meta">${[p.date?fmtDate(p.date):"Undated",p.vendor,p.cost!=null?money(p.cost):null].filter(Boolean).map(esc).join(" · ")}</div></div><div class="pm-actions">${catalogMenu(`<button data-edit-part="${esc(p._syncKey)}">Edit entry</button><button class="danger" data-delete-part="${esc(p._syncKey)}">Delete entry…</button>`)}</div>${p.description?`<div class="pm-part-desc">${esc(p.description)}</div>`:""}</article>`).join("");
+  const maintenanceRows=maintenance.map(m=>`<div class="pm-ledger-row"><div class="pm-ledger-date">${m.date?esc(fmtDate(m.date)):"Undated"}</div><div class="pm-ledger-type">${esc(m.category||"Maintenance")}</div><div class="pm-ledger-rounds">${m.round_count!=null?`${esc(m.round_count)} rds`:"—"}</div><div class="pm-ledger-notes">${esc(m.notes||"—")}</div><div class="pm-ledger-actions">${catalogMenu(`<button data-edit-maintenance="${esc(m._syncKey)}">Edit entry</button><button class="danger" data-delete-maintenance="${esc(m._syncKey)}">Delete entry…</button>`)}</div></div>`).join("");
+  el.innerHTML=`<article class="pr-paper pm-paper"><header class="pm-head">${archiveMasthead("Parts & Maintenance",`Private Collection · ${gunDisplay(g)}`,"https://raw.githubusercontent.com/chasedouthit-bot/Sixgun-Retriever/main/assets/parts-maintenance-masthead-v2.jpg","Engraved cabin workbench overlooking the Grand Tetons")}<div class="pm-subtitle">Selected service records for this sixgun · ${summary.roundsSinceLast} recorded rounds since last service</div></header><section class="pm-section"><h2 class="pm-section-title">Parts & Modifications</h2>${partRows||`<div class="pm-empty">No parts or modifications have been recorded.</div>`}</section><section class="pm-section"><h2 class="pm-section-title">Maintenance Log</h2>${maintenanceRows?`<div class="pm-ledger"><div class="pm-ledger-head"><div>Date</div><div>Service</div><div>Rounds</div><div>Notes</div></div>${maintenanceRows}</div>`:`<div class="pm-empty">No maintenance has been logged.</div>`}</section></article>`;
   el.querySelectorAll("[data-edit-part]").forEach(b=>b.onclick=()=>openPartEditor(b.dataset.editPart));el.querySelectorAll("[data-delete-part]").forEach(b=>b.onclick=()=>deletePart(b.dataset.deletePart));el.querySelectorAll("[data-edit-maintenance]").forEach(b=>b.onclick=()=>openMaintenanceEditor(b.dataset.editMaintenance));el.querySelectorAll("[data-delete-maintenance]").forEach(b=>b.onclick=()=>deleteMaintenance(b.dataset.deleteMaintenance));
 }
 function todayValue(){const now=new Date();return new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);}
 function openPartEditor(key=null){const g=biographyGun();if(!g)return;const item=key?gunParts(g).find(x=>x._syncKey===key):null;editorOpen(item?"Edit Part or Modification":"Add Part or Modification",`<div class="form-grid"><div class="field full"><label>Title *</label><input name="title" value="${esc(item?.title||"")}" required placeholder="Grip change, action job, sight swap…"></div><div class="field"><label>Date</label><input type="date" name="date" value="${esc(item?.date||"")}"></div><div class="field"><label>Vendor</label><input name="vendor" value="${esc(item?.vendor||"")}"></div><div class="field"><label>Cost</label><input type="number" min="0" step="0.01" name="cost" value="${esc(item?.cost??"")}"></div><div class="field full"><label>Description</label><textarea name="description">${esc(item?.description||"")}</textarea></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">${item?"Save Changes":"Add Entry"}</button></div>`,async fd=>{const v=Object.fromEntries(fd),record=item||{_syncKey:`parts-modification::${crypto.randomUUID()}`,gun_key:g._legacyKey};Object.assign(record,{title:v.title.trim(),description:v.description.trim(),date:v.date||null,vendor:v.vendor.trim(),cost:v.cost===""?null:Number(v.cost)});if(!item)DB.catalog.parts_modifications.push(record);await save();editorClose();renderPartsMaintenance();renderBiography();toast(item?"Part record updated":"Part record added");});}
-function openMaintenanceEditor(key=null){const g=biographyGun();if(!g)return;const item=key?gunMaintenance(g).find(x=>x._syncKey===key):null;const categories=["Cleaning","Lubrication","Inspection","Function Check","Spring Replacement","Repair","Other"];editorOpen(item?"Edit Maintenance Entry":"Log Maintenance",`<div class="form-grid"><div class="field"><label>Date *</label><input type="date" name="date" value="${esc(item?.date||todayValue())}" required></div><div class="field"><label>Service type *</label><select name="category" required>${categories.map(x=>`<option ${x===(item?.category||"Cleaning")?"selected":""}>${x}</option>`).join("")}</select></div><div class="field"><label>Rounds since last service</label><input type="number" min="0" step="1" name="round_count" value="${esc(item?.round_count??"")}"></div><div class="field full"><label>Notes</label><textarea name="notes">${esc(item?.notes||"")}</textarea></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">${item?"Save Changes":"Log Entry"}</button></div>`,async fd=>{const v=Object.fromEntries(fd),record=item||{_syncKey:`maintenance-entry::${crypto.randomUUID()}`,gun_key:g._legacyKey};Object.assign(record,{date:v.date,category:v.category,notes:v.notes.trim(),round_count:v.round_count===""?null:Number(v.round_count)});if(!item)DB.catalog.maintenance_entries.push(record);await save();editorClose();renderPartsMaintenance();renderBiography();toast(item?"Maintenance entry updated":"Maintenance logged");});}
-function deletePart(key){taConfirm("Delete this parts or modification entry?",async()=>{DB.catalog.parts_modifications=DB.catalog.parts_modifications.filter(x=>x._syncKey!==key);await save();renderPartsMaintenance();renderBiography();toast("Part record deleted");});}
-function deleteMaintenance(key){taConfirm("Delete this maintenance entry?",async()=>{DB.catalog.maintenance_entries=DB.catalog.maintenance_entries.filter(x=>x._syncKey!==key);await save();renderPartsMaintenance();renderBiography();toast("Maintenance entry deleted");});}
+function openMaintenanceEditor(key=null){const g=biographyGun();if(!g)return;const item=key?gunMaintenance(g).find(x=>x._syncKey===key):null,date=item?.date||todayValue(),rounds=item?.round_count??calculatedMaintenanceRounds(g,date,item?._syncKey),categories=["Cleaning","Lubrication","Inspection","Function Check","Spring Replacement","Repair","Other"];editorOpen(item?"Edit Maintenance Entry":"Log Maintenance",`<div class="form-grid"><div class="field"><label>Date *</label><input type="date" name="date" value="${esc(date)}" required></div><div class="field"><label>Service type *</label><select name="category" required>${categories.map(x=>`<option ${x===(item?.category||"Cleaning")?"selected":""}>${x}</option>`).join("")}</select></div><div class="field"><label>Rounds since last service</label><input type="number" min="0" step="1" name="round_count" value="${esc(rounds)}"><small>Calculated from recorded session shot counts. You can correct it if needed.</small></div><div class="field full"><label>Notes</label><textarea name="notes">${esc(item?.notes||"")}</textarea></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">${item?"Save Changes":"Log Entry"}</button></div>`,async fd=>{const v=Object.fromEntries(fd),record=item||{_syncKey:`maintenance-entry::${crypto.randomUUID()}`,gun_key:g._legacyKey};Object.assign(record,{date:v.date,category:v.category,notes:v.notes.trim(),round_count:v.round_count===""?calculatedMaintenanceRounds(g,v.date,item?._syncKey):Number(v.round_count)});if(!item)DB.catalog.maintenance_entries.push(record);await save();editorClose();renderPartsMaintenance();renderBiography();toast(item?"Maintenance entry updated":"Maintenance logged");});}
+function deletePart(key){taConfirm("Permanently delete this parts or modification entry? This cannot be undone.",async()=>{DB.catalog.parts_modifications=DB.catalog.parts_modifications.filter(x=>x._syncKey!==key);await save();renderPartsMaintenance();renderBiography();toast("Part record deleted");});}
+function deleteMaintenance(key){taConfirm("Permanently delete this maintenance entry? This cannot be undone.",async()=>{DB.catalog.maintenance_entries=DB.catalog.maintenance_entries.filter(x=>x._syncKey!==key);await save();renderPartsMaintenance();renderBiography();toast("Maintenance entry deleted");});}
 document.getElementById("partsMaintenanceBackBtn").onclick=()=>goto("biography");document.getElementById("addPartBtn").onclick=()=>openPartEditor();document.getElementById("addMaintenanceBtn").onclick=()=>openMaintenanceEditor();
 
 function sessionRecordDate(session){return session.date||String(session.session_datetime||"").slice(0,10)||null;}
@@ -1853,7 +1862,7 @@ document.getElementById("addGunBtn").onclick=openGunForm;document.getElementById
 
 /* ---------- nav ---------- */
 const createNavBtn=document.getElementById("createNavBtn"),createSheet=document.getElementById("createSheet"),createScrim=document.getElementById("createScrim");
-function activeScreenName(){return document.querySelector(".screen.active")?.id?.replace(/^s-/,"")||"loads";}
+function activeScreenName(){return document.querySelector?.(".screen.active")?.id?.replace(/^s-/,"")||"loads";}
 function hideSheet(sheet,scrim){sheet.classList.remove("open");scrim.classList.remove("open");sheet.inert=true;sheet.setAttribute("aria-hidden","true");setTimeout(()=>{if(!sheet.classList.contains("open")){sheet.hidden=true;scrim.hidden=true;}},300);}
 function showSheet(sheet,scrim){sheet.hidden=false;scrim.hidden=false;sheet.inert=false;sheet.setAttribute("aria-hidden","false");requestAnimationFrame(()=>{sheet.classList.add("open");scrim.classList.add("open");});}
 function closeCreateMenu(){hideSheet(createSheet,createScrim);createNavBtn.classList.remove("open");createNavBtn.setAttribute("aria-expanded","false");}
@@ -1869,8 +1878,8 @@ function goto(s){
   document.querySelectorAll("nav button[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
   // caliber switcher is meaningless in app-wide Library/Catalog; keep home reachable
   document.getElementById("cartSwitch").style.visibility=(s==="lib"||s==="catalog"||s==="biography"||s==="letter"||s==="photo-record"||s==="parts-maintenance"||s==="tier-settings"||s==="import")?"hidden":"visible";
-  if(s==="lib")renderLibrary();
-  if(s==="catalog")renderCatalog();
+  renderActiveScreen(s);
+  unmountInactiveScreens(s);
   window.scrollTo(0,0);
 }
 document.querySelectorAll("nav button[data-s]").forEach(b=>b.onclick=()=>goto(b.dataset.s));
@@ -1951,7 +1960,22 @@ document.getElementById("cartScrim").onclick=closeSheet;
 function renderAll(){
   ensureCatalog();
   document.getElementById("hdr-sub").textContent=DB.activeCartridge;
-  renderGunChips();renderChips();renderStatusChips();renderPowderChips();renderLoads();renderBench();renderCatalog();
+  renderActiveScreen(activeScreenName());
+}
+function renderActiveScreen(screen=activeScreenName()){
+  if(screen==="loads"){renderGunChips();renderChips();renderStatusChips();renderPowderChips();renderLoads();}
+  else if(screen==="bench")renderBench();
+  else if(screen==="catalog")renderCatalog();
+  else if(screen==="lib")renderLibrary();
+  else if(screen==="biography"&&activeBiographyKey)renderBiography();
+  else if(screen==="letter"&&activeBiographyKey)renderLetter();
+  else if(screen==="photo-record"&&activeBiographyKey)renderPhotoRecord();
+  else if(screen==="parts-maintenance"&&activeBiographyKey)renderPartsMaintenance();
+  else if(screen==="tier-settings")renderTierSettings();
+}
+function unmountInactiveScreens(active){
+  const containers={loads:["loadList"],bench:["journalList"],catalog:["catalogGuns","catalogPowders","catalogBullets"],biography:["bioContent"],letter:["letterPreview"],"photo-record":["photoRecordContent"],"parts-maintenance":["partsMaintenanceContent"]};
+  for(const [screen,ids] of Object.entries(containers))if(screen!==active)for(const id of ids){const el=document.getElementById(id);if(el)el.innerHTML="";}
 }
 
 /* ================= LIBRARY ================= */
@@ -4117,7 +4141,12 @@ const LIBRARY_TAG_ALIASES=new Map(Object.entries({
   "timing":"revolver timing"
 }));
 function libraryPlainText(v){return String(v??"").replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();}
-function libraryCanonicalTag(value){const tag=String(value??"").trim();return LIBRARY_TAG_ALIASES.get(tag.toLowerCase())||tag;}
+function libraryCanonicalTag(value){
+  const tag=String(value??"").replace(/\s+/g," ").trim();if(!tag)return"";
+  const pressure=tag.match(/^(\d{4,6})\s*(psi|cup)$/i);if(pressure)return`${Number(pressure[1]).toLocaleString("en-US")} ${pressure[2].toLowerCase()}`;
+  const direct=LIBRARY_TAG_ALIASES.get(tag.toLowerCase());if(direct)return direct;
+  return tag.replace(/^h[-\s]?110$/i,"H110").replace(/^\.357\s+(?:mag(?:num)?|s&w magnum)$/i,".357 Magnum").replace(/^\.38\s+(?:spl|special|s&w special)$/i,".38 Special");
+}
 function libraryUniqueTags(values){const seen=new Set();return values.flat().filter(Boolean).map(libraryCanonicalTag).filter(x=>{const k=x.toLowerCase();if(!k||seen.has(k))return false;seen.add(k);return true;});}
 function libraryArticleTags(a){return libraryUniqueTags([a.tags||[],a.cartridges||[],a.author]);}
 function libraryNoteTags(e){return libraryUniqueTags([e.tags||[],e.cartridge,e.who]);}
@@ -5210,7 +5239,7 @@ async function hydrateCloud(){
   if(!partRows.error)DB.catalog.parts_modifications=(partRows.data||[]).map(p=>({_syncKey:p.legacy_key,gun_key:p.guns.legacy_key,title:p.title,description:p.description||"",date:p.date,cost:p.cost,vendor:p.vendor||""}));
   if(!maintenanceRows.error)DB.catalog.maintenance_entries=(maintenanceRows.data||[]).map(m=>({_syncKey:m.legacy_key,gun_key:m.guns.legacy_key,date:m.date,category:m.category,notes:m.notes||"",round_count:m.round_count}));
   if(!targetPhotoRows.error){const paths=new Map((targetPhotoRows.data||[]).filter(row=>row.photo_path).map(row=>[row.legacy_key,row.photo_path]));for(const [cart,c] of Object.entries(DB.cartridges||{}))for(const load of c.loads||[])(load.targets||[]).forEach((target,index)=>{const path=paths.get(targetKey(cart,load,index,target));if(path)target.photoPath=path;});}
-  await signTargetPhotos();await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});renderAll();cloudStatus("Synced","ok");if(pendingLoadMerges||pendingAccuracyRepairs){pendingLoadMerges=0;pendingAccuracyRepairs=0;await saveCloudState();}
+  await signTargetPhotos();await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});renderAll();cloudStatus("Synced","ok");if(pendingLoadMerges||pendingAccuracyRepairs||pendingStateRepairs){pendingLoadMerges=0;pendingAccuracyRepairs=0;pendingStateRepairs=0;await saveCloudState();}
 }
 async function onSignedIn(session){cloudUser=session.user;document.getElementById("cloudAuth").classList.add("hidden");cloudStatus("Connecting…","warn");try{await hydrateCloud();}catch(e){console.error(e);cloudStatus("Setup needed · run Supabase SQL","error");toast("Supabase setup is not finished yet");}}
 async function cloudBoot(){

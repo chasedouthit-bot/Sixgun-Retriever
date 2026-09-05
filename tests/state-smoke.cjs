@@ -285,7 +285,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,ensureTierSettings,tierKeys,tierLabel,tierColor,tierSortRank,tierValue,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,reconcileLoadAccuracy,moaFromGroup,targetAccuracyMoa,dateForDisplay,fmtDate2,catalogUsage,removeCatalogEntry,cloudSafeState,sameCloudQueueJob,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={ensureCatalog,ensureTierSettings,tierKeys,tierLabel,tierColor,tierSortRank,tierValue,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,reconcileLoadAccuracy,reconcileLoadState,loadHasFiredData,loadDisplayNote,moaFromGroup,targetAccuracyMoa,dateForDisplay,fmtDate2,catalogUsage,removeCatalogEntry,cloudSafeState,sameCloudQueueJob,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,gunRoundsBetween,calculatedMaintenanceRounds,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,libraryCanonicalTag,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -296,6 +296,12 @@ api.reconcileLoadAccuracy(staleAccuracy);
 assert.equal(staleAccuracy.targets[0].moa,19.003,"target MOA must be repaired from its measured group and distance");
 assert.equal(staleAccuracy.moa,19.003,"the load summary must mirror the authoritative analyzed target");
 assert.equal(api.fmtDate2("2026-09-03"),"Sep 3, 2026","date-only records must render as calendar dates without a UTC shift");
+const firedState={keep:"pending",avg:null,note:"Loaded, not fired. Controlled companion.",sessions:[{date:"2026-09-03",shots:12,avg:1068.4}],targets:[]};
+assert.equal(api.reconcileLoadState(firedState),1,"fired loads must repair contradictory not-fired notes");
+assert.equal(firedState.note,"Controlled companion.","state repair must preserve the meaningful remainder of a note");
+const draftState={keep:"pending",note:"PLACEHOLDER — charge unverified, not worked up.",sessions:[],targets:[]};
+api.reconcileLoadState(draftState);assert.equal(draftState.keep,"draft","unverified placeholder recipes must use the draft state");
+assert.equal(api.libraryCanonicalTag("23000 PSI"),"23,000 psi","pressure tags must normalize punctuation and unit casing");
 assert(api.sameCloudQueueJob({token:"current",updatedAt:1},{token:"current",updatedAt:1}),"a sync may clear the exact queue job it processed");
 assert(!api.sameCloudQueueJob({token:"newer",updatedAt:2},{token:"older",updatedAt:1}),"an older sync must preserve a newer queued save");
 assert(api.sameCloudQueueJob({updatedAt:1},{updatedAt:1}),"legacy queue jobs without tokens must remain compatible");
@@ -493,7 +499,7 @@ catalog.maintenance_entries.push({_syncKey:"maintenance-entry::old",gun_key:gun.
 catalog.maintenance_entries.push({_syncKey:"maintenance-entry::new",gun_key:gun._legacyKey,date:"2026-08-26",category:"Function Check",notes:"Passed.",round_count:null});
 assert.equal(api.gunParts(gun).length, 1, "parts records should belong to the firearm");
 assert.equal(api.gunMaintenance(gun)[0]._syncKey, "maintenance-entry::new", "maintenance ledger should be reverse chronological");
-assert.deepEqual(JSON.parse(JSON.stringify(api.maintenanceSummary(gun))), {count:2,last:"2026-08-26"}, "maintenance summary should expose last service and count");
+assert.deepEqual(JSON.parse(JSON.stringify(api.maintenanceSummary(gun))), {count:2,last:"2026-08-26",roundsSinceLast:0}, "maintenance summary should expose last service, count, and recorded rounds since service");
 assert.equal(api.letterData(gun).maintenance.length, 2, "letter data should pull live maintenance records");
 const servicePdf = api.pdfPartsMaintenancePages(gun, 2);
 assert(servicePdf.includes("Parts &amp; Modifications") && servicePdf.includes("Maintenance Log"), "PDF should preserve both service subsections");

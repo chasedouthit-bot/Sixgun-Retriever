@@ -15,7 +15,7 @@ function normalizeStatusUI(){
     if(!tags)return;
     let badge=tags.querySelector('.keeper');
     const raw=String(load.keep||'').toLowerCase();
-    const status=raw==='yes'?['yes','Keeper']:raw==='work'?['work','Watch']:raw==='reshoot'?['reshoot','Reshoot']:(raw==='loaded'||raw==='pending')?['loaded','Loaded']:null;
+    const status=raw==='yes'?['yes','Keeper']:raw==='work'?['work','Watch']:raw==='reshoot'?['reshoot','Reshoot']:raw==='draft'?['draft','Draft / Unverified']:(raw==='loaded'||raw==='pending')?['loaded','Loaded']:null;
     if(!status){if(badge)badge.remove();return;}
     if(!badge){badge=document.createElement('span');tags.insertBefore(badge,tags.firstChild);}
     badge.className=`keeper ${status[0]}`;
@@ -40,6 +40,7 @@ function addStyles(){
     .card[data-load]>.sr-pick{top:18px;right:14px}
     .card[data-load] .card-tags{max-width:42%;justify-content:flex-end;flex-wrap:wrap;gap:5px}
     .keeper.loaded{color:var(--brass);border-color:var(--brass-dim)}
+    .keeper.draft{color:var(--ink-faint);border-color:var(--line);background:repeating-linear-gradient(135deg,transparent,transparent 5px,rgba(255,255,255,.035) 5px,rgba(255,255,255,.035) 10px)}
     @media(max-width:520px){
       .card[data-load]>.card-head{padding-right:54px}
       .card[data-load]>.sr-pick{top:16px;right:12px}

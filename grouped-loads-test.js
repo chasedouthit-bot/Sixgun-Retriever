@@ -9,6 +9,7 @@
     if(raw==='yes')return['yes','Keeper'];
     if(raw==='reshoot')return['reshoot','Reshoot'];
     if(raw==='work')return['work','Watch'];
+    if(raw==='draft')return['draft','Draft / Unverified'];
     if(raw==='loaded'||raw==='pending')return['loaded','Loaded'];
     return['none',''];
   }
@@ -16,7 +17,7 @@
   function statusControl(load,statusClass,statusLabel){
     const raw=load.keep==null?'pending':String(load.keep).toLowerCase();
     const current=raw==='loaded'?'pending':raw;
-    const options=[['','— None —'],['pending','Loaded'],['work','Watch'],['yes','Keeper'],['reshoot','Reshoot']];
+    const options=[['','— None —'],['draft','Draft / Unverified'],['pending','Loaded'],['work','Watch'],['yes','Keeper'],['reshoot','Reshoot']];
     return `<label class="keeper gl-status ${statusClass}" title="Change status"><span>${statusLabel||'—'}</span><select data-group-status="${esc(load.id)}" aria-label="Change status for ${Number(load.charge).toFixed(1)} grain load">${options.map(([value,label])=>`<option value="${value}" ${current===value?'selected':''}>${label}</option>`).join('')}</select></label>`;
   }
 
@@ -103,7 +104,7 @@
         <button class="gl-target" type="button" data-group-target="${esc(load.id)}">＋ Target</button>
       </div>
       <div class="gl-card-footer">
-        ${load.note?`<div class="gl-note">${esc(load.note)}</div>`:'<span></span>'}
+        ${loadDisplayNote(load)?`<div class="gl-note">${esc(loadDisplayNote(load))}</div>`:'<span></span>'}
         <button class="gl-expand-toggle" type="button" data-group-load="${esc(load.id)}" aria-expanded="${open}" aria-label="${open?'Collapse':'Expand'} details for ${Number(load.charge).toFixed(1)} grain load">
           <span class="gl-chevron ${open?'up':''}" aria-hidden="true">⌄</span>
         </button>

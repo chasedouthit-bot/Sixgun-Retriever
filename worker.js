@@ -1,4 +1,4 @@
-const RELEASE_VERSION = '2.35.9';
+const RELEASE_VERSION = '2.36.0';
 const APP_SCRIPTS = [
   'performance-intelligence.js',
   'status-hotfix.js',
