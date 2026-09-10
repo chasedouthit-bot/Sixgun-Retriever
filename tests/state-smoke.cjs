@@ -142,7 +142,7 @@ assert(html.includes('class="session-pager"'), "load detail must expose a swipea
 assert(html.includes('function loadSessionPages(sessions,targets)'), "session history must group chronograph strings and targets together");
 assert(html.includes('sb.from("target_analyses").select("legacy_key,photo_path")'), "cloud hydration must recover permanent target photo paths");
 assert(html.includes('if(local?.value)DB=local.value;await signTargetPhotos();renderAll()'), "pending sync hydration must refresh target photo URLs before rendering");
-assert(html.includes('if(local){DB=local;await signTargetPhotos();renderAll();}'), "completed sync must refresh target photo URLs before rendering");
+assert(html.includes('reconcileSyncedImports(job.state);await signTargetPhotos();renderAll();'), "completed sync must refresh target photo URLs before rendering without replacing newer working state");
 assert(html.includes('photoPath:existingTarget?.photoPath||null'), "recalibrating a target must retain its permanent photo path");
 assert(html.includes('function taReattachTargetPhoto(loadId,targetIndex)'), "targets with legacy missing photos must offer recovery");
 assert(html.includes('>Reattach Photo</button>'), "a missing target photo must expose the recovery action in session history");
@@ -285,7 +285,7 @@ vm.createContext(context);
 
 const instrumented = scripts[0].replace(
   /cloudBoot\(\);\s*$/,
-  "globalThis.__test={ensureCatalog,ensureTierSettings,tierKeys,tierLabel,tierColor,tierSortRank,tierValue,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,reconcileLoadAccuracy,reconcileLoadState,loadHasFiredData,loadDisplayNote,moaFromGroup,targetAccuracyMoa,dateForDisplay,fmtDate2,catalogUsage,removeCatalogEntry,cloudSafeState,sameCloudQueueJob,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,gunRoundsBetween,calculatedMaintenanceRounds,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,libraryCanonicalTag,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
+  "globalThis.__test={uploadPendingTargets,attachImportSession,updatePowderRecord,captureImportDraft,navigationKey,serializeCloudWrite,flushCloudQueue,acknowledgeCloudSnapshot,setCloudUser:user=>cloudUser=user,ensureCatalog,ensureTierSettings,tierKeys,tierLabel,tierColor,tierSortRank,tierValue,addGunRecord,addPowderRecord,addBulletRecord,exactBullet,bulletNorm,mergeBullets,reconcileDuplicateLoads,reconcileLoadAccuracy,reconcileLoadState,loadHasFiredData,loadDisplayNote,moaFromGroup,targetAccuracyMoa,dateForDisplay,fmtDate2,catalogUsage,removeCatalogEntry,cloudSafeState,sameCloudQueueJob,biographyStats,loadPerformanceScore,letterData,letterPrompts,ensureLetterSettings,gunLetter,archiveLetterMarkup,gunRangeEvents,gunLifeRecord,photoRecord,gunMoments,momentPhotos,normalizePhotoOrder,albumPageSize,photoRatio,albumPageGroups,albumLayoutClass,renderPhotoMoment,renderRecordAlbum,pdfMomentPages,pdfRecordAlbumPages,gunParts,gunMaintenance,gunRoundsBetween,calculatedMaintenanceRounds,maintenanceSummary,pdfPartsMaintenancePages,parseShotViewCSV,loadSessionPages,tgTrajectoryFor,tgSuggestedBC,tgSettingsFor,tgTargetOffset,tgGridLayout,tgPaperMarkup,taFitLine,taProjectionPeriod,taProjectionPhase,taNeutralDamageCandidates,libraryCanonicalTag,getDB:()=>DB,getLibTables:()=>LIB_TABLES};"
 );
 vm.runInContext(instrumented, context);
 
@@ -552,3 +552,5 @@ assert(!("display_data" in photoSafe), "display image data must not enter app_st
 assert(!("print_data" in photoSafe), "print image data must not enter app_state");
 
 console.log(JSON.stringify({ guns: gunCount, powders: powderCount, loads: Object.values(db.cartridges).reduce((n, c) => n + c.loads.length, 0), result: "ok" }));
+
+module.exports={api,context,db};

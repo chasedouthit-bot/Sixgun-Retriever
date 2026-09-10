@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 
-const html = fs.readFileSync('index.html', 'utf8');
+const html = fs.readFileSync('index.html', 'utf8').replace(/\r\n/g, '\n');
 const start = html.indexOf('const LIB_ARTICLES=[');
 const end = html.indexOf('\n\n\nlet libView=', start);
 assert.ok(start >= 0 && end > start, 'Library article data is present');

@@ -87,7 +87,7 @@
   }
   Object.keys(rows).forEach(key=>{
     document.getElementById(`${key}FilterBtn`).addEventListener("click",()=>{openPanel=openPanel===key?null:key;refresh();});
-    rows[key].addEventListener("click",event=>{if(event.target.closest(".chip:not(.disabled)"))setTimeout(()=>{openPanel=null;refresh();},0);});
+    rows[key].addEventListener("click",event=>{if(event.target.closest(".chip:not(.disabled)"))setTimeout(()=>{openPanel=null;refresh();document.getElementById(`${key}FilterBtn`).focus({preventScroll:true});},0);});
     new MutationObserver(refresh).observe(rows[key],{childList:true,subtree:true,attributes:true,attributeFilter:["class","data-enabled"]});
   });
   refresh();

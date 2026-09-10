@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sixgun Retriever">
-<link rel="manifest" href="/manifest.webmanifest?v=2.36.0">
-<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.36.0">
-<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.36.0">
-<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.36.0">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.36.0">
+<link rel="manifest" href="/manifest.webmanifest?v=2.36.1">
+<link rel="apple-touch-icon" href="/sixgun-retriever-ios-icon.png?v=2.36.1">
+<link rel="apple-touch-icon" sizes="180x180" href="/sixgun-retriever-ios-icon.png?v=2.36.1">
+<link rel="apple-touch-icon-precomposed" href="/sixgun-retriever-ios-icon.png?v=2.36.1">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png?v=2.36.1">
 <title>The Sixgun Retriever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -493,6 +493,11 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
 .bullet-edit{border:1px solid var(--line);background:var(--bg3);color:var(--ink-dim);border-radius:8px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer}
 .bullet-merge{display:inline-flex;margin:6px 0 0;padding:2px 0;border:0;border-bottom:1px dotted rgba(184,173,156,.35);background:none;color:var(--ink-faint);font:600 9px/1.3 Inter,sans-serif;letter-spacing:.02em;cursor:pointer}
 .bullet-merge:hover,.bullet-merge:focus-visible{color:var(--ink-dim);border-bottom-color:var(--ink-dim)}
+:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
+button.chip,button.lib-cal-chip,button.shape-chip,button.tbl-chip{font-family:inherit}button.chip:disabled{cursor:default}
+#editorFeedback{margin-top:12px;color:var(--ink-dim);font-size:14px;line-height:1.5}
+.catalog-search{display:block;width:100%;padding:10px;margin-bottom:12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font:inherit}
+.catalog-row[hidden],.catalog-panel p[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -532,7 +537,7 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
     </div>
     <div id="landingCards" style="display:none"></div>
     <div class="landing-foot">All data created under the supervision of the Sixgun Retriever.</div>
-    <div class="landing-version">Version 2.36.0</div>
+    <div class="landing-version">Version 2.36.1</div>
   </div>
 </div>
 
@@ -622,17 +627,17 @@ nav .create-nav{position:relative;overflow:visible;padding:0;align-self:stretch;
       </div>
       <div class="catalog-panel on" data-catalog-panel="guns">
         <div class="catalog-toolbar"><span class="catalog-count" id="catalogGunSummary">0 firearms</span><button class="catalog-add" id="addGunBtn">＋ Add</button></div>
-        <div class="catalog-list" id="catalogGuns"></div>
+        <input class="catalog-search" type="search" data-catalog-search="catalogGuns" aria-label="Search guns" placeholder="Search guns…"><div class="catalog-list" id="catalogGuns"></div><p class="catalog-notes" id="catalogGunsEmpty" hidden>No matches. Clear the search to show all guns.</p>
         <div class="catalog-foot">Tap a firearm to open its archival binder.</div>
       </div>
       <div class="catalog-panel" data-catalog-panel="powders">
         <div class="catalog-toolbar"><span class="catalog-count" id="catalogPowderSummary">0 powders</span><button class="catalog-add" id="addPowderBtn">＋ Add</button></div>
-        <div class="catalog-list" id="catalogPowders"></div>
+        <input class="catalog-search" type="search" data-catalog-search="catalogPowders" aria-label="Search powders" placeholder="Search powders…"><div class="catalog-list" id="catalogPowders"></div><p class="catalog-notes" id="catalogPowdersEmpty" hidden>No matches. Clear the search to show all powders.</p>
         <div class="catalog-foot">Your working shelf of propellants.</div>
       </div>
       <div class="catalog-panel" data-catalog-panel="bullets">
         <div class="catalog-toolbar"><span class="catalog-count" id="catalogBulletSummary">0 bullets</span><button class="catalog-add" id="addBulletBtn">＋ Add</button></div>
-        <div class="catalog-list" id="catalogBullets"></div>
+        <input class="catalog-search" type="search" data-catalog-search="catalogBullets" aria-label="Search bullets" placeholder="Search bullets…"><div class="catalog-list" id="catalogBullets"></div><p class="catalog-notes" id="catalogBulletsEmpty" hidden>No matches. Clear the search to show all bullets.</p>
         <div class="catalog-foot">Projectiles referenced by your recorded loads.</div>
       </div>
     </div>
@@ -982,8 +987,8 @@ const SEED = {
 
 /* ---------- persistence ---------- */
 const KEY="reloadingBench_v20";
-const RELEASE_VERSION="2.36.0";
-const CACHE_VERSION="sixgun-retriever-v2.36.0";
+const RELEASE_VERSION="2.36.1";
+const CACHE_VERSION="sixgun-retriever-v2.36.1";
 // Clear Cache Storage entries left by older installed-PWA builds without
 // touching application data (which now lives in Supabase/IndexedDB).
 if("caches" in window){
@@ -1074,15 +1079,53 @@ function attachGunToCartridge(g,cart=g.caliber){const c=DB.cartridges[cart];if(!
 function addGunRecord(values){const model=String(values.model||"").trim();if(!model)throw new Error("Model is required");const g={_legacyKey:`catalog::${crypto.randomUUID()}`,make:String(values.make||"").trim(),model,caliber:String(values.caliber||DB.activeCartridge).trim(),serial:String(values.serial||"").trim(),purchase_date:values.purchase_date||null,source:String(values.source||"").trim(),price:values.price===""||values.price==null?null:Number(values.price),rotation_status:String(values.rotation_status||"in rotation").trim(),rotation_note:String(values.rotation_note||"").trim(),barrel_length:String(values.barrel_length||values.barrel||"").trim(),finish:String(values.finish||"").trim(),sight_height_in:values.sight_height_in===""||values.sight_height_in==null?null:Number(values.sight_height_in)};g.name=gunDisplay(g);if(exactGun(g.name,g.caliber))throw new Error("That gun is already in the Catalog");ensureCatalog().guns.push(g);attachGunToCartridge(g);return g;}
 function addPowderRecord(values){const name=String(values.name||"").trim();if(!name)throw new Error("Powder name is required");if(exactPowder(name))throw new Error("That powder is already in the Catalog");const p={_legacyKey:`catalog::${crypto.randomUUID()}`,name,notes:String(values.notes||"").trim()};ensureCatalog().powders.push(p);return p;}
 function addBulletRecord(values){const product=String(values.product||values.display||"").trim();if(!product)throw new Error("Bullet product/name is required");const b={_legacyKey:`bullet::${crypto.randomUUID()}`,manufacturer:String(values.manufacturer||"").trim(),product,weight_gr:values.weight_gr===""||values.weight_gr==null?null:Number(values.weight_gr),diameter:String(values.diameter||"").trim(),caliber:String(values.caliber||"").trim(),style:String(values.style||"").trim(),bc_g1:values.bc_g1===""||values.bc_g1==null?null:Number(values.bc_g1),bc_source:String(values.bc_source||"").trim(),notes:String(values.notes||"").trim()};b.display=bulletDisplay(b);if(exactBullet(b.display))throw new Error("That bullet is already in the Catalog");ensureCatalog().bullets.push(b);return b;}
-function editorOpen(title,html,onSubmit){const scrim=document.getElementById("editorScrim"),form=document.getElementById("editorForm");document.getElementById("editorTitle").textContent=title;form.innerHTML=html;scrim.style.display="flex";form.querySelectorAll('.field').forEach((field,index)=>{const label=field.querySelector(':scope>label'),control=field.querySelector(':scope>input,:scope>select,:scope>textarea');if(label&&control&&!label.contains(control)){control.id=control.id||`editorField${index}`;label.htmlFor=control.id;}});form.querySelectorAll('.editor-actions button:not([type])').forEach(button=>button.type="submit");form.querySelectorAll('input,select,textarea').forEach(field=>field.oninvalid=e=>{e.preventDefault();const label=field.closest('.field')?.querySelector('label')?.textContent?.replace('*','').trim()||'Required field';field.scrollIntoView({behavior:'smooth',block:'center'});field.focus({preventScroll:true});toast(`${label} needs attention`);});form.onsubmit=async e=>{e.preventDefault();const submitter=e.submitter||form.querySelector('.editor-actions .primary'),original=submitter?.textContent;if(submitter){submitter.disabled=true;submitter.textContent="Saving…";}try{await onSubmit(new FormData(form),form);}catch(err){toast(err.message||"Could not save");if(submitter?.isConnected){submitter.disabled=false;submitter.textContent=original;}}};}
-function editorClose(){document.getElementById("editorScrim").style.display="none";document.getElementById("editorForm").innerHTML="";}
-document.getElementById("editorClose").onclick=editorClose;document.getElementById("editorScrim").onclick=e=>{if(e.target.id==="editorScrim")editorClose();};
+let editorSession=null;
+function editorValues(form){return [...form.querySelectorAll("input,select,textarea")].filter(x=>x.name||x.id).map(x=>({key:x.name||x.id,value:x.type==="file"?null:x.value,checked:x.checked}));}
+function rememberEditorDraft(){if(!editorSession)return;const form=document.getElementById("editorForm");editorSession.dirty=JSON.stringify(editorValues(form))!==editorSession.initial||[...form.querySelectorAll('input[type="file"]')].some(x=>x.files.length);try{sessionStorage.setItem(editorSession.key,JSON.stringify(editorValues(form)));}catch(e){/* The open form still retains its draft when storage is unavailable. */}}
+function editorOpen(title,html,onSubmit){
+  const scrim=document.getElementById("editorScrim"),form=document.getElementById("editorForm");
+  let hash=0;for(const char of html)hash=(Math.imul(hash,31)+char.charCodeAt(0))|0;
+  editorSession={key:`sixgun-editor:${DB.activeCartridge}:${activeBiographyKey||""}:${title}:${hash}`,returnFocus:document.activeElement,dirty:false,busy:false};
+  document.getElementById("editorTitle").textContent=title;form.innerHTML=html;
+  form.querySelectorAll(".field").forEach((field,i)=>{const label=field.querySelector("label"),input=field.querySelector("input,select,textarea");if(label&&input){input.id=input.id||`editor-field-${i}`;label.htmlFor=input.id;}});
+  editorSession.initial=JSON.stringify(editorValues(form));
+  try{const draft=JSON.parse(sessionStorage.getItem(editorSession.key)||"null");if(draft){for(const x of form.querySelectorAll("input,select,textarea")){const v=draft.find(v=>v.key===(x.name||x.id));if(v&&x.type!=="file"){x.value=v.value;x.checked=v.checked;}}editorSession.dirty=JSON.stringify(editorValues(form))!==editorSession.initial;}}catch(e){}
+  form.insertAdjacentHTML("beforeend",'<div id="editorFeedback" role="status" aria-live="polite"></div>');
+  if(editorSession.dirty)document.getElementById("editorFeedback").textContent="Draft restored. Reselect any attached files before saving.";
+  editorSession.background=[...document.querySelectorAll('main,nav,body>header,#landing,#cartSheet')].map(x=>[x,x.hasAttribute("inert")]);editorSession.background.forEach(([x])=>x.setAttribute("inert",""));editorSession.bodyOverflow=document.body.style.overflow;document.body.style.overflow="hidden";
+  scrim.setAttribute("aria-labelledby","editorTitle");scrim.style.display="flex";
+  form.querySelectorAll('.editor-actions button:not([type])').forEach(button=>button.type="submit");
+  form.querySelectorAll('input,select,textarea').forEach(field=>field.oninvalid=e=>{e.preventDefault();const label=field.closest('.field')?.querySelector('label')?.textContent?.replace('*','').trim()||'Required field';field.scrollIntoView({behavior:'smooth',block:'center'});field.focus({preventScroll:true});document.getElementById("editorFeedback").textContent=label+" needs attention";});
+  form.oninput=rememberEditorDraft;form.onchange=rememberEditorDraft;
+  form.querySelectorAll('[onclick="editorClose()"]').forEach(b=>b.onclick=requestEditorClose);
+  form.onsubmit=async e=>{e.preventDefault();const session=editorSession;if(!session||session.busy)return;rememberEditorDraft();session.busy=true;const buttons=[...form.querySelectorAll("button")].map(b=>[b,b.disabled]);buttons.forEach(([b])=>b.disabled=true);document.getElementById("editorClose").disabled=true;form.setAttribute("aria-busy","true");document.getElementById("editorFeedback").textContent="Saving…";try{await onSubmit(new FormData(form),form);}catch(err){if(editorSession===session)document.getElementById("editorFeedback").textContent=err.message||"Could not save. Your draft is still here.";}finally{session.busy=false;buttons.forEach(([b,disabled])=>b.disabled=disabled);document.getElementById("editorClose").disabled=false;form.removeAttribute("aria-busy");}};
+  requestAnimationFrame(()=>form.querySelector("input,select,textarea,button")?.focus());
+}
+function requestEditorClose(){
+  if(!editorSession||editorSession.busy)return;rememberEditorDraft();
+  if(!editorSession.dirty){editorClose();return;}
+  const feedback=document.getElementById("editorFeedback");feedback.innerHTML='<p>Discard your unsaved changes?</p><div class="editor-actions"><button type="button" id="editorKeep">Keep editing</button><button type="button" id="editorDiscard">Discard changes</button></div>';
+  document.getElementById("editorKeep").onclick=()=>{feedback.textContent="Draft kept.";document.getElementById("editorForm").querySelector("input,select,textarea")?.focus();};document.getElementById("editorDiscard").onclick=editorClose;document.getElementById("editorKeep").focus();
+}
+function editorClose(){
+  const session=editorSession;if(session){try{sessionStorage.removeItem(session.key);}catch(e){}session.background?.forEach(([x,inert])=>{if(!inert)x.removeAttribute("inert");});document.body.style.overflow=session.bodyOverflow;}editorSession=null;
+  document.getElementById("editorScrim").style.display="none";document.getElementById("editorForm").innerHTML="";
+  requestAnimationFrame(()=>{const target=session?.returnFocus;if(target?.isConnected)target.focus();else document.querySelector('nav button.on')?.focus();});
+}
+document.getElementById("editorClose").onclick=requestEditorClose;document.getElementById("editorScrim").onclick=e=>{if(e.target.id==="editorScrim")requestEditorClose();};
+document.getElementById("editorScrim").addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();requestEditorClose();}if(e.key==="Tab"){const items=[...document.getElementById("editorScrim").querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]')].filter(x=>x.getClientRects().length),first=items[0],last=items.at(-1);if(!first){e.preventDefault();return;}if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+window.addEventListener("beforeunload",e=>{if(editorSession?.dirty){rememberEditorDraft();e.preventDefault();e.returnValue="";}});
 function entityLists(){ensureCatalog();return `<datalist id="gunSuggestions">${DB.catalog.guns.map(g=>`<option value="${esc(gunDisplay(g))}">${esc(g.caliber||"")}</option>`).join("")}</datalist><datalist id="powderSuggestions">${DB.catalog.powders.map(p=>`<option value="${esc(p.name)}">${esc(p.notes||"")}</option>`).join("")}</datalist>`;}
 function wireEntityInput(inputId,kind,cart){const input=document.getElementById(inputId),hint=document.getElementById(inputId+"Hint");if(!input||!hint)return;const update=()=>{const value=input.value.trim(),items=kind==="gun"?ensureCatalog().guns:ensureCatalog().powders,exact=kind==="gun"?exactGun(value,cart):exactPowder(value);if(!value||exact){hint.style.display="none";return;}const near=items.filter(x=>norm(kind==="gun"?gunDisplay(x):x.name).includes(norm(value))||norm(value).includes(norm(kind==="gun"?gunDisplay(x):x.name))).slice(0,3);hint.innerHTML=`${near.length?`Similar: ${near.map(x=>`<button type="button" data-pick="${esc(kind==="gun"?gunDisplay(x):x.name)}">${esc(kind==="gun"?gunDisplay(x):x.name)}</button>`).join(" · ")}<br>`:""}<button type="button" data-add="1">＋ Add “${esc(value)}” to ${kind==="gun"?"Guns":"Powders"}</button>`;hint.style.display="block";hint.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{input.value=b.dataset.pick;update();});hint.querySelector("[data-add]").onclick=()=>{try{const item=kind==="gun"?addGunRecord({model:value,caliber:cart}):addPowderRecord({name:value});input.value=kind==="gun"?gunDisplay(item):item.name;hint.style.display="none";save();renderAll();toast("Added to Catalog");}catch(e){toast(e.message);}};};input.addEventListener("input",update);input.addEventListener("change",update);update();}
 function gunFormHtml(g={}){const sourceOptions=["","Bought new","Inherited","Gifted","Traded"].map(v=>`<option value="${esc(v)}" ${norm(g.source)===norm(v)?"selected":""}>${v||"Choose…"}</option>`).join("");return `<div class="form-grid"><div class="field"><label>Make</label><input name="make" value="${esc(g.make||"")}"></div><div class="field"><label>Model *</label><input name="model" value="${esc(g.model||"")}" required></div><div class="field"><label>Caliber</label><input name="caliber" value="${esc(g.caliber||DB.activeCartridge)}" list="caliberSuggestions"><datalist id="caliberSuggestions">${Object.keys(DB.cartridges).map(c=>`<option value="${esc(c)}">`).join("")}</datalist></div><div class="field"><label>Serial</label><input name="serial" value="${esc(g.serial||"")}"></div><div class="field"><label>Barrel length</label><input name="barrel_length" value="${esc(g.barrel_length||g.barrel||"")}" placeholder="4 inches"></div><div class="field"><label>Finish</label><input name="finish" value="${esc(g.finish||"")}" placeholder="Blued, stainless…"></div><div class="field"><label>Sight height over bore (in.)</label><input type="number" min="0.1" max="4" step="0.01" name="sight_height_in" value="${esc(g.sight_height_in??"")}" placeholder="0.90"></div><div class="field"><label>Purchase date</label><input type="date" name="purchase_date" value="${esc(g.purchase_date||"")}"></div><div class="field"><label>Source</label><select name="source">${sourceOptions}</select></div><div class="field"><label>Price</label><input type="number" min="0" step="0.01" name="price" value="${esc(g.price??"")}"></div><div class="field"><label>Rotation status</label><select name="rotation_status"><option value="in rotation" ${g.rotation_status!=="resting"?"selected":""}>In rotation</option><option value="resting" ${g.rotation_status==="resting"?"selected":""}>Resting</option></select></div><div class="field full"><label>Rotation note</label><textarea name="rotation_note">${esc(g.rotation_note||"")}</textarea></div></div>`;}
 function openGunForm(){editorOpen("Add Gun",gunFormHtml()+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Add Gun</button></div>`,async fd=>{addGunRecord(Object.fromEntries(fd));await save();editorClose();renderAll();toast("Gun added");});}
 function openGunEdit(key){ensureCatalog();const g=DB.catalog.guns.find(x=>x._legacyKey===key);if(!g)return;editorOpen("Edit Gun",gunFormHtml(g)+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Save Changes</button></div>`,async fd=>{const v=Object.fromEntries(fd),oldName=gunDisplay(g);Object.assign(g,{make:v.make.trim(),model:v.model.trim(),caliber:v.caliber.trim(),serial:v.serial.trim(),purchase_date:v.purchase_date||null,source:v.source,price:v.price===""?null:Number(v.price),rotation_status:v.rotation_status,rotation_note:v.rotation_note.trim(),barrel_length:v.barrel_length.trim(),finish:v.finish.trim(),sight_height_in:v.sight_height_in===""?null:Number(v.sight_height_in)});g.name=gunDisplay(g);for(const cx of Object.values(DB.cartridges||{})){for(const cg of cx.guns||[])if(cg._legacyKey===key)Object.assign(cg,clone(g));for(const l of cx.loads||[])if(l.gunCatalogKey===key||norm(l.gun)===norm(oldName)){l.gun=g.name;l.gunCatalogKey=key;}for(const j of cx.journal||[])if(j.gunCatalogKey===key||norm(j.gun)===norm(oldName)){j.gun=g.name;j.gunCatalogKey=key;}}await save();editorClose();renderAll();if(activeBiographyKey===key)renderBiography();toast("Gun updated");});}
 function openPowderForm(){editorOpen("Add Powder",`<div class="form-grid"><div class="field full"><label>Name *</label><input name="name" required autocomplete="off"></div><div class="field full"><label>Notes</label><textarea name="notes"></textarea></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Add Powder</button></div>`,async fd=>{addPowderRecord(Object.fromEntries(fd));await save();editorClose();renderAll();toast("Powder added");});}
+function updatePowderRecord(key,values){
+  const p=ensureCatalog().powders.find(p=>p._legacyKey===key);if(!p)throw new Error("Powder not found");const name=String(values.name||"").trim();if(!name)throw new Error("Powder name is required");const duplicate=exactPowder(name);if(duplicate&&duplicate._legacyKey!==key)throw new Error("That powder is already in the Catalog");const oldName=p.name;p.name=name;p.notes=String(values.notes||"").trim();
+  for(const c of Object.values(DB.cartridges||{}))for(const record of [...(c.loads||[]),...(c.journal||[])])if(record.powderCatalogKey===key||(!record.powderCatalogKey&&norm(record.powder)===norm(oldName))){record.powder=name;record.powderCatalogKey=key;}return p;
+}
+function openPowderEdit(key){const p=ensureCatalog().powders.find(p=>p._legacyKey===key);if(!p)return;editorOpen("Edit Powder",`<div class="form-grid"><div class="field full"><label>Name *</label><input name="name" value="${esc(p.name)}" required></div><div class="field full"><label>Notes</label><textarea name="notes">${esc(p.notes)}</textarea></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Save Changes</button></div>`,async fd=>{updatePowderRecord(key,Object.fromEntries(fd));await save();editorClose();renderAll();toast("Powder updated");});}
 function bulletFormHtml(b={}){const source=String(b.bc_source||"");return `<div class="form-grid"><div class="field"><label>Manufacturer</label><input name="manufacturer" value="${esc(b.manufacturer||"")}"></div><div class="field"><label>Product / name *</label><input name="product" value="${esc(b.product||"")}" required></div><div class="field"><label>Weight (gr)</label><input type="number" min="0" step="0.1" name="weight_gr" value="${esc(b.weight_gr??"")}"></div><div class="field"><label>Diameter</label><input name="diameter" value="${esc(b.diameter||"")}" placeholder=".452"></div><div class="field"><label>Caliber</label><input name="caliber" value="${esc(b.caliber||"")}"></div><div class="field"><label>Style / type</label><input name="style" value="${esc(b.style||"")}" placeholder="SWC, RNFP, WFN…"></div><div class="field"><label>Ballistic coefficient (G1)</label><input type="number" min="0.01" max="1" step="0.001" name="bc_g1" value="${esc(b.bc_g1??"")}" placeholder="0.180"></div><div class="field"><label>BC source</label><select name="bc_source"><option value="" ${!source?"selected":""}>Not recorded</option><option value="suggested" ${source==="suggested"?"selected":""}>App suggestion</option><option value="published" ${source==="published"?"selected":""}>Published value</option><option value="manufacturer" ${source==="manufacturer"?"selected":""}>Manufacturer value</option><option value="measured" ${source==="measured"?"selected":""}>User measured</option></select></div><div class="field full"><label>Notes</label><textarea name="notes">${esc(b.notes||"")}</textarea></div></div>`;}
 function openBulletForm(){editorOpen("Add Bullet",bulletFormHtml()+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Add Bullet</button></div>`,async fd=>{addBulletRecord(Object.fromEntries(fd));await save();editorClose();renderAll();toast("Bullet added");});}
 function openBulletEdit(key){const b=ensureCatalog().bullets.find(x=>x._legacyKey===key);if(!b)return;editorOpen("Edit Bullet",bulletFormHtml(b)+`<div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Save Changes</button></div>`,async fd=>{const v=Object.fromEntries(fd);Object.assign(b,{manufacturer:v.manufacturer.trim(),product:v.product.trim(),weight_gr:v.weight_gr===""?null:Number(v.weight_gr),diameter:v.diameter.trim(),caliber:v.caliber.trim(),style:v.style.trim(),bc_g1:v.bc_g1===""?null:Number(v.bc_g1),bc_source:v.bc_source,notes:v.notes.trim(),display:""});b.display=bulletDisplay(b);for(const c of Object.values(DB.cartridges||{}))for(const l of c.loads||[])if(l.bulletCatalogKey===key)l.bullet=b.display;await save();editorClose();renderAll();toast("Bullet updated");});}
@@ -1158,6 +1201,7 @@ document.getElementById("tgClose").onclick=tgClose;document.getElementById("tgSa
 
 /* ---------- Garmin ShotView CSV import ---------- */
 let importRows=[],importReturnScreen="loads";
+try{importRows=JSON.parse(sessionStorage.getItem("sixgun-import-drafts")||"[]");if(!Array.isArray(importRows))importRows=[];importRows.forEach(row=>{if(row.status==="saving")row.status="error";});}catch(e){importRows=[];}
 function csvRows(text){
   const rows=[];let row=[],field="",quoted=false;
   for(let i=0;i<text.length;i++){
@@ -1209,40 +1253,58 @@ function importInlineLoad(row){
   const settings=ensureTierSettings(c),tierOpts=tierKeys(c).map(k=>`<option value="${esc(k)}">${esc(tierLabel(k,c))}</option>`).join(""),tierField=settings.enabled!==false?`<div class="field"><label>${esc(settings.noun||"Tier")}</label><select data-new-load="tier">${tierOpts}</select></div>`:"";
   return `<div class="import-inline"><div class="import-inline-grid"><div class="field"><label>Powder *</label><select data-new-load="powder"><option value="">Choose…</option>${DB.catalog.powders.map(p=>`<option value="${esc(p._legacyKey)}">${esc(p.name)}</option>`).join("")}<option value="__new__">＋ New Powder</option></select></div><div class="field"><label>Charge (gr) *</label><input type="number" min="0" step="0.1" data-new-load="charge"></div><div class="field"><label>Bullet *</label><select data-new-load="bullet"><option value="">Search / choose…</option>${DB.catalog.bullets.map(b=>`<option value="${esc(b._legacyKey)}">${esc(bulletDisplay(b))}</option>`).join("")}<option value="__new__">＋ New Bullet</option></select></div>${tierField}</div><div class="import-inline-actions"><button data-cancel-new-load="1">Cancel</button><button class="primary" data-create-load="1">Create Load</button></div></div>`;
 }
-function renderImport(){
+function renderImport(rowId=null){
   const list=document.getElementById("importList");if(!list)return;
-  list.innerHTML=importRows.map(row=>{const p=row.parsed,c=p.computed,discrepancy=Object.values(p.delta).some(v=>v!=null&&v>.2),state=row.status==="saved"?"Saved":row.status==="saving"?"Saving…":row.status==="error"?"Retry":"Unsaved";return `<article class="import-row ${row.status}" data-import-id="${esc(row.id)}"><div class="import-row-top"><div><div class="import-file-name">${esc(importDateLabel(p.sessionDatetime))}</div><div class="import-date">Source file · ${esc(p.filename)}</div></div><div class="import-state">${state}</div></div><div class="import-stats"><div class="import-stat"><strong>${c.avg}</strong><span>Avg fps</span></div><div class="import-stat"><strong>${c.sd}</strong><span>SD (sample)</span></div><div class="import-stat"><strong>${c.es}</strong><span>ES</span></div><div class="import-stat"><strong>${c.n}</strong><span>Shots</span></div></div><div class="import-check ${discrepancy?"warn":""}">${discrepancy?`Garmin reported ${p.reported.avg??"—"} avg / ${p.reported.sd??"—"} SD / ${p.reported.es??"—"} ES · recomputed values will be saved.`:"Raw shots cross-check against Garmin’s summary."}</div>${row.status==="saved"?`<div class="import-date">Assigned to ${esc(row.savedGun)} · ${esc(row.savedLoad)}</div>`:`<div class="import-assign"><div class="field"><label>Firearm *</label><select data-import-gun>${importGunOptions(row.gunKey)}</select></div><div class="field"><label>Load *</label><select data-import-load ${row.gunKey?"":"disabled"}>${importLoadOptions(row)}</select></div>${row.newGun?importInlineGun(row):""}${row.newLoad?importInlineLoad(row):""}<div class="field import-notes"><label>Session notes</label><textarea data-import-notes>${esc(row.notes)}</textarea></div></div><div class="import-save-line"><div class="import-error-copy">${esc(row.error||"")}</div><button class="import-save" data-save-import ${row.gunKey&&row.loadKey&&row.status!=="saving"?"":"disabled"}>${row.status==="error"?"Retry Save":"Save Session"}</button></div>`}</article>`;}).join("");
-  wireImportRows();
+  const markup=row=>{const p=row.parsed,c=p.computed,discrepancy=Object.values(p.delta).some(v=>v!=null&&v>.2),state=row.status==="saved"?"Synced":row.status==="saving"?"Saving…":row.status==="error"?(row.localSaved?"Saved locally · sync pending":"Save needs retry"):"Unsaved";return `<article class="import-row ${row.status}" data-import-id="${esc(row.id)}"><div class="import-row-top"><div><div class="import-file-name">${esc(importDateLabel(p.sessionDatetime))}</div><div class="import-date">Source file · ${esc(p.filename)}</div></div><div class="import-state">${state}</div></div><div class="import-stats"><div class="import-stat"><strong>${c.avg}</strong><span>Avg fps</span></div><div class="import-stat"><strong>${c.sd}</strong><span>SD (sample)</span></div><div class="import-stat"><strong>${c.es}</strong><span>ES</span></div><div class="import-stat"><strong>${c.n}</strong><span>Shots</span></div></div><div class="import-check ${discrepancy?"warn":""}">${discrepancy?`Garmin reported ${p.reported.avg??"—"} avg / ${p.reported.sd??"—"} SD / ${p.reported.es??"—"} ES · recomputed values will be saved.`:"Raw shots cross-check against Garmin’s summary."}</div>${row.status==="saved"?`<div class="import-date">Assigned to ${esc(row.savedGun)} · ${esc(row.savedLoad)}</div>`:`<div class="import-assign"><div class="field"><label>Firearm *</label><select data-import-gun>${importGunOptions(row.gunKey)}</select></div><div class="field"><label>Load *</label><select data-import-load ${row.gunKey?"":"disabled"}>${importLoadOptions(row)}</select></div>${row.newGun?importInlineGun(row):""}${row.newLoad?importInlineLoad(row):""}<div class="field import-notes"><label>Session notes</label><textarea data-import-notes>${esc(row.notes)}</textarea></div></div><div class="import-save-line"><div class="import-error-copy">${esc(row.error||"")}</div><button class="import-save" data-save-import ${row.gunKey&&row.loadKey&&row.status!=="saving"?"":"disabled"}>${row.status==="error"?"Retry Save":"Save Session"}</button></div>`}</article>`;};
+  for(const row of importRows){if(rowId&&row.id!==rowId)continue;const article=[...list.querySelectorAll("[data-import-id]")].find(el=>el.dataset.importId===row.id),focusId=article?.contains(document.activeElement)?document.activeElement.id:null;const shell=document.createElement("div");shell.innerHTML=markup(row);const next=shell.firstElementChild;if(article)article.replaceWith(next);else list.appendChild(next);restoreImportDraft(row,next);wireImportRows(next);if(focusId)requestAnimationFrame(()=>[...next.querySelectorAll("input,select,textarea")].find(x=>x.id===focusId&&!x.disabled)?.focus({preventScroll:true}));}
+  persistImportDrafts();
 }
+function captureImportDraft(row,root){if(!row||!root)return;row.draft=row.draft||{};root.querySelectorAll('[data-new-gun],[data-new-load]').forEach(x=>{row.draft[(x.dataset.newGun?'gun:':'load:')+(x.dataset.newGun||x.dataset.newLoad)]=x.value;});}
+function restoreImportDraft(row,root){root.querySelectorAll('[data-new-gun],[data-new-load]').forEach(x=>{const key=(x.dataset.newGun?'gun:':'load:')+(x.dataset.newGun||x.dataset.newLoad);if(row.draft&&key in row.draft)x.value=row.draft[key];});root.querySelectorAll('input,select,textarea').forEach((x,i)=>{x.id='import-'+row.id+'-'+i;const label=x.closest('.field')?.querySelector('label');if(label)label.htmlFor=x.id;if(row.status==='saving')x.disabled=true;});}
+function persistImportDrafts(){try{sessionStorage.setItem('sixgun-import-drafts',JSON.stringify(importRows));}catch(e){}}
+document.getElementById('importList').addEventListener('input',e=>{const root=e.target.closest('[data-import-id]'),row=importRowFrom(e.target);captureImportDraft(row,root);persistImportDrafts();});
+document.getElementById('importList').addEventListener('change',e=>{captureImportDraft(importRowFrom(e.target),e.target.closest('[data-import-id]'));persistImportDrafts();});
 function importRowFrom(el){return importRows.find(r=>r.id===el.closest("[data-import-id]")?.dataset.importId);}
-function wireImportRows(){
-  document.querySelectorAll("[data-import-gun]").forEach(el=>el.onchange=()=>{const row=importRowFrom(el);if(el.value==="__new__"){row.newGun=true;row.gunKey="";}else{row.gunKey=el.value;row.newGun=false;}row.loadKey="";row.newLoad=false;renderImport();});
-  document.querySelectorAll("[data-import-load]").forEach(el=>el.onchange=()=>{const row=importRowFrom(el);if(el.value==="__new__"){row.newLoad=true;row.loadKey="";}else{row.loadKey=el.value;row.newLoad=false;}renderImport();});
-  document.querySelectorAll("[data-import-notes]").forEach(el=>el.oninput=()=>{importRowFrom(el).notes=el.value;});
-  document.querySelectorAll('[data-new-load="powder"]').forEach(el=>el.onchange=()=>{if(el.value!=="__new__")return;const name=window.prompt("New powder name");if(!name){el.value="";return;}try{const p=addPowderRecord({name});const option=document.createElement("option");option.value=p._legacyKey;option.textContent=p.name;el.insertBefore(option,el.lastElementChild);el.value=p._legacyKey;save();toast("Powder added to Catalog");}catch(e){el.value="";toast(e.message);}});
-  document.querySelectorAll('[data-new-load="bullet"]').forEach(el=>el.onchange=()=>{if(el.value!=="__new__")return;const product=window.prompt("New bullet product/name");if(!product){el.value="";return;}try{const b=addBulletRecord({product});const option=document.createElement("option");option.value=b._legacyKey;option.textContent=bulletDisplay(b);el.insertBefore(option,el.lastElementChild);el.value=b._legacyKey;save();toast("Bullet added to Catalog");}catch(e){el.value="";toast(e.message);}});
-  document.querySelectorAll("[data-cancel-new-gun]").forEach(el=>el.onclick=()=>{const row=importRowFrom(el);row.newGun=false;renderImport();});
-  document.querySelectorAll("[data-cancel-new-load]").forEach(el=>el.onclick=()=>{const row=importRowFrom(el);row.newLoad=false;renderImport();});
-  document.querySelectorAll("[data-create-gun]").forEach(el=>el.onclick=()=>{const root=el.closest("[data-import-id]"),row=importRowFrom(el),values={};root.querySelectorAll("[data-new-gun]").forEach(x=>values[x.dataset.newGun]=x.value);try{const gun=addGunRecord(values);row.gunKey=gun._legacyKey;row.newGun=false;save();renderImport();toast("Firearm added to Catalog");}catch(e){row.error=e.message;renderImport();}});
-  document.querySelectorAll("[data-create-load]").forEach(el=>el.onclick=()=>{const root=el.closest("[data-import-id]"),row=importRowFrom(el),values={};root.querySelectorAll("[data-new-load]").forEach(x=>values[x.dataset.newLoad]=x.value);try{const gun=DB.catalog.guns.find(g=>g._legacyKey===row.gunKey),powder=DB.catalog.powders.find(p=>p._legacyKey===values.powder),bullet=exactBullet(values.bullet),cart=(gun?.caliber&&DB.cartridges[gun.caliber])?gun.caliber:DB.activeCartridge;if(!gun||!powder||!bullet||values.charge==="")throw new Error(values.bullet==="__new__"?"Add the new bullet in Catalog, then select it":"Complete powder, charge, and bullet");attachGunToCartridge(gun,cart);const settings=ensureTierSettings(DB.cartridges[cart]),load={id:`load-${crypto.randomUUID()}`,gun:gunDisplay(gun),gunCatalogKey:gun._legacyKey,powder:powder.name,powderCatalogKey:powder._legacyKey,bullet:bulletDisplay(bullet),bulletCatalogKey:bullet._legacyKey,charge:Number(values.charge),tier:settings.enabled!==false?tierValue(values.tier):null,keep:"pending",avg:null,sd:null,es:null,moa:null,sessions:[],targets:[]};DB.cartridges[cart].loads.push(load);row.loadKey=`${cart}::${load.id}`;row.newLoad=false;renderImport();}catch(e){row.error=e.message;renderImport();}});
-  document.querySelectorAll("[data-save-import]").forEach(el=>el.onclick=()=>saveImportRow(importRowFrom(el)));
+function wireImportRows(root=document){
+  root.querySelectorAll("[data-import-gun]").forEach(el=>el.onchange=()=>{const row=importRowFrom(el);if(el.value==="__new__"){row.newGun=true;row.gunKey="";}else{row.gunKey=el.value;row.newGun=false;}row.loadKey="";row.newLoad=false;renderImport(row.id);});
+  root.querySelectorAll("[data-import-load]").forEach(el=>el.onchange=()=>{const row=importRowFrom(el);if(el.value==="__new__"){row.newLoad=true;row.loadKey="";}else{row.loadKey=el.value;row.newLoad=false;}renderImport(row.id);});
+  root.querySelectorAll("[data-import-notes]").forEach(el=>el.oninput=()=>{importRowFrom(el).notes=el.value;});
+  root.querySelectorAll('[data-new-load="powder"]').forEach(el=>el.onchange=()=>{if(el.value!=="__new__")return;const name=window.prompt("New powder name");if(!name){el.value="";return;}try{const p=addPowderRecord({name});const option=document.createElement("option");option.value=p._legacyKey;option.textContent=p.name;el.insertBefore(option,el.lastElementChild);el.value=p._legacyKey;captureImportDraft(importRowFrom(el),el.closest("[data-import-id]"));persistImportDrafts();save();toast("Powder added to Catalog");}catch(e){el.value="";toast(e.message);}});
+  root.querySelectorAll('[data-new-load="bullet"]').forEach(el=>el.onchange=()=>{if(el.value!=="__new__")return;const product=window.prompt("New bullet product/name");if(!product){el.value="";return;}try{const b=addBulletRecord({product});const option=document.createElement("option");option.value=b._legacyKey;option.textContent=bulletDisplay(b);el.insertBefore(option,el.lastElementChild);el.value=b._legacyKey;captureImportDraft(importRowFrom(el),el.closest("[data-import-id]"));persistImportDrafts();save();toast("Bullet added to Catalog");}catch(e){el.value="";toast(e.message);}});
+  root.querySelectorAll("[data-cancel-new-gun]").forEach(el=>el.onclick=()=>{const row=importRowFrom(el);row.newGun=false;renderImport(row.id);});
+  root.querySelectorAll("[data-cancel-new-load]").forEach(el=>el.onclick=()=>{const row=importRowFrom(el);row.newLoad=false;renderImport(row.id);});
+  root.querySelectorAll("[data-create-gun]").forEach(el=>el.onclick=()=>{const root=el.closest("[data-import-id]"),row=importRowFrom(el),values={};root.querySelectorAll("[data-new-gun]").forEach(x=>values[x.dataset.newGun]=x.value);try{const gun=addGunRecord(values);row.gunKey=gun._legacyKey;row.newGun=false;save();renderImport(row.id);toast("Firearm added to Catalog");}catch(e){row.error=e.message;renderImport(row.id);}});
+  root.querySelectorAll("[data-create-load]").forEach(el=>el.onclick=()=>{const root=el.closest("[data-import-id]"),row=importRowFrom(el),values={};root.querySelectorAll("[data-new-load]").forEach(x=>values[x.dataset.newLoad]=x.value);try{const gun=DB.catalog.guns.find(g=>g._legacyKey===row.gunKey),powder=DB.catalog.powders.find(p=>p._legacyKey===values.powder),bullet=exactBullet(values.bullet),cart=(gun?.caliber&&DB.cartridges[gun.caliber])?gun.caliber:DB.activeCartridge;if(!gun||!powder||!bullet||values.charge==="")throw new Error(values.bullet==="__new__"?"Add the new bullet in Catalog, then select it":"Complete powder, charge, and bullet");attachGunToCartridge(gun,cart);const settings=ensureTierSettings(DB.cartridges[cart]),load={id:`load-${crypto.randomUUID()}`,gun:gunDisplay(gun),gunCatalogKey:gun._legacyKey,powder:powder.name,powderCatalogKey:powder._legacyKey,bullet:bulletDisplay(bullet),bulletCatalogKey:bullet._legacyKey,charge:Number(values.charge),tier:settings.enabled!==false?tierValue(values.tier):null,keep:"pending",avg:null,sd:null,es:null,moa:null,sessions:[],targets:[]};DB.cartridges[cart].loads.push(load);row.loadKey=`${cart}::${load.id}`;row.newLoad=false;save();renderImport(row.id);}catch(e){row.error=e.message;renderImport(row.id);}});
+  root.querySelectorAll("[data-save-import]").forEach(el=>el.onclick=()=>saveImportRow(importRowFrom(el)));
 }
 function findImportLoad(key){for(const [cart,c] of Object.entries(DB.cartridges||{}))for(const load of c.loads||[])if(`${cart}::${load.id}`===key)return{cart,load};return null;}
 function localSessionDate(iso){if(!iso)return null;const d=new Date(iso);if(isNaN(d))return null;const pad=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
+function attachImportSession(row,found){
+  const key=row.session._syncKey;
+  for(const c of Object.values(DB.cartridges))for(const load of c.loads||[]){const matched=(load.sessions||[]).some(s=>s._syncKey===key);if(!matched)continue;load.sessions=load.sessions.filter(s=>s._syncKey!==key);if(load!==found.load){const last=load.sessions.at(-1);const previous=row.previousSummary?.loadKey===row.attachedLoadKey?row.previousSummary:null;for(const metric of ['avg','sd','es'])load[metric]=last?.[metric]??previous?.[metric]??null;}}
+  if(row.attachedLoadKey!==row.loadKey){row.previousSummary={loadKey:row.loadKey,avg:found.load.avg,sd:found.load.sd,es:found.load.es};row.attachedLoadKey=row.loadKey;}
+  row.session.notes=row.notes||null;found.load.sessions=found.load.sessions||[];found.load.sessions.push(row.session);for(const metric of ['avg','sd','es'])found.load[metric]=row.parsed.computed[metric];
+}
 async function saveImportRow(row){
-  const gun=DB.catalog.guns.find(g=>g._legacyKey===row.gunKey),found=findImportLoad(row.loadKey);if(!gun||!found){row.error="Choose a firearm and load";renderImport();return;}
-  row.status="saving";row.error="";renderImport();
+  if(!row||row.status==="saving"||row.status==="saved")return;
+  const gun=DB.catalog.guns.find(g=>g._legacyKey===row.gunKey),found=findImportLoad(row.loadKey);if(!gun||!found||found.load.gunCatalogKey!==gun._legacyKey){row.error="Choose a firearm and load";renderImport(row.id);return;}
+  row.status="saving";row.localSaved=false;row.error="";renderImport(row.id);
   try{
     const p=row.parsed,c=p.computed;
-    if(!row.session){row.session={_syncKey:`garmin-session::${crypto.randomUUID()}`,date:localSessionDate(p.sessionDatetime),session_datetime:p.sessionDatetime,shots:c.n,avg:c.avg,sd:c.sd,es:c.es,notes:row.notes||null,source:"garmin_shotview",source_filename:p.filename,garmin_avg:p.reported.avg,garmin_sd:p.reported.sd,garmin_es:p.reported.es,sd_population:c.populationSd,sd_method:"sample",raw_shots:p.shots};found.load.sessions=found.load.sessions||[];found.load.sessions.push(row.session);}else row.session.notes=row.notes||null;
-    found.load.avg=c.avg;found.load.sd=c.sd;found.load.es=c.es;
-    if(!window.SixgunCloud?.saveNow)throw new Error("Cloud sync is not ready. Sign in and try again.");await window.SixgunCloud.saveNow();
-    row.status="saved";row.savedGun=gunDisplay(gun);row.savedLoad=importLoadLabel(found.cart,found.load);row.error="";renderAll();renderImport();toast("Garmin session saved");
-  }catch(e){row.status="error";row.error=e.message||"Could not save this session";renderImport();}
+    if(!row.session){row.session={_syncKey:`garmin-session::${crypto.randomUUID()}`,date:localSessionDate(p.sessionDatetime),session_datetime:p.sessionDatetime,shots:c.n,avg:c.avg,sd:c.sd,es:c.es,notes:row.notes||null,source:"garmin_shotview",source_filename:p.filename,garmin_avg:p.reported.avg,garmin_sd:p.reported.sd,garmin_es:p.reported.es,sd_population:c.populationSd,sd_method:"sample",raw_shots:p.shots};}else row.session.notes=row.notes||null;
+    attachImportSession(row,found);
+    if(!window.SixgunCloud?.saveNow)throw new Error("Cloud sync is not ready. Sign in and try again.");await window.SixgunCloud.saveNow(()=>{row.localSaved=true;persistImportDrafts();});
+    row.status="saved";row.savedGun=gunDisplay(gun);row.savedLoad=importLoadLabel(found.cart,found.load);row.error="";renderAll();renderImport(row.id);toast("Garmin session saved");
+  }catch(e){row.status="error";row.error=e.message||"Could not save this session";renderImport(row.id);}
 }
 async function handleImportFiles(files){
   const errors=[];for(const file of files){try{const parsed=parseShotViewCSV(await file.text(),file.name);importRows.push({id:crypto.randomUUID(),parsed,gunKey:"",loadKey:"",notes:parsed.sessionNote||"",newGun:false,newLoad:false,status:"unsaved",error:"",session:null});}catch(e){errors.push(`${file.name}: ${e.message}`);}}
   document.getElementById("importErrors").innerHTML=errors.map(esc).join("<br>");renderImport();
+}
+function reconcileSyncedImports(state){
+  for(const row of importRows){if(!row.localSaved||!row.session||row.status==="saving"||row.status==="saved")continue;
+    for(const [cart,c] of Object.entries(state.cartridges||{})){const load=(c.loads||[]).find(l=>`${cart}::${l.id}`===row.loadKey&&l.gunCatalogKey===row.gunKey),session=load?.sessions?.find(s=>s._syncKey===row.session._syncKey);if(!session||String(session.notes||"")!==String(row.notes||""))continue;const gun=state.catalog?.guns?.find(g=>g._legacyKey===row.gunKey);row.status="saved";row.error="";row.savedGun=gunDisplay(gun||{});row.savedLoad=importLoadLabel(cart,load);renderImport(row.id);break;}
+  }
 }
 function openImport(from="loads"){importReturnScreen=from;document.getElementById("landing").classList.add("hidden");goto("import");renderImport();}
 const importInput=document.getElementById("importFileInput"),importDrop=document.getElementById("importDropZone");
@@ -1311,7 +1373,7 @@ function renderGunChips(){
   // ensure a valid active gun (or "all") for this cartridge
   if(activeGun!=="all"&&!guns.some(g=>g.name===activeGun)) activeGun=guns.length?guns[0].name:null;
   const chips=[["all","All guns"],...guns.map(g=>[g.name,g.name])];
-  el.innerHTML=chips.map(([k,l])=>`<div class="chip ${activeGun===k?'on':''}" data-g="${k}">${l}</div>`).join("");
+  el.innerHTML=chips.map(([k,l])=>`<button type="button" class="chip ${activeGun===k?'on':''}" aria-pressed="${activeGun===k}" data-g="${esc(k)}">${esc(l)}</button>`).join("");
   el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{activeGun=c.dataset.g;tierFilter="all";statusFilter="all";powderFilter="all";renderGunChips();renderChips();renderStatusChips();renderPowderChips();renderLoads();});
 }
 function renderChips(){
@@ -1326,7 +1388,7 @@ function renderChips(){
   el.dataset.enabled=String(settings.enabled!==false);
   const opts=[["all","All tiers",false],...(settings.enabled===false?[]:visible.map(k=>[k,tierLabel(k,C(),false),overCap(k)]))];
   el.innerHTML=opts.map(([k,l,disabled])=>
-    `<div class="chip ${tierFilter===k?'on':''} ${disabled?'disabled':''}" data-t="${k}" ${disabled?'data-disabled="1"':''}>${l}</div>`
+    `<button type="button" class="chip ${tierFilter===k?'on':''} ${disabled?'disabled':''}" aria-pressed="${tierFilter===k}" data-t="${esc(k)}" ${disabled?'disabled data-disabled="1"':''}>${esc(l)}</button>`
   ).join("")+`<button type="button" class="tier-manage-btn" id="tierManageBtn">⚙ Customize</button>`;
   el.querySelectorAll(".chip").forEach(c=>{
     if(c.dataset.disabled)return; // grayed tiers above ceiling aren't clickable
@@ -1336,7 +1398,7 @@ function renderChips(){
 }
 function renderStatusChips(){
   const el=document.getElementById("statusChips"),opts=[["all","All statuses"],["yes","Keeper"],["work","Watch"],["reshoot","Reshoot"],["pending","Loaded"],["draft","Draft / Unverified"]];
-  el.innerHTML=opts.map(([key,label])=>`<div class="chip ${statusFilter===key?'on':''}" data-s="${key}">${label}</div>`).join("");
+  el.innerHTML=opts.map(([key,label])=>`<button type="button" class="chip ${statusFilter===key?'on':''}" aria-pressed="${statusFilter===key}" data-s="${esc(key)}">${esc(label)}</button>`).join("");
   el.querySelectorAll(".chip").forEach(chip=>chip.onclick=()=>{statusFilter=chip.dataset.s;renderStatusChips();renderPowderChips();renderLoads();});
 }
 function renderPowderChips(){
@@ -1355,7 +1417,7 @@ function renderPowderChips(){
   el.style.display="flex";
   const opts=[["all","All powders",false],...allPowders.map(p=>[p,p,!present.has(p)])];
   el.innerHTML=opts.map(([k,l,disabled])=>
-    `<div class="chip ${powderFilter===k?'on':''} ${disabled?'disabled':''}" data-p="${k}" ${disabled?'data-disabled="1"':''}>${l}</div>`
+    `<button type="button" class="chip ${powderFilter===k?'on':''} ${disabled?'disabled':''}" aria-pressed="${powderFilter===k}" data-p="${esc(k)}" ${disabled?'disabled data-disabled="1"':''}>${esc(l)}</button>`
   ).join("");
   el.querySelectorAll(".chip").forEach(c=>{
     if(c.dataset.disabled)return;
@@ -1675,7 +1737,7 @@ async function exportLetterPdf(options){
   try{await waitForBookImages(book);if(window.html2pdf){toast("Preparing PDF…");await window.html2pdf().set({margin:0,filename:`${gunDisplay(g).replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"")}-biography.pdf`,image:{type:"jpeg",quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:"#f1e8cf",logging:false},jsPDF:{unit:"in",format:"letter",orientation:"portrait"},pagebreak:{mode:["css","legacy"],before:[".pdf-photo-page"]}}).from(book).save();return;}toast("PDF export requires an online connection");}finally{book.remove();fitLetterPreview();}
 }
 window.addEventListener("resize",()=>{fitLetterPreview();fitBiographyLetter();});
-document.getElementById("letterBackBtn").onclick=()=>goto("biography");
+document.getElementById("letterBackBtn").onclick=()=>navigationBack("biography");
 document.getElementById("letterEditBtn").onclick=openLetterEditor;
 document.getElementById("letterSettingsBtn").onclick=openLetterSettings;
 document.getElementById("letterExportBtn").onclick=()=>exportLetterPdf();
@@ -1753,7 +1815,7 @@ function closePhotoViewer(){document.getElementById("photoViewer").classList.rem
 document.getElementById("photoViewerClose").onclick=closePhotoViewer;document.getElementById("photoViewerManage").onclick=()=>{const p=viewerPhotos[viewerIndex];closePhotoViewer();photoRecordEditing=true;renderPhotoRecord();setTimeout(()=>document.querySelector(`[data-photo-key="${CSS.escape(p._syncKey)}"]`)?.scrollIntoView({behavior:"smooth",block:"center"}),50);};
 document.getElementById("photoViewerPrev").onclick=e=>{e.stopPropagation();movePhotoViewer(-1);};document.getElementById("photoViewerNext").onclick=e=>{e.stopPropagation();movePhotoViewer(1);};document.addEventListener("keydown",e=>{if(!document.getElementById("photoViewer").classList.contains("open"))return;if(e.key==="ArrowLeft")movePhotoViewer(-1);if(e.key==="ArrowRight")movePhotoViewer(1);if(e.key==="Escape")closePhotoViewer();});
 const viewerStage=document.getElementById("photoViewerStage");function pointerDistance(){const pts=[...viewerPointers.values()];return pts.length<2?0:Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);}viewerStage.onpointerdown=e=>{viewerStage.setPointerCapture?.(e.pointerId);viewerPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(viewerPointers.size===1)viewerStartX=e.clientX;if(viewerPointers.size===2){viewerPinchStart=pointerDistance();viewerPinchScale=viewerScale;}};viewerStage.onpointermove=e=>{if(!viewerPointers.has(e.pointerId))return;viewerPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(viewerPointers.size===2&&viewerPinchStart){viewerScale=Math.max(1,Math.min(4,viewerPinchScale*pointerDistance()/viewerPinchStart));document.getElementById("photoViewerImg").style.transform=`scale(${viewerScale})`;}};viewerStage.onpointerup=e=>{const wasSingle=viewerPointers.size===1,dx=e.clientX-viewerStartX;viewerPointers.delete(e.pointerId);if(wasSingle&&Math.abs(dx)>55&&viewerScale===1){viewerIndex=(viewerIndex+(dx<0?1:-1)+viewerPhotos.length)%viewerPhotos.length;renderPhotoViewer();}};viewerStage.onpointercancel=e=>viewerPointers.delete(e.pointerId);document.getElementById("photoViewerImg").ondblclick=()=>{viewerScale=viewerScale===1?2:1;renderPhotoViewer();};
-document.getElementById("photoRecordBackBtn").onclick=()=>goto("biography");document.getElementById("photoRecordAddBtn").onclick=openPhotoUpload;document.getElementById("photoRecordEditBtn").onclick=()=>{photoRecordEditing=!photoRecordEditing;renderPhotoRecord();};
+document.getElementById("photoRecordBackBtn").onclick=()=>navigationBack("biography");document.getElementById("photoRecordAddBtn").onclick=openPhotoUpload;document.getElementById("photoRecordEditBtn").onclick=()=>{photoRecordEditing=!photoRecordEditing;renderPhotoRecord();};
 
 /* ---------- parts & maintenance ---------- */
 function gunParts(g){ensureCatalog();return DB.catalog.parts_modifications.filter(x=>x.gun_key===g._legacyKey).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));}
@@ -1778,7 +1840,7 @@ function openPartEditor(key=null){const g=biographyGun();if(!g)return;const item
 function openMaintenanceEditor(key=null){const g=biographyGun();if(!g)return;const item=key?gunMaintenance(g).find(x=>x._syncKey===key):null,date=item?.date||todayValue(),rounds=item?.round_count??calculatedMaintenanceRounds(g,date,item?._syncKey),categories=["Cleaning","Lubrication","Inspection","Function Check","Spring Replacement","Repair","Other"];editorOpen(item?"Edit Maintenance Entry":"Log Maintenance",`<div class="form-grid"><div class="field"><label>Date *</label><input type="date" name="date" value="${esc(date)}" required></div><div class="field"><label>Service type *</label><select name="category" required>${categories.map(x=>`<option ${x===(item?.category||"Cleaning")?"selected":""}>${x}</option>`).join("")}</select></div><div class="field"><label>Rounds since last service</label><input type="number" min="0" step="1" name="round_count" value="${esc(rounds)}"><small>Calculated from recorded session shot counts. You can correct it if needed.</small></div><div class="field full"><label>Notes</label><textarea name="notes">${esc(item?.notes||"")}</textarea></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">${item?"Save Changes":"Log Entry"}</button></div>`,async fd=>{const v=Object.fromEntries(fd),record=item||{_syncKey:`maintenance-entry::${crypto.randomUUID()}`,gun_key:g._legacyKey};Object.assign(record,{date:v.date,category:v.category,notes:v.notes.trim(),round_count:v.round_count===""?calculatedMaintenanceRounds(g,v.date,item?._syncKey):Number(v.round_count)});if(!item)DB.catalog.maintenance_entries.push(record);await save();editorClose();renderPartsMaintenance();renderBiography();toast(item?"Maintenance entry updated":"Maintenance logged");});}
 function deletePart(key){taConfirm("Permanently delete this parts or modification entry? This cannot be undone.",async()=>{DB.catalog.parts_modifications=DB.catalog.parts_modifications.filter(x=>x._syncKey!==key);await save();renderPartsMaintenance();renderBiography();toast("Part record deleted");});}
 function deleteMaintenance(key){taConfirm("Permanently delete this maintenance entry? This cannot be undone.",async()=>{DB.catalog.maintenance_entries=DB.catalog.maintenance_entries.filter(x=>x._syncKey!==key);await save();renderPartsMaintenance();renderBiography();toast("Maintenance entry deleted");});}
-document.getElementById("partsMaintenanceBackBtn").onclick=()=>goto("biography");document.getElementById("addPartBtn").onclick=()=>openPartEditor();document.getElementById("addMaintenanceBtn").onclick=()=>openMaintenanceEditor();
+document.getElementById("partsMaintenanceBackBtn").onclick=()=>navigationBack("biography");document.getElementById("addPartBtn").onclick=()=>openPartEditor();document.getElementById("addMaintenanceBtn").onclick=()=>openMaintenanceEditor();
 
 function sessionRecordDate(session){return session.date||String(session.session_datetime||"").slice(0,10)||null;}
 function gunRangeEvents(g){
@@ -1820,7 +1882,7 @@ function renderBiography(){
   const masthead=document.querySelector("#bioArchiveLetter .letter-ornament");if(masthead&&!masthead.complete)masthead.addEventListener("load",fitBiographyLetter,{once:true});document.fonts?.ready.then(fitBiographyLetter);requestAnimationFrame(()=>requestAnimationFrame(fitBiographyLetter));
 }
 function openGunEntryForm(){const g=biographyGun();if(!g)return;const now=new Date(),today=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);editorOpen("Add Biography Entry",`<div class="form-grid"><div class="field"><label>Date *</label><input type="date" name="date" value="${today}" required></div><div class="field full"><label>Entry *</label><textarea name="text" required></textarea></div><div class="field full"><label>Photo</label><input type="file" id="bioPhoto" accept="image/*"><div class="photo-preview" id="bioPhotoPreview"></div></div></div><div class="editor-actions"><button type="button" onclick="editorClose()">Cancel</button><button class="primary">Add Entry</button></div>`,async(fd,form)=>{const v=Object.fromEntries(fd),file=form.querySelector("#bioPhoto").files[0];DB.catalog.gun_entries.push({_syncKey:`gun-entry::${crypto.randomUUID()}`,gun_key:g._legacyKey,date:v.date,text:v.text.trim(),photo:file?await fileDataUrl(file):null,photo_path:null});await save();editorClose();renderBiography();toast("Biography entry added");});document.getElementById("bioPhoto").onchange=async e=>{const f=e.target.files[0];document.getElementById("bioPhotoPreview").innerHTML=f?`<img src="${await fileDataUrl(f)}" alt="Selected photo">`:"";};}
-document.getElementById("bioBackBtn").onclick=()=>goto("catalog");
+document.getElementById("bioBackBtn").onclick=()=>navigationBack("catalog");
 document.getElementById("bioEditBtn").onclick=()=>{if(activeBiographyKey)openGunEdit(activeBiographyKey);};
 
 function catalogUsage(kind,key){
@@ -1839,6 +1901,8 @@ function requestCatalogDelete(kind,key){
   ensureCatalog();const item=(kind==="gun"?DB.catalog.guns:kind==="powder"?DB.catalog.powders:DB.catalog.bullets).find(x=>x._legacyKey===key);if(!item)return;const name=kind==="gun"?gunDisplay(item):kind==="bullet"?bulletDisplay(item):item.name,used=catalogUsage(kind,key);if(used.loads||used.journal){const bits=[];if(used.loads)bits.push(`${used.loads} load${used.loads===1?"":"s"}`);if(used.sessions)bits.push(`${used.sessions} session${used.sessions===1?"":"s"}`);if(used.journal)bits.push(`${used.journal} journal entr${used.journal===1?"y":"ies"}`);appAlert(`${name} is still used in ${bits.join(" and ")}. Remove or update those records first.`);return;}
   taConfirm(`Delete ${name} from the Catalog? Library reference tables will not be affected.`,async()=>{removeCatalogEntry(kind,key);await save();renderAll();toast(`${name} deleted`);});
 }
+function filterCatalog(){document.querySelectorAll('[data-catalog-search]').forEach(input=>{const root=document.getElementById(input.dataset.catalogSearch),query=norm(input.value);let visible=0;root.querySelectorAll('.catalog-row').forEach(row=>{row.hidden=!norm(row.textContent).includes(query);if(!row.hidden)visible++;});document.getElementById(input.dataset.catalogSearch+'Empty').hidden=!query||visible>0;});}
+document.querySelectorAll('[data-catalog-search]').forEach(input=>input.oninput=filterCatalog);
 let activeCatalogTab="guns";
 function setCatalogTab(kind){
   activeCatalogTab=["guns","powders","bullets"].includes(kind)?kind:"guns";
@@ -1852,13 +1916,14 @@ function renderCatalog(){
   document.getElementById("catalogGunCount").textContent=gunCount;document.getElementById("catalogPowderCount").textContent=powderCount;document.getElementById("catalogBulletCount").textContent=bulletCount;
   document.getElementById("catalogGunSummary").textContent=`${gunCount} firearm${gunCount===1?"":"s"}`;document.getElementById("catalogPowderSummary").textContent=`${powderCount} powder${powderCount===1?"":"s"}`;document.getElementById("catalogBulletSummary").textContent=`${bulletCount} bullet${bulletCount===1?"":"s"}`;
   guns.innerHTML=gunCount?DB.catalog.guns.map((g,i)=>{const status=g.rotation_status||"in rotation",statusClass=norm(status).includes("order")?"pending":"";return `<div class="catalog-row"><button class="catalog-open" data-open-gun="${esc(g._legacyKey)}"><span class="catalog-index">${String(i+1).padStart(2,"0")}</span><span class="catalog-copy"><span class="catalog-name">${esc(gunDisplay(g))}</span><span class="catalog-meta">${esc(g.caliber||"Caliber not recorded")} · <span class="catalog-status ${statusClass}">${esc(status)}</span></span></span><span class="catalog-chevron">›</span></button>${catalogMenu(`<button class="catalog-edit" data-edit-gun="${esc(g._legacyKey)}">Edit firearm</button><button class="catalog-delete" data-kind="gun" data-key="${esc(g._legacyKey)}">Delete firearm</button>`)}</div>`;}).join(""):`<div class="catalog-empty">No firearms recorded yet.</div>`;
-  powders.innerHTML=powderCount?DB.catalog.powders.map((p,i)=>`<div class="catalog-row"><div class="catalog-static"><span class="catalog-index">${String(i+1).padStart(2,"0")}</span><span class="catalog-copy"><span class="catalog-name">${esc(p.name)}</span>${p.notes?`<span class="catalog-notes">${esc(p.notes)}</span>`:""}</span><span></span></div>${catalogMenu(`<button class="catalog-delete" data-kind="powder" data-key="${esc(p._legacyKey)}">Delete powder</button>`)}</div>`).join(""):`<div class="catalog-empty">No powders recorded yet.</div>`;
+  powders.innerHTML=powderCount?DB.catalog.powders.map((p,i)=>`<div class="catalog-row"><div class="catalog-static"><span class="catalog-index">${String(i+1).padStart(2,"0")}</span><span class="catalog-copy"><span class="catalog-name">${esc(p.name)}</span>${p.notes?`<span class="catalog-notes">${esc(p.notes)}</span>`:""}</span><span></span></div>${catalogMenu(`<button class="powder-edit" data-key="${esc(p._legacyKey)}">Edit powder</button><button class="catalog-delete" data-kind="powder" data-key="${esc(p._legacyKey)}">Delete powder</button>`)}</div>`).join(""):`<div class="catalog-empty">No powders recorded yet.</div>`;
   bullets.innerHTML=bulletCount?DB.catalog.bullets.map((b,i)=>{const u=catalogUsage("bullet",b._legacyKey),meta=[b.diameter,b.caliber,b.style,`${u.loads} load${u.loads===1?"":"s"}`].filter(Boolean).map(esc).join(" · ");return `<div class="catalog-row"><div class="catalog-static"><span class="catalog-index">${String(i+1).padStart(2,"0")}</span><span class="catalog-copy"><span class="catalog-name">${esc(bulletDisplay(b))}</span><span class="catalog-meta">${meta}</span>${b.notes?`<span class="catalog-notes">${esc(b.notes)}</span>`:""}</span><span></span></div>${catalogMenu(`<button class="bullet-edit" data-key="${esc(b._legacyKey)}">Edit bullet</button><button class="bullet-merge" data-key="${esc(b._legacyKey)}">Merge duplicate…</button><button class="catalog-delete" data-kind="bullet" data-key="${esc(b._legacyKey)}">Delete bullet</button>`)}</div>`;}).join(""):`<div class="catalog-empty">No bullets recorded yet.</div>`;
   document.querySelectorAll("#s-catalog [data-catalog-tab]").forEach(b=>b.onclick=()=>setCatalogTab(b.dataset.catalogTab));setCatalogTab(activeCatalogTab);
+  filterCatalog();document.querySelectorAll(".powder-edit").forEach(b=>b.onclick=()=>openPowderEdit(b.dataset.key));
   document.getElementById("addBulletBtn").onclick=openBulletForm;
   document.querySelectorAll(".bullet-edit").forEach(b=>b.onclick=()=>{b.closest("details")?.removeAttribute("open");openBulletEdit(b.dataset.key);});document.querySelectorAll(".bullet-merge").forEach(b=>b.onclick=()=>{b.closest("details")?.removeAttribute("open");requestBulletMerge(b.dataset.key);});document.querySelectorAll(".catalog-open").forEach(b=>b.onclick=()=>openBiography(b.dataset.openGun));document.querySelectorAll(".catalog-edit").forEach(b=>b.onclick=()=>{b.closest("details")?.removeAttribute("open");openGunEdit(b.dataset.editGun);});document.querySelectorAll(".catalog-delete").forEach(b=>b.onclick=()=>{b.closest("details")?.removeAttribute("open");requestCatalogDelete(b.dataset.kind,b.dataset.key);});
 }
-document.getElementById("addGunBtn").onclick=openGunForm;document.getElementById("addPowderBtn").onclick=openPowderForm;document.getElementById("newJournalBtn").onclick=openJournalForm;document.getElementById("importBackBtn").onclick=()=>{if(importReturnScreen==="landing")showLanding();else goto(importReturnScreen);};
+document.getElementById("addGunBtn").onclick=openGunForm;document.getElementById("addPowderBtn").onclick=openPowderForm;document.getElementById("newJournalBtn").onclick=openJournalForm;document.getElementById("importBackBtn").onclick=()=>{navigationBack(importReturnScreen);};
 
 /* ---------- nav ---------- */
 const createNavBtn=document.getElementById("createNavBtn"),createSheet=document.getElementById("createSheet"),createScrim=document.getElementById("createScrim");
@@ -1871,17 +1936,29 @@ createNavBtn.onclick=()=>createSheet.classList.contains("open")?closeCreateMenu(
 createScrim.onclick=closeCreateMenu;
 document.getElementById("createLoadAction").onclick=()=>{closeCreateMenu();openLoadForm();};
 document.getElementById("createImportAction").onclick=()=>{const from=activeScreenName();closeCreateMenu();openImport(from);};
-function goto(s){
+const navigationScroll=new Map();
+let navigationCurrent={screen:"landing",biographyKey:null,cartridge:DB.activeCartridge};
+function navigationKey(route){return [route.screen,["biography","letter","photo-record","parts-maintenance"].includes(route.screen)?route.biographyKey||"":"",["loads","bench"].includes(route.screen)?route.cartridge||"":""].join("::");}
+function rememberNavigation(){const y=window.scrollY||0;navigationScroll.set(navigationKey(navigationCurrent),y);window.history?.replaceState({...navigationCurrent,sixgun:true,scroll:y},"");}
+function goto(s,restored=null){
   closeCreateMenu();
-  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
-  document.getElementById("s-"+s).classList.add("active");
-  document.querySelectorAll("nav button[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===s));
-  // caliber switcher is meaningless in app-wide Library/Catalog; keep home reachable
-  document.getElementById("cartSwitch").style.visibility=(s==="lib"||s==="catalog"||s==="biography"||s==="letter"||s==="photo-record"||s==="parts-maintenance"||s==="tier-settings"||s==="import")?"hidden":"visible";
-  renderActiveScreen(s);
+  if(!restored)rememberNavigation();
+  const route=restored||{screen:s,biographyKey:activeBiographyKey,cartridge:DB.activeCartridge,parent:navigationCurrent.screen};
+  if(restored){activeBiographyKey=route.biographyKey;if(DB.cartridges[route.cartridge])DB.activeCartridge=route.cartridge;renderAll();}
+  if(!restored&&s!==navigationCurrent.screen)window.history?.pushState({...route,sixgun:true},"");
+  navigationCurrent=route;
+  document.getElementById("landing").classList.toggle("hidden",s!=="landing");
+  document.querySelectorAll(".screen").forEach(x=>x.classList.toggle("active",x.id==="s-"+s));
+  const tab=["biography","letter","photo-record","parts-maintenance"].includes(s)?"catalog":s;
+  document.querySelectorAll("nav button[data-s]").forEach(b=>{b.classList.toggle("on",b.dataset.s===tab);if(b.dataset.s===tab)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  document.getElementById("cartSwitch").style.visibility=["loads","bench"].includes(s)?"visible":"hidden";
+  renderActiveScreen(s);if(s==="import")renderImport();
   unmountInactiveScreens(s);
-  window.scrollTo(0,0);
+  requestAnimationFrame(()=>window.scrollTo(0,navigationScroll.get(navigationKey(route))??route.scroll??0));
 }
+function navigationBack(fallback){if(navigationCurrent.parent===fallback&&window.history)window.history.back();else goto(fallback);}
+window.addEventListener("popstate",e=>{if(!e.state?.sixgun)return;if(editorSession){window.history?.pushState({...navigationCurrent,sixgun:true},"");requestEditorClose();return;}navigationScroll.set(navigationKey(navigationCurrent),window.scrollY||0);closeSheet();goto(e.state.screen,e.state);});
+if(window.history){window.history.scrollRestoration="manual";window.history.replaceState({...navigationCurrent,sixgun:true},"");}
 document.querySelectorAll("nav button[data-s]").forEach(b=>b.onclick=()=>goto(b.dataset.s));
 
 /* ---------- toast ---------- */
@@ -1924,7 +2001,7 @@ function enterCartridge(name){
 }
 function showLanding(){
   renderLanding();
-  document.getElementById("landing").classList.remove("hidden");
+  goto("landing");
 }
 document.getElementById("homeBtn").onclick=showLanding;
 // The landing page is visible before IndexedDB/auth hydration completes. Wire
@@ -1956,6 +2033,7 @@ function switchCartridge(name){
 document.getElementById("cartSwitch").onclick=openSheet;
 document.getElementById("cartScrim").onclick=closeSheet;
 
+document.addEventListener("click",e=>{const chip=e.target.closest?.("button.chip,button.lib-cal-chip,button.shape-chip,button.tbl-chip");if(!chip)return;const data={...chip.dataset},parent=chip.parentElement;requestAnimationFrame(()=>{if(!chip.isConnected){[...parent.querySelectorAll("button")].find(b=>Object.entries(data).every(([k,v])=>b.dataset[k]===v))?.focus({preventScroll:true});}});},true);
 /* ---------- master render ---------- */
 function renderAll(){
   ensureCatalog();
@@ -3947,7 +4025,7 @@ function renderLibCalFilter(){
   const el=document.getElementById("libCalFilter");
   const carts=[...new Set([...LIB_ENTRIES.map(e=>e.cartridge),...LIB_TABLES.map(t=>t.cartridge)])];
   const chips=[["all","All calibers"]].concat(carts.map(c=>[c,c]));
-  el.innerHTML=chips.map(([k,l])=>`<div class="lib-cal-chip ${libCart===k?'on':''}" data-c="${k}">${l}</div>`).join("");
+  el.innerHTML=chips.map(([k,l])=>`<button type="button" class="lib-cal-chip ${libCart===k?'on':''}" aria-pressed="${libCart===k}" data-c="${esc(k)}">${esc(l)}</button>`).join("");
   el.querySelectorAll(".lib-cal-chip").forEach(c=>c.onclick=()=>{libCart=c.dataset.c;renderLibCalFilter();renderLibShapes();renderLibEntries();renderTblFilters();renderLibTables();});
 }
 function libEntriesScoped(){return libCart==="all"?LIB_ENTRIES:LIB_ENTRIES.filter(e=>e.cartridge===libCart);}
@@ -3956,7 +4034,7 @@ function renderLibShapes(){
   const present=[...new Set(libEntriesScoped().map(e=>e.shape))];
   const chips=[["all","All","sd-all"]].concat(Object.entries(LIB_SHAPES).filter(([k])=>present.includes(k)).map(([k,v])=>[k,v,"sd-"+k]));
   if(libShape!=="all"&&!present.includes(libShape))libShape="all";
-  el.innerHTML=chips.map(([k,l,d])=>`<div class="shape-chip ${libShape===k?'on':''}" data-s="${k}"><span class="sdot ${d}"></span>${l}</div>`).join("");
+  el.innerHTML=chips.map(([k,l,d])=>`<button type="button" class="shape-chip ${libShape===k?'on':''}" aria-pressed="${libShape===k}" data-s="${esc(k)}"><span class="sdot ${d}"></span>${esc(l)}</button>`).join("");
   el.querySelectorAll(".shape-chip").forEach(c=>c.onclick=()=>{libShape=c.dataset.s;renderLibShapes();renderLibEntries();});
 }
 function renderLibEntries(){
@@ -4024,10 +4102,10 @@ function renderTblFilters(){
   if(tblWriter!=="all"&&!writers.includes(tblWriter))tblWriter="all";
   function grp(label,items,active,attr){
     return `<span class="tbl-chip group-label">${label}</span>`+[["all","All"]].concat(items.map(i=>[i,i])).map(([k,l])=>
-      `<div class="tbl-chip ${active===k?'on':''}" data-f="${attr}" data-v="${k}">${l}</div>`).join("");
+      `<button type="button" class="tbl-chip ${active===k?'on':''}" aria-pressed="${active===k}" data-f="${attr}" data-v="${esc(k)}">${esc(l)}</button>`).join("");
   }
   const powderButton=`<button type="button" class="tbl-chip powder-picker-btn ${allStars.length?'has-stars':''}" id="powderPickerButton">Powders <span class="powder-count">${allStars.length}</span></button>`;
-  const pinned=visibleStars.map(p=>`<div class="tbl-chip ${tblPowder===p?'on':''}" data-f="powder" data-v="${p}">${p}</div>`).join("");
+  const pinned=visibleStars.map(p=>`<button type="button" class="tbl-chip ${tblPowder===p?'on':''}" aria-pressed="${tblPowder===p}" data-f="powder" data-v="${esc(p)}">${esc(p)}</button>`).join("");
   el.innerHTML=powderButton+pinned+grp("Writer",writers,tblWriter,"writer");
   document.getElementById("powderPickerButton").onclick=openPowderPicker;
   el.querySelectorAll(".tbl-chip[data-f]").forEach(c=>c.onclick=()=>{
@@ -5127,19 +5205,25 @@ function prepareState(state){
 function cloudSafeState(state){const out=clone(prepareState(state));(out.catalog?.gun_entries||[]).forEach(e=>{delete e.photo;delete e.photo_url;});(out.catalog?.moment_photos||[]).forEach(p=>{delete p.display_data;delete p.print_data;delete p.display_url;delete p.print_url;});Object.values(out.cartridges||{}).forEach(c=>{(c.loads||[]).forEach(l=>(l.targets||[]).forEach(t=>{delete t.photo;}));(c.journal||[]).forEach(j=>{delete j.photo;delete j.photos;j.photoPaths=(j.photoPaths||j.photo_urls||[]).filter(p=>typeof p==="string"&&!p.startsWith("data:"));delete j.photo_urls;});});return out;}
 function cloudQueueJob(state){return{id:"snapshot",token:crypto.randomUUID(),state:cloudSafeState(state),updatedAt:Date.now()};}
 function sameCloudQueueJob(a,b){if(!a||!b)return false;if(a.token||b.token)return!!a.token&&a.token===b.token;return a.updatedAt===b.updatedAt;}
-async function clearCloudQueueJob(job){const current=await idbGet("queue","snapshot");if(!sameCloudQueueJob(current,job))return false;await idbDelete("queue","snapshot");return true;}
+let cloudWriteChain=Promise.resolve();
+function serializeCloudWrite(action){const next=cloudWriteChain.then(action);cloudWriteChain=next.catch(()=>{});return next;}
+function persistCloudSnapshot(){
+  const value=clone(prepareState(DB)),job={id:"snapshot",revision:crypto.randomUUID(),state:cloudSafeState(value),updatedAt:Date.now()};
+  return serializeCloudWrite(async()=>{const d=await idbOpen();await new Promise((resolve,reject)=>{const t=d.transaction(["state","queue"],"readwrite");t.objectStore("state").put({id:"current",value,updatedAt:job.updatedAt});t.objectStore("queue").put(job);t.oncomplete=resolve;t.onerror=()=>reject(t.error);t.onabort=()=>reject(t.error||new Error("Could not save on this device"));});return job;});
+}
+async function acknowledgeCloudSnapshot(job){
+  const d=await idbOpen();return new Promise((resolve,reject)=>{const t=d.transaction("queue","readwrite"),store=t.objectStore("queue"),r=store.get("snapshot");r.onsuccess=()=>{const current=r.result;if(current&&(current.revision||job.revision?!!current.revision&&current.revision===job.revision:sameCloudQueueJob(current,job)))store.delete("snapshot");};t.oncomplete=resolve;t.onerror=()=>reject(t.error);t.onabort=()=>reject(t.error);});
+}
 async function saveCloudState(){
-  prepareState(DB);
-  await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});
-  await idbPut("queue",cloudQueueJob(DB));
+  await persistCloudSnapshot();
   cloudStatus(navigator.onLine?"Saving…":"Offline · changes queued","warn");
   clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(()=>flushCloudQueue(),250);
 }
-async function saveCloudStateNow(){
-  prepareState(DB);await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});const job=cloudQueueJob(DB);await idbPut("queue",job);
-  if(!cloudUser)throw new Error("Sign in before saving an imported session");if(!navigator.onLine)throw new Error("You are offline. Reconnect, then retry this row.");
-  while(cloudFlushing)await new Promise(resolve=>setTimeout(resolve,50));cloudFlushing=true;cloudStatus("Saving session…","warn");
-  let continueSync=false;try{await syncNormalized(cloudSafeState(DB));const cleared=await clearCloudQueueJob(job);if(cleared)localStorage.removeItem(KEY);continueSync=!cleared;cloudStatus(cleared?"Synced":"Saving…",cleared?"ok":"warn");}catch(e){cloudStatus(/relation|schema cache/i.test(e.message||"")?"Setup needed · run Garmin SQL":"Session save failed","error");throw e;}finally{cloudFlushing=false;if(continueSync)setTimeout(()=>flushCloudQueue(),0);}
+async function saveCloudStateNow(onLocalSaved=()=>{}){
+  await persistCloudSnapshot();
+  onLocalSaved();
+  if(!cloudUser)throw new Error("Saved on this device. Sign in, then retry to sync.");if(!navigator.onLine)throw new Error("Saved on this device. Reconnect, then retry to sync.");
+  await flushCloudQueue(true);
 }
 window.SixgunCloud={saveState:saveCloudState,saveNow:saveCloudStateNow,uploadPhoto:async(blob,folder="journal")=>{
   if(!cloudUser)throw new Error("Sign in before uploading photos");
@@ -5153,24 +5237,37 @@ function num(v){return v==null||v===""||isNaN(Number(v))?null:Number(v);}
 function dataUrlBlob(url){const [head,data]=url.split(",");const mime=(head.match(/data:([^;]+)/)||[])[1]||"image/jpeg";const bin=atob(data),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new Blob([bytes],{type:mime});}
 async function uploadPendingTargets(state){
   const local=(await idbGet("state","current"))?.value||DB;
+  const uploadedJournalData=new Map();
   const localTargets=new Map();Object.entries(local.cartridges||{}).forEach(([cart,c])=>(c.loads||[]).forEach(load=>(load.targets||[]).forEach((t,i)=>localTargets.set(targetKey(cart,load,i,t),t))));
   for(const [cart,c] of Object.entries(state.cartridges||{}))for(const load of c.loads||[])for(let i=0;i<(load.targets||[]).length;i++){
     const t=load.targets[i];t._syncKey=targetKey(cart,load,i,t);if(t.photoPath)continue;
-    const source=localTargets.get(t._syncKey);if(!source?.photo?.startsWith("data:"))continue;
+    const source=localTargets.get(t._syncKey);if(source?.photoPath){t.photoPath=source.photoPath;continue;}if(!source?.photo?.startsWith("data:"))continue;
     const blob=dataUrlBlob(source.photo),ext=blob.type.includes("png")?"png":blob.type.includes("webp")?"webp":"jpg";
     const path=`${cloudUser.id}/targets/${crypto.randomUUID()}.${ext}`;
     const {error}=await sb.storage.from("sixgun-photos").upload(path,blob,{contentType:blob.type,upsert:false});if(error)throw error;
     t.photoPath=path;source.photoPath=path;
   }
-  for(const e of state.catalog?.gun_entries||[]){if(e.photo_path)continue;const source=(local.catalog?.gun_entries||[]).find(x=>x._syncKey===e._syncKey);if(!source?.photo?.startsWith("data:"))continue;const blob=dataUrlBlob(source.photo),ext=blob.type.includes("png")?"png":blob.type.includes("webp")?"webp":"jpg",path=`${cloudUser.id}/gun-biographies/${crypto.randomUUID()}.${ext}`;const {error}=await sb.storage.from("sixgun-photos").upload(path,blob,{contentType:blob.type,upsert:false});if(error)throw error;e.photo_path=path;source.photo_path=path;}
-  for(const p of state.catalog?.moment_photos||[]){const source=(local.catalog?.moment_photos||[]).find(x=>x._syncKey===p._syncKey)||p;if(!p.display_path&&source.display_data?.startsWith("data:")){const blob=dataUrlBlob(source.display_data);p.display_path=await window.SixgunCloud.uploadPhoto(blob,"photographic-record/display");source.display_path=p.display_path;}if(!p.print_path&&source.print_data?.startsWith("data:")){const blob=dataUrlBlob(source.print_data);p.print_path=await window.SixgunCloud.uploadPhoto(blob,"photographic-record/print");source.print_path=p.print_path;}}
+  for(const e of state.catalog?.gun_entries||[]){if(e.photo_path)continue;const source=(local.catalog?.gun_entries||[]).find(x=>x._syncKey===e._syncKey);if(source?.photo_path){e.photo_path=source.photo_path;continue;}if(!source?.photo?.startsWith("data:"))continue;const blob=dataUrlBlob(source.photo),ext=blob.type.includes("png")?"png":blob.type.includes("webp")?"webp":"jpg",path=`${cloudUser.id}/gun-biographies/${crypto.randomUUID()}.${ext}`;const {error}=await sb.storage.from("sixgun-photos").upload(path,blob,{contentType:blob.type,upsert:false});if(error)throw error;e.photo_path=path;source.photo_path=path;}
+  for(const p of state.catalog?.moment_photos||[]){const source=(local.catalog?.moment_photos||[]).find(x=>x._syncKey===p._syncKey)||p;p.display_path=p.display_path||source.display_path;p.print_path=p.print_path||source.print_path;if(!p.display_path&&source.display_data?.startsWith("data:")){const blob=dataUrlBlob(source.display_data);p.display_path=await window.SixgunCloud.uploadPhoto(blob,"photographic-record/display");source.display_path=p.display_path;}if(!p.print_path&&source.print_data?.startsWith("data:")){const blob=dataUrlBlob(source.print_data);p.print_path=await window.SixgunCloud.uploadPhoto(blob,"photographic-record/print");source.print_path=p.print_path;}}
   for(const [cart,c] of Object.entries(state.cartridges||{}))for(let i=0;i<(c.journal||[]).length;i++){
-    const j=c.journal[i],source=local.cartridges?.[cart]?.journal?.[i]||j;
-    const originals=[...(source.photoPaths||[]),...(source.photo_urls||[]),...(source.photos||[])],paths=(j.photoPaths||[]).filter(p=>typeof p==="string"&&!p.startsWith("data:"));
+    const j=c.journal[i],source=local.cartridges?.[cart]?.journal?.find(entry=>entry._syncKey===j._syncKey)||j;
+    const originals=[...(source.photoPaths||[]),...(source.photo_urls||[]),...(source.photos||[])],paths=[...(j.photoPaths||[]),...(source.photoPaths||[])].filter(p=>typeof p==="string"&&!p.startsWith("data:"));
     for(const item of originals){if(typeof item!=="string"||!item.startsWith("data:"))continue;const blob=dataUrlBlob(item),ext=blob.type.includes("png")?"png":blob.type.includes("webp")?"webp":"jpg",path=`${cloudUser.id}/journal/${crypto.randomUUID()}.${ext}`;const {error}=await sb.storage.from("sixgun-photos").upload(path,blob,{contentType:blob.type,upsert:false});if(error)throw error;paths.push(path);}
+    uploadedJournalData.set(j._syncKey,new Set(originals.filter(item=>typeof item==="string"&&item.startsWith("data:"))));
     j.photoPaths=[...new Set(paths)];source.photoPaths=j.photoPaths;delete source.photo_urls;delete source.photos;
   }
-  await idbPut("state",{id:"current",value:local,updatedAt:Date.now()});
+  // Merge uploaded paths only; a network request must never replace newer edits.
+  await serializeCloudWrite(async()=>{
+    const latest=(await idbGet("state","current"))?.value||DB;
+    for(const target of [latest,DB]){
+      for(const [cart,c] of Object.entries(state.cartridges||{})){
+        for(const load of c.loads||[])for(const photo of load.targets||[]){const current=target.cartridges?.[cart]?.loads?.find(l=>l.id===load.id)?.targets?.find(t=>t._syncKey===photo._syncKey);if(current&&photo.photoPath)current.photoPath=photo.photoPath;}
+        for(const entry of c.journal||[]){const current=target.cartridges?.[cart]?.journal?.find(j=>j._syncKey===entry._syncKey);if(current&&entry.photoPaths?.length){const uploaded=uploadedJournalData.get(entry._syncKey)||new Set();current.photoPaths=[...new Set([...(current.photoPaths||[]).filter(p=>!uploaded.has(p)),...entry.photoPaths])];for(const field of ["photos","photo_urls"])if(current[field])current[field]=current[field].filter(p=>!uploaded.has(p));}}
+      }
+      for(const [collection,fields] of [["gun_entries",["photo_path"]],["moment_photos",["display_path","print_path"]]])for(const photo of state.catalog?.[collection]||[]){const current=target.catalog?.[collection]?.find(p=>p._syncKey===photo._syncKey);if(current)for(const field of fields)if(photo[field])current[field]=photo[field];}
+    }
+    await idbPut("state",{id:"current",value:latest,updatedAt:Date.now()});
+  });
 }
 async function syncNormalized(state){
   state=prepareState(clone(state));await uploadPendingTargets(state);
@@ -5214,9 +5311,14 @@ async function syncNormalized(state){
   supaError(await sb.from("app_state").upsert({user_id:uid,state:cloudSafeState(state),schema_version:CLOUD_SCHEMA_VERSION,updated_at:now},{onConflict:"user_id"}));
   return state;
 }
-async function flushCloudQueue(){
-  if(cloudFlushing||!cloudUser||!navigator.onLine)return;const job=await idbGet("queue","snapshot");if(!job){cloudStatus("Synced","ok");return;}
-  let continueSync=false;cloudFlushing=true;cloudStatus("Syncing…","warn");try{await syncNormalized(job.state);const cleared=await clearCloudQueueJob(job);if(cleared)localStorage.removeItem(KEY);continueSync=!cleared;cloudStatus(cleared?"Synced":"Saving…",cleared?"ok":"warn");const local=(await idbGet("state","current"))?.value;if(local){DB=local;await signTargetPhotos();renderAll();}}catch(e){console.error("Sixgun sync",e);cloudStatus(/relation|schema cache|bucket/i.test(e.message||"")?"Setup needed · see SUPABASE_SETUP.md":"Sync paused · will retry","error");}finally{cloudFlushing=false;if(continueSync)setTimeout(()=>flushCloudQueue(),0);}
+async function flushCloudQueue(throwOnError=false){
+  if(cloudFlushing&&!throwOnError)return;
+  while(cloudFlushing)await new Promise(resolve=>setTimeout(resolve,50));
+  if(!cloudUser||!navigator.onLine){if(throwOnError)throw new Error("Saved on this device. Reconnect and sign in to sync.");return;}
+  cloudFlushing=true;let succeeded=false;
+  try{const job=await idbGet("queue","snapshot");if(!job){cloudStatus("Synced","ok");return;}cloudStatus("Syncing…","warn");await syncNormalized(job.state);await acknowledgeCloudSnapshot(job);reconcileSyncedImports(job.state);await signTargetPhotos();renderAll();localStorage.removeItem(KEY);const pending=await idbGet("queue","snapshot");cloudStatus(pending?"Saved locally · sync pending":"Synced",pending?"warn":"ok");succeeded=true;}
+  catch(e){console.error("Sixgun sync",e);cloudStatus(/relation|schema cache|bucket/i.test(e.message||"")?"Setup needed · see SUPABASE_SETUP.md":"Saved locally · sync will retry","error");if(throwOnError)throw e;}
+  finally{cloudFlushing=false;if(succeeded){clearTimeout(cloudSaveTimer);cloudSaveTimer=setTimeout(()=>flushCloudQueue(),250);}}
 }
 async function signTargetPhotos(){
   const paths=[];(DB.catalog?.gun_entries||[]).forEach(e=>{if(e.photo_path)paths.push(e.photo_path);});(DB.catalog?.moment_photos||[]).forEach(p=>{if(p.display_path)paths.push(p.display_path);if(p.print_path)paths.push(p.print_path);});Object.values(DB.cartridges||{}).forEach(c=>{(c.loads||[]).forEach(l=>(l.targets||[]).forEach(t=>{if(t.photoPath)paths.push(t.photoPath);}));(c.journal||[]).forEach(j=>(j.photoPaths||[]).forEach(p=>paths.push(p)));});if(!paths.length)return;
