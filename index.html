@@ -499,6 +499,49 @@ button.chip,button.lib-cal-chip,button.shape-chip,button.tbl-chip{font-family:in
 .catalog-search{display:block;width:100%;padding:10px;margin-bottom:12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font:inherit}
 .catalog-row[hidden],.catalog-panel p[hidden]{display:none!important}
 </style>
+<style>
+/* Warm paper, walnut and brass on the archive entry screen. */
+#landing {
+  background: radial-gradient(ellipse at top, #45382b, #231e19 52%, #191613);
+}
+#landing .landing-inner { max-width: 32rem; }
+#landing .landing-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2.25rem, 7vw, 3.25rem);
+  letter-spacing: -.035em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+#landing .landing-rule {
+  width: 7rem;
+  height: 3px;
+  border-block: 1px solid #a78a58;
+  background: transparent;
+}
+#landing .door {
+  background: linear-gradient(115deg, #f4ead7, #e7d8be);
+  border: 1px solid #cfb996;
+  border-left: 4px solid #b18a4d;
+  border-radius: 5px;
+  box-shadow: 0 3px 9px #100c092e;
+  padding: clamp(1rem, 4vw, 1.5rem);
+}
+#landing .door-name { color: #35291e; }
+#landing .door-kicker, #landing .door-arrow { color: #73532d; }
+#landing .door-sub {
+  color: #5d5042;
+  font-size: .9rem;
+  line-height: 1.45;
+}
+#landing .landing-foot, #landing .landing-kicker { color: #cbbb9f; }
+#landing .door:focus-visible {
+  outline: 3px solid #eed098;
+  outline-offset: 4px;
+}
+@media (hover: hover) {
+  #landing .door:hover { background: #fff3de; }
+}
+</style>
 </head>
 <body>
 <div id="landing">
