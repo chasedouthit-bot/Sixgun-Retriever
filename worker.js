@@ -66,7 +66,7 @@ function safeReturn(value, origin) {
 function loginPage(returnTo, message = '', status = 401) {
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#1a1613"><title>Sixgun Retriever · Private</title><style>
   *{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;padding:24px;background:#1a1613;color:#f4efe6;font-family:Georgia,serif}main{width:100%;max-width:390px;border:1px solid #3a3229;border-radius:14px;padding:32px;background:#231e19}small{color:#c79a4b;letter-spacing:.16em;text-transform:uppercase}h1{font-size:29px;font-weight:normal;margin:14px 0}p{color:#b8ad9c;line-height:1.6}label{display:block;margin:24px 0 8px}input,button{width:100%;padding:14px;border:1px solid #584932;border-radius:7px;font-size:16px}input{background:#1a1613;color:#f4efe6}button{margin-top:14px;background:#c79a4b;color:#1a1613;cursor:pointer;font-weight:bold}.error{color:#efac9b}input:focus-visible,button:focus-visible{outline:2px solid #c79a4b;outline-offset:3px}
-  </style></head><body><main><small>Sixgun Retriever</small><h1>A private workspace.</h1><p>Enter the family password to continue.</p>${message ? `<p class="error" role="alert">${escapeHtml(message)}</p>` : ''}<form action="/__private/login" method="post"><input type="hidden" name="returnTo" value="${escapeHtml(returnTo)}"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" maxlength="256" required autofocus><button type="submit">Enter</button></form></main></body></html>`;
+  </style></head><body><main><small>Sixgun Retriever</small><h1>A private workspace.</h1><p>Enter your six-digit PIN to continue.</p>${message ? `<p class="error" role="alert">${escapeHtml(message)}</p>` : ''}<form action="/__private/login" method="post"><input type="hidden" name="returnTo" value="${escapeHtml(returnTo)}"><label for="password">PIN</label><input id="password" name="password" type="password" autocomplete="current-password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required autofocus><button type="submit">Enter</button></form></main></body></html>`;
   return reply(html, status, {'Content-Type':'text/html; charset=utf-8', 'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'", 'X-Frame-Options':'DENY'});
 }
 
@@ -159,7 +159,7 @@ export default {
         const form = new URLSearchParams(body);
         const target = safeReturn(form.get('returnTo'), url.origin);
         const password = form.get('password') || '';
-        if (password.length > 256 || !await passwordMatches(password, env.PRIVATE_PASSWORD)) return loginPage(target, 'That password did not match.');
+        if (password.length > 256 || !await passwordMatches(password, env.PRIVATE_PASSWORD)) return loginPage(target, 'That PIN did not match.');
         const now = Math.floor(Date.now() / 1000);
         const payload = base64url(encoder.encode(JSON.stringify({v:1, aud:url.hostname, iat:now, exp:now + SESSION_SECONDS})));
         const signature = base64url(await crypto.subtle.sign('HMAC', await sessionKey(env), encoder.encode(payload)));
