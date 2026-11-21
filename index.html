@@ -798,10 +798,11 @@ button.chip,button.lib-cal-chip,button.shape-chip,button.tbl-chip{font-family:in
     <input id="cloudEmail" type="email" autocomplete="username" placeholder="Email">
     <input id="cloudPassword" type="password" autocomplete="current-password" placeholder="Password (optional for magic link)">
     <div class="cloud-auth-actions"><button id="cloudMagic">Email magic link</button><button id="cloudSignIn" class="primary">Sign in</button></div>
+    <button type="button" id="cloudClose">Continue on this device</button>
     <div id="cloudAuthStatus" class="cloud-auth-status"></div>
   </div>
 </div>
-<div id="cloudSync" class="cloud-sync warn">Local · sign in to sync</div>
+<button type="button" id="cloudSync" class="cloud-sync warn">Local · sign in to sync</button>
 
 <script>/* placeholder split so analyzer script mounts after DATA */</script>
 
@@ -5453,10 +5454,12 @@ async function onSignedIn(session){cloudUser=session.user;document.getElementByI
 async function cloudBoot(){
   try{const local=await idbGet("state","current");if(local?.value)DB=local.value;else{try{const legacy=localStorage.getItem(KEY);if(legacy)DB=JSON.parse(legacy);}catch(e){}await idbPut("state",{id:"current",value:clone(DB),updatedAt:Date.now()});}renderAll();showLanding();
     if(!window.supabase){cloudStatus("Cloud SDK unavailable · offline","error");return;}sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-    const {data:{session}}=await sb.auth.getSession();if(session)await onSignedIn(session);else document.getElementById("cloudAuth").classList.remove("hidden");
-    sb.auth.onAuthStateChange((event,next)=>{if(next&&next.user&&next.user.id!==cloudUser?.id)setTimeout(()=>onSignedIn(next),0);if(event==="SIGNED_OUT"){cloudUser=null;document.getElementById("cloudAuth").classList.remove("hidden");cloudStatus("Local · sign in to sync","warn");}});
+    const {data:{session}}=await sb.auth.getSession();if(session)await onSignedIn(session);
+    sb.auth.onAuthStateChange((event,next)=>{if(next&&next.user&&next.user.id!==cloudUser?.id)setTimeout(()=>onSignedIn(next),0);if(event==="SIGNED_OUT"){cloudUser=null;document.getElementById("cloudAuth").classList.add("hidden");cloudStatus("Local · sign in to sync","warn");}});
   }catch(e){console.error(e);cloudStatus("Local mode · cloud unavailable","error");renderAll();showLanding();}
 }
+document.getElementById("cloudSync").onclick=()=>{if(!cloudUser)document.getElementById("cloudAuth").classList.remove("hidden");};
+document.getElementById("cloudClose").onclick=()=>document.getElementById("cloudAuth").classList.add("hidden");
 document.getElementById("cloudSignIn").onclick=async()=>{const email=document.getElementById("cloudEmail").value.trim(),password=document.getElementById("cloudPassword").value;if(!email||!password){authStatus("Enter the owner email and password.",true);return;}authStatus("Signing in…");const {error}=await sb.auth.signInWithPassword({email,password});authStatus(error?error.message:"",!!error);};
 document.getElementById("cloudMagic").onclick=async()=>{const email=document.getElementById("cloudEmail").value.trim();if(!email){authStatus("Enter the owner email first.",true);return;}authStatus("Sending a private sign-in link…");const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo:location.origin}});authStatus(error?error.message:"Check your email for the sign-in link.",!!error);};
 window.addEventListener("online",()=>flushCloudQueue());window.addEventListener("offline",()=>cloudStatus("Offline · changes queued","warn"));
